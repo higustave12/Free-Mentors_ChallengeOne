@@ -30,4 +30,4 @@ young people to provide free mentorship sessions.
 * CSS
 * JAVASCRIPT
 
-## Author : GUSTAVE HARINTWARI
+## Author : Gustave Harintwari
