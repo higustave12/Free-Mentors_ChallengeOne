@@ -20,3 +20,12 @@ young people to provide free mentorship sessions.
 
 ## UI Template
 * use this link to access the UI templates https://higustave123.github.io/Free-Mentors_ChallengeOne/
+
+## Installation (Tools)
+* Text editor VS CODE
+
+## Technologies Used
+### Front-End
+* HTML
+* CSS
+* JAVASCRIPT
