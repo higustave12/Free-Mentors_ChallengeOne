@@ -15,7 +15,7 @@ young people to provide free mentorship sessions.
 * Users can review a mentor after a mentorship session
 * Admin can delete a review deemed as inappropriate
 
-##Pivotal Tracker stories
+## Pivotal Tracker stories
 * Use the this link to access pivotal tracker stories https://www.pivotaltracker.com/n/projects/2379750
 
 ## UI Template
