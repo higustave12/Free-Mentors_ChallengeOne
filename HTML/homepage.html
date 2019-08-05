@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>
+            Free Mentors | Home
+        </title>
+        <link rel="stylesheet" href="../CSS/homepage.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+        <script type="text/javascript" src="../JS/homepage.js"></script>
+    </head>
+
+    <body>
+        <!--header div-->
+        <div class="header">
+            <p>
+                <span>FreeMentors.com</span>
+                <span id="clock_paragraph"></span><br/>
+            </p><br/>
+            <a href="./Login_SignUp.html" id="login_signup_link">Login | Sign Up</a><br/>
+        </div>
+        <!--Navigation menu bar-->
+        <div class="topnav" id="myTopnav">
+            <a href="homepage.html" class="active" id="home">HOME</a>
+            <a href="./getInvolved.html" id="get_involved">BECOME A MENTOR</a>
+            <a onclick="ShowSearchDiv()" id="search_home">FIND A MENTOR</a>
+            <a href="./share_story.html" id="share_story">SHARE STORY</a>
+            <a href="./aboutus.html" id="about_us">ABOUT US</a>
+            <a href="./Login_SignUp.html" id="my_account">My Account</a>
+            <a href="javascript:void(0);" class="icon" id="icon" onclick="myFunction()">
+                <i class="fa fa-bars"></i>
+            </a>
+        </div>
+        <hr id="menu_hr"/>
+        <!--Search div-->
+        <div class="col-12 col-s-12 search_div" id="search">
+            <p>
+                <input type="text" placeholder=" Subject name" />
+            </p>
+            <p>
+                <input type="text" placeholder=" Mentor name" />
+            </p>
+            <button type="button" onclick="search_car()">Search</button>
+        </div>
+        <!--row div with contents and aside div-->
+        <div class="row" id="row">
+            <!--Contents div part 1-->
+            <div class="col-10 col-s-12 contents_div" id="contents_div">
+                <div class="col-3 col-s-12 mentorship_subjects_div">
+                    <p id="subject_title">Javascript Programming</p>
+                    <img src="../ASSETS/JS.png"/>
+                    <button type="button" id="javascript_mentors" onclick="Redirect_JS()">VIEW MENTORS</button>
+
+                    <p id="subject_title">C Programming</p>
+                    <img src="../ASSETS/C.png"/>
+                    <button type="button" id="C_mentors" onclick="Redirect_C()">VIEW MENTORS</button>
+                </div>
+                <div class="col-3 col-s-12 mentorship_subjects_div">
+                    <p id="subject_title">C++ Programming</p>
+                    <img src="../ASSETS/C++.png"/>
+                    <button type="button" id="Cplus_mentors" onclick="Redirect_Cplus()">VIEW MENTORS</button>
+
+                    <p id="subject_title">C# Programming</p>
+                    <img src="../ASSETS/C_sharp.png"/>
+                    <button type="button" id="C_sharp_mentors" onclick="Redirect_C_sharp()">VIEW MENTORS</button>
+                </div>
+                <div class="col-3 col-s-12 mentorship_subjects_div">
+                    <p id="subject_title">Android Programming</p>
+                    <img src="../ASSETS/ANDROID.jpg"/>
+                    <button type="button" onclick="Redirect_Android()">VIEW MENTORS</button>
+
+                    <p id="subject_title">SQL Programming</p>
+                    <img src="../ASSETS/SQL.jpg"/>
+                    <button type="button" onclick="Redirect_Sql()">VIEW MENTORS</button>
+                </div>
+                <div class="col-3 col-s-12 mentorship_subjects_div">
+                    <p id="subject_title">Python Programming</p>
+                    <img src="../ASSETS/PYTHON.png"/>
+                    <button type="button" onclick="Redirect_Python()">VIEW MENTORS</button>
+
+                    <p id="subject_title">RUBY Programming</p>
+                    <img src="../ASSETS/RUBY.png"/>
+                    <button type="button" onclick="Redirect_Ruby()">VIEW MENTORS</button>
+                </div>
+                <!--Contact us div-->
+                <div class="col-12 col-s-12 contact_us_banner_col">
+                    <a href="#Call_for_assistance">
+                        <p id="contact_us_banner_paragraph">
+                            <h2>Need assistance for Mentorship ? Feel free to contact us</h2>
+                            <img src="../ASSETS/phone_call.png" alt="Call_us" title="Call us for assistance" />
+                        </p>
+                    </a>
+                </div>
+                <!--Contents div part 2-->
+                <div class="col-3 col-s-12 mentorship_subjects_div">
+                    <p id="subject_title">Assembly Programming</p>
+                    <img src="../ASSETS/ASSEMBLY.jpg"/>
+                    <button type="button">VIEW MENTORS</button>
+
+                    <p id="subject_title">JAVA Programming</p>
+                    <img src="../ASSETS/JAVA.png"/>
+                    <button type="button">VIEW MENTORS</button>
+                </div>
+                <div class="col-3 col-s-12 mentorship_subjects_div">
+                    <p id="subject_title">GO Programming</p>
+                    <img src="../ASSETS/GO.png"/>
+                    <button type="button">VIEW MENTORS</button>
+
+                    <p id="subject_title">CSS Programming</p>
+                    <img src="../ASSETS/CSS.png"/>
+                    <button type="button">VIEW MENTORS</button>
+                </div>
+                <div class="col-3 col-s-12 mentorship_subjects_div">
+                    <p id="subject_title">HTML5 Programming</p>
+                    <img src="../ASSETS/HTML5.jpg"/>
+                    <button type="button">VIEW MENTORS</button>
+
+                    <p id="subject_title">SWIFT Programming</p>
+                    <img src="../ASSETS/SWIFT.jpg"/>
+                    <button type="button">VIEW MENTORS</button>
+                </div>
+                <div class="col-3 col-s-12 mentorship_subjects_div">
+                    <p id="subject_title">PASCAL Programming</p>
+                    <img src="../ASSETS/PASCAL.jpg"/>
+                    <button type="button">VIEW MENTORS</button>
+
+                    <p id="subject_title">PERL Programming</p>
+                    <img src="../ASSETS/PERL.jpg"/>
+                    <button type="button">VIEW MENTORS</button>
+                </div>
+            </div>
+            <!--aside div 1-->
+            <div class="col-2 col-s-12 aside">
+                <h1>HOT Ads</h1>
+                <a href="#">
+                    <img src="../ASSETS/Adgif.gif" />
+                </a>
+                <a href="#">
+                    <img src="../ASSETS/mentoring_ads_4.jpg" />
+                </a>
+                <a href="#">
+                    <img src="../ASSETS/mentoring_ads_5.png" />
+                </a>
+            </div>
+            <!--aside div 2-->
+            <div class="col-2 col-s-12 aside2">
+                <h1>HOT NEWS</h1>
+                <ol>
+                    <li>
+                        <p>
+                            <a href="#">Summer mentoring sessions schedule</a>
+                        </p>
+                    </li>
+                    <li>
+                        <p>
+                            <a href="#">Winter mentoring sessions schedule</a>
+                        </p>
+                    </li>
+                    <li>
+                        <p>
+                            <a href="#">Fall mentoring sessions schedule</a>
+                        </p>
+                    </li>
+                    <li>
+                        <p>
+                            <a href="#">Mentors, Mentees bootcamp 2019</a>
+                        </p>
+                    </li>
+                    <li>
+                        <p>
+                            <a href="#">Mentoring session by Dr Mike Aron from Harvard University</a>
+                        </p>
+                    </li>
+                    <li>
+                        <p>
+                            <a href="#">One to one mentoring session via our new video call platform e_video_mentoring</a>
+                        </p>
+                    </li>
+                </ol>
+            </div>
+            <!--back to top button-->
+            <div class="col-12 col-s-12 back_to_top_btn_div">
+                <button type="button" title="Back to top" onclick="topFunction()">Top</button>
+            </div>
+        </div>
+        <div class="footer">
+            <p>
+                <small>
+                    &copy2019 Free Mentors(ADC). All Rights Reserved.
+                </small>
+            </p>
+        </div>
+    </body>
+</html>
