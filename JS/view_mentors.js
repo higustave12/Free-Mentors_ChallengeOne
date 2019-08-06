@@ -81,4 +81,8 @@ const Clocktime = () => {
       const url="./Mentor_Details/Eraste.html";
       window.location.href= url;
     };
-    
+    //redirect to book session page
+    function Redirect_book_session(){
+      const url="./Book_session/Book_session.html";
+      window.location.href= url;
+    }

@@ -135,12 +135,16 @@ color: #fff;
     margin-bottom: 5px
 }
 .mentor_div img{
-  width: 180px;
-  height: 200px
+  width: 250px;
+  height: 290px
 }
-.mentor_names, .bio, .occupation, .expertise {
+.mentor_names, .bio, .occupation, .expertise, .can_help_with {
     font-weight: bold;
-    color: red
+    color: red;
+    text-decoration: underline
+}
+.description{
+    font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif
 }
 .mentor_div p{
     font-weight: bold
@@ -160,21 +164,32 @@ color: #fff;
     border-radius: 5px;
     color: #fff
 }
-.subscribed_mentors_li{
-  color: royalblue;
-  font-weight: bold
+.mentor_div button:hover{
+  font-size: 16px
 }
-
-/*Contact us banner div column CSS*/
-.contact_us_banner_col{
-  background-color: #0099cc;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
-  text-align: center
+.detailed_description{
+    padding: 15px 15px
 }
-.contact_us_banner_col img{
-  width: 40px;
-  height: auto;
-  border-radius: 90px
+.detailed_description h5{
+    color: rgb(116, 112, 112)
+}
+.detailed_description hr{
+    margin-bottom: 40px
+}
+.detailed_description h3{
+    opacity: 0.8
+}
+.detailed_description button{
+    padding: 15px 30px;
+    font-size: 20px;
+    cursor: pointer;
+    background-color: orangered;
+    font-weight: bold;
+    color: #000;
+    border-radius: 5px
+}
+.detailed_description button:hover{
+    color: #fff
 }
 /*Aside div CSS*/
   .aside, .aside2 {
@@ -198,29 +213,7 @@ color: #fff;
     color: red;
     text-decoration: underline
   }
-  .contact_us_banner_col a{
-    text-decoration: none;
-    color: #000
-  }
-  .contact_us_banner_col a:hover{
-    color: red;
-    text-decoration: underline
-  }
-   /*Back to top div CSS*/
-  .back_to_top_btn_div button{
-    border: none;
-    outline: none;
-    background-color: red;
-    color: white;
-    font-size: 18px;
-    float: right;
-    margin-right: 10px;
-    cursor: pointer;
-    padding: 15px;
-    border-radius: 4px;
-    z-index: 5;
-    margin-top: 5px
-  }
+ 
   /*Footer div CSS*/
   .footer {
     background-color: orange;
