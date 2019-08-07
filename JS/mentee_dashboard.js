@@ -66,8 +66,51 @@ const Clocktime = () => {
       if(review_value>5 || review_value<1){
           document.getElementById("review_input").style.borderColor="red";
       }else{
-          document.getElementById("review_data").innerText= review_value;
-          document.getElementById("mentor_review_div").style.display="none";
-          document.getElementById("review_session_btn").disabled= "true";
+          document.getElementById("not_reviewed").style.display="none";
+          document.getElementById("review_stars_gustave").style.display="inline-block";
+          var all_stars = document.getElementById("review_stars_gustave").querySelectorAll(".fa-star");
+          if(review_value==1){
+            all_stars[0].style.color = "orange";
+            all_stars[1].style.display = "none";
+            all_stars[2].style.display = "none";
+            all_stars[3].style.display = "none";
+            all_stars[4].style.display = "none";
+            document.getElementById("mentor_review_div").style.display="none";
+            document.getElementById("review_session_btn").disabled= "true";
+          }
+          if(review_value==2){
+            for(let i=0; i<=1; i++){
+              all_stars[i].style.color="orange";
+            }
+            all_stars[2].style.display = "none";
+            all_stars[3].style.display = "none";
+            all_stars[4].style.display = "none";
+            document.getElementById("mentor_review_div").style.display="none";
+            document.getElementById("review_session_btn").disabled= "true";
+          }
+          if(review_value==3){
+            for(let i=0; i<=3; i++){
+              all_stars[i].style.color="orange";
+            }
+            all_stars[3].style.display = "none";
+            all_stars[4].style.display = "none";
+            document.getElementById("mentor_review_div").style.display="none";
+           document.getElementById("review_session_btn").disabled= "true";
+          }
+          if(review_value==4){
+            for(let i=0; i<=4; i++){
+              all_stars[i].style.color="orange";
+            }
+            all_stars[4].style.display = "none";
+            document.getElementById("mentor_review_div").style.display="none";
+            document.getElementById("review_session_btn").disabled= "true";
+          }
+          if(review_value==5){
+            for(let i of all_stars){
+              i.style.color="orange";
+            }
+            document.getElementById("mentor_review_div").style.display="none";
+            document.getElementById("review_session_btn").disabled= "true";
+          }
       }
   }
