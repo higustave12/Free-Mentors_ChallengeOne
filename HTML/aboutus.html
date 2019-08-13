@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>
+            Free Mentors | About us
+        </title>
+        <link rel="stylesheet" href="../CSS/about_us.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+        <script type="text/javascript" src="../JS/about_us.js"></script>
+    </head>
+
+    <body>
+        <!--header div-->
+        <div class="header">
+            <p>
+                <span>FreeMentors.com</span>
+                <span id="clock_paragraph"></span><br/>
+            </p><br/>
+            <a href="./Login_SignUp.html" id="login_signup_link">Login | Sign Up</a><br/>
+        </div>
+        <!--Navigation menu bar-->
+        <div class="topnav" id="myTopnav">
+            <a href="homepage.html" id="home">HOME</a>
+            <a href="./getInvolved.html" id="get_involved">BECOME A MENTOR</a>
+            <a onclick="ShowSearchDiv()" id="search_home">FIND A MENTOR</a>
+            <a href="./share_story.html" id="share_story">SHARE STORY</a>
+            <a href="./aboutus.html" class="active" id="about_us">ABOUT US</a>
+            <a href="./Login_SignUp.html" id="my_account">My Account</a>
+            <a href="javascript:void(0);" class="icon" id="icon" onclick="myFunction()">
+                <i class="fa fa-bars"></i>
+            </a>
+        </div>
+        <hr id="menu_hr"/>
+        <!--Search div-->
+        <div class="col-12 col-s-12 search_div" id="search">
+            <p>
+                <input type="text" placeholder=" Subject name" />
+            </p>
+            <p>
+                <input type="text" placeholder=" Mentor name" />
+            </p>
+            <button type="button" onclick="search_car()">Search</button>
+        </div>
+        <!--row div with contents and aside div-->
+        <div class="row" id="row">
+            <!--Contents div part 1-->
+            <div class="col-12 col-s-12 contents_div" id="contents_div">
+                <span class="title">About Us</span><br/><br/>
+                <p id="aboutus_contents">Free Mentors is a social initiative where accomplished 
+                    professionals become role models to young people by providing free mentorship sessions.
+                </p><br/><br/>
+                <div class="col-4 col-s-12 aspire">
+                    <h2>Aspire</h2>
+                    <p>
+                        Reach out for any challenge or issues that you face or if you aspire to scale up in your respective field or switch to a new field
+                    </p>
+                </div>
+                <div class="col-4 col-s-12 influence">
+                    <h2>Influence</h2>
+                    <p>
+                        We help you to get in touch with experts in your field who can share their experiences. You can choose a mentor for yourself too
+                    </p>
+                </div>
+                <div class="col-4 col-s-12 grow">
+                    <h2>Grow</h2>
+                    <p>
+                        Have a personalized chat with your mentor and gain valuable skills. With your aspirations, our mentors help you seek a holistic approach in your pursuit
+                    </p>
+                </div>
+                <div class="col-12 col-s-12">
+                    <span class="title">Our Values</span><br/><br/>
+                    <p id="ourvalues_contents">
+                        We at Free Mentors aspire to build a trusted platform of online mentorship by guiding software engineers to reach their goals. We aim to become the best software engineers mentoring platform in the world.
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div class="footer">
+            <p>
+                <small>
+                    &copy2019 Free Mentors(ADC). All Rights Reserved.
+                </small>
+            </p>
+        </div>
+    </body>
+</html>
