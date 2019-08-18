@@ -19,7 +19,7 @@ young people to provide free mentorship sessions.
 * Use the this link to access pivotal tracker stories https://www.pivotaltracker.com/n/projects/2379750
 
 ## UI Template
-* use this link to access the UI templates https://higustave123.github.io/Free-Mentors_ChallengeOne/
+* use this link to access the UI templates  https://higustave12.github.io/Free-Mentors_ChallengeOne/
 
 ## Installation (Tools)
 * Text editor VS CODE
