@@ -40,7 +40,7 @@ Free Mentors is a social initiative where accomplished professionals become role
 ```npm run dev```
 * Run Postman to check API Endpoints on 
 ```localhost:3000``` 
-## .env file sample(Note: The following are just samples for your reference)
+## (.env) file sample(Note: The following are just samples for your reference)
 * SECRET="gaahdjijhdshgygsd537bhwevt!jhbvsc"
 * DATABASE_URL= url (Note: put the correct postgresql database url)
 
