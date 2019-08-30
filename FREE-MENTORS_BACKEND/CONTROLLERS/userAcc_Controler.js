@@ -127,6 +127,48 @@ class userAccountControler{
             }
         }
     }
+
+    //Change a user to a mentor(Done By admin)
+    ChangeUserToMentor(req, res){
+        const user_id= parseInt(req.params.userId);
+        const all_users= accounts.AllAccounts;
+        const user_found= all_users.find(users=>users.userId===user_id);
+        if(user_found){
+            const new_role= true;
+            const admin_role_check= req.user_token.is_admin;
+            if(admin_role_check===true){
+                user_found.is_a_mentor= new_role;
+                const updated_user_acc= user_found;
+                return res.status(200).json({
+                    status: 200,
+                    message: "User account changed to mentor",
+                    data: {
+                        userId: updated_user_acc.userId,
+                        firstName: updated_user_acc.firstName,
+                        lastName: updated_user_acc.lastName,
+                        email: updated_user_acc.email,
+                        address: updated_user_acc.address,
+                        bio: updated_user_acc.bio,
+                        occupation: updated_user_acc.occupation,
+                        expertise: updated_user_acc.expertise,
+                        is_admin: updated_user_acc.is_admin,
+                        is_a_mentor: updated_user_acc.is_a_mentor
+                    }
+                });
+            }else{
+                return res.status(400).json({
+                    status: 400,
+                    error: "Only Administrator can change a user to a mentor"
+                });
+            }
+        }else{
+            return res.status(404).json({
+                status: 404,
+                error: "A mentee with such userId not found"
+            });
+        }
+    }
+
 }
 
 const account_controler= new userAccountControler();
