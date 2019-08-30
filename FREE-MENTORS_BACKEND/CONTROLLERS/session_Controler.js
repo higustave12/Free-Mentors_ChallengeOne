@@ -107,6 +107,42 @@ class sessionControler{
             })
         }
     }
+
+    //Get or View all sessions
+    getAllSession(req, res){
+        const is_mentor_checking= req.user_token.is_a_mentor;
+        const allsess= session_inst.allSessions;
+
+        if(is_mentor_checking===false){
+            const mentee_ID= req.user_token.userId;
+            const mentee_sessions= allsess.filter(mentee=>mentee.menteeId===mentee_ID);
+            if(mentee_sessions.length>=1){
+                return res.status(200).json({
+                    status: 200,
+                    data: mentee_sessions
+                });
+            }else{
+                return res.status(404).json({
+                    status: 404,
+                    error: "No mentorship session found"
+                });
+            }
+        }else{
+            const mentor_ID= req.user_token.userId;
+            const mentor_sessions= allsess.filter(mentor=>mentor.mentorId===mentor_ID);
+            if(mentor_sessions.length>=1){
+                return res.status(200).json({
+                    status: 200,
+                    data: mentor_sessions
+                });
+            }else{
+                return res.status(404).json({
+                    status: 404,
+                    error: "No mentorship session found"
+                });
+            }
+        }
+    }
 }
 
 const session_contrl= new sessionControler();

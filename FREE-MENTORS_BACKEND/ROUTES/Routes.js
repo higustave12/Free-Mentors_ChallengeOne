@@ -16,5 +16,6 @@ router.get('/api/v1/mentors/:userId',verifyToken, account_controler.viewMentorBy
 router.post('/api/v1/session',verifyToken, session_contrl.createSession); //Create mentorship session
 router.patch('/api/v1/sessions/:sessionId/accept',verifyToken, session_contrl.acceptSessionRequest); //Accept session req
 router.patch('/api/v1/sessions/:sessionId/reject',verifyToken, session_contrl.rejectSessionRequest); //Reject session req
+router.get('/api/v1/sessions',verifyToken, session_contrl.getAllSession); //Get all mentorship sessions
 
 export default router;
