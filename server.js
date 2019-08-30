@@ -1,10 +1,14 @@
 import express from 'express';
 import body_parser from 'body-parser';
 import router from './ROUTES/Routes';
+import swaggerUi from 'swagger-ui-express';
+import swaggerDoc from './SWAGGER/swagger.json';
 
 const app= express();
 app.use(body_parser.json());
 app.use(body_parser.urlencoded({extended : false}));
+
+app.use('/freementors', swaggerUi.serve, swaggerUi.setup(swaggerDoc));
 
 app.get('/',(req,res)=>{
     return res.status(200).json({
