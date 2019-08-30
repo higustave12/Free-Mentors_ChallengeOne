@@ -25,7 +25,7 @@ Free Mentors is a social initiative where accomplished professionals become role
 * use this link to access the UI templates  https://higustave12.github.io/Free-Mentors_ChallengeOne/
 
 ## Swagger documentation
-* Swagger documentatoion link: https://adc-10.herokuapp.com/freementors/
+* Swagger documentatoion link:  https://adc-10.herokuapp.com/freementors/
 
 ## Installation(Tools)
 * Text Editor: Visual Studio
