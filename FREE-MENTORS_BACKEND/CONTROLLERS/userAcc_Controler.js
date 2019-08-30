@@ -169,6 +169,16 @@ class userAccountControler{
         }
     }
 
+     //View All mentors
+    viewAllMentors(req, res){
+        const accs= accounts.AllAccounts;
+        const mentor_users=accs.filter(user=>user.is_a_mentor===true);
+            return res.status(200).json({
+                status: 200,
+                data: mentor_users
+            });
+    }
+
 }
 
 const account_controler= new userAccountControler();
