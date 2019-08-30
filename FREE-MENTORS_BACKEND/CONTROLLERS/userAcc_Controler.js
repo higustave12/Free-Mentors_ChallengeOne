@@ -179,6 +179,43 @@ class userAccountControler{
             });
     }
 
+    //View a specific mentor by Id
+    viewMentorById(req, res){
+        const single_user_id= parseInt(req.params.userId);
+        const all_users_accs= accounts.AllAccounts;
+        const user_acc= all_users_accs.find(acc=>acc.userId===single_user_id);
+        if(!(user_acc)){
+            return res.status(404).json({
+                status: 404,
+                error: "A user with such Id not found"
+            });
+        }else{
+            const mentor_check_val= user_acc.is_a_mentor;
+            if(mentor_check_val===true){
+                return res.status(200).json({
+                    status: 200,
+                    data: {
+                        mentorId: user_acc.userId,
+                        firstName: user_acc.firstName,
+                        lastName: user_acc.lastName,
+                        email: user_acc.email,
+                        address: user_acc.address,
+                        bio: user_acc.bio,
+                        occupation: user_acc.occupation,
+                        expertise: user_acc.expertise,
+                        is_admin: user_acc.is_admin,
+                        is_a_mentor: user_acc.is_a_mentor
+                    }
+                });
+            }else{
+                return res.status(404).json({
+                    status: 404,
+                    error: "A mentor for this Id not found"
+                });
+            }
+        }
+    }
+
 }
 
 const account_controler= new userAccountControler();
