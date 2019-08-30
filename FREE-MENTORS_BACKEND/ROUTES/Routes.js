@@ -1,5 +1,6 @@
 import express from 'express';
 import account_controler from '../CONTROLLERS/userAcc_Controler';
+import session_contrl from '../CONTROLLERS/session_Controler';
 import {verifyToken} from '../JWT/jwt_conf';
 
 const router= express.Router();
@@ -10,4 +11,8 @@ router.post('/api/v1/auth/signin',account_controler.userLogin); //Endpoint to lo
 router.patch('/api/v1/user/:userId',verifyToken, account_controler.ChangeUserToMentor); //Endpoint to change user to mentor
 router.get('/api/v1/mentors',verifyToken, account_controler.viewAllMentors); //Endpoint to view all registered mentors
 router.get('/api/v1/mentors/:userId',verifyToken, account_controler.viewMentorById); //Endpoint to view a specific mentor by Id
+
+//Mentorship session routes
+router.post('/api/v1/session',verifyToken, session_contrl.createSession); //Create mentorship session
+
 export default router;
