@@ -77,6 +77,36 @@ class sessionControler{
             })
         }
     }
+
+    //Mentor reject mentorship session
+    rejectSessionRequest(req, res){
+        const sessioId= parseInt(req.params.sessionId);
+        const all_sessio= session_inst.allSessions;
+        const session_lookups= all_sessio.find(single_sessio=>single_sessio.sessionId===sessioId);
+        if(session_lookups){
+            const mentorId= req.user_token.userId;
+            const check_session_mentors= session_lookups.mentorId;
+            if(check_session_mentors===mentorId){
+                const new_session_status= "rejected";
+                session_lookups.status= new_session_status;
+                const updatedSessions= session_lookups;
+                return res.status(200).json({
+                    status: 200,
+                    data: updatedSessions
+                });
+            }else{
+                return res.status(404).json({
+                    status: 404,
+                    error: "You are not a mentor for this session"
+                })
+            }
+        }else{
+            return res.status(404).json({
+                status: 404,
+                error: "No session with such Id found"
+            })
+        }
+    }
 }
 
 const session_contrl= new sessionControler();
