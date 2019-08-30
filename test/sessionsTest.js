@@ -4,7 +4,6 @@ import app from '../server';
 import JWT from 'jsonwebtoken';
 import session_inst from '../MODELS/session';
 import accounts from '../MODELS/User_Accounts';
-
 import dotenv from 'dotenv';
 
 dotenv.config();
