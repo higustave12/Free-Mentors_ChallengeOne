@@ -1,6 +1,5 @@
 [![Build Status](https://travis-ci.org/higustave12/Free-Mentors_ChallengeOne.svg?branch=develop)](https://travis-ci.org/higustave12/Free-Mentors_ChallengeOne)
 [![Coverage Status](https://coveralls.io/repos/github/higustave12/Free-Mentors_ChallengeOne/badge.svg?branch=develop)](https://coveralls.io/github/higustave12/Free-Mentors_ChallengeOne?branch=develop)
-[![Maintainability](https://api.codeclimate.com/v1/badges/e77b28230d0784880a42/maintainability)](https://codeclimate.com/github/higustave12/Free-Mentors_ChallengeOne/maintainability)
 
 # Free Mentors
 Free Mentors is a social initiative where accomplished professionals become role models to young people to provide free mentorship sessions.
