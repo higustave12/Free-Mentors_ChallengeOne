@@ -117,6 +117,19 @@ color: #fff;
   display: none;
   font-weight: bold
 }
+.search_div select{
+  border: 2px solid orange;
+  height: 30px;
+  width: 150px;
+  text-align: center;
+  border-radius: 5px
+}
+.search_div input[type="text"]{
+  height: 30px;
+  text-align: center;
+  font-weight: bold;
+  border-radius: 5px
+}
 .search_div button{
   cursor: pointer;
   padding: 8px;

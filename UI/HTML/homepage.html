@@ -35,12 +35,20 @@
         <!--Search div-->
         <div class="col-12 col-s-12 search_div" id="search">
             <p>
-                <input type="text" placeholder=" Subject name" />
+                <select>
+                    <option value="Javascript">JAVASCRIPT</option>
+                    <option value="C++">C++</option>
+                    <option value="Android">ANDROID</option>
+                    <option value="Python">PYTHON</option>
+                    <option value="C">C</option>
+                    <option value="sql">SQL</option>
+                    <option value="java">JAVA</option>
+                    <option value="C#">C#</option>
+                    <option value="html5">HTML5</option>
+                </select>
+                <input type="text" placeholder="Search By Mentor Name" autofocus />&nbsp;
+                <button type="button" onclick="search_car()">Search</button>
             </p>
-            <p>
-                <input type="text" placeholder=" Mentor name" />
-            </p>
-            <button type="button" onclick="search_car()">Search</button>
         </div>
         <!--row div with contents and aside div-->
         <div class="row" id="row">
