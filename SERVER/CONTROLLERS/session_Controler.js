@@ -16,7 +16,7 @@ class sessionControler{
             }
             return res.status(400).send({
                 status: 400,
-                error: create_session_errors
+                error: create_session_errors[0]
             });
         }else{
             const allAccs= accounts.AllAccounts;
