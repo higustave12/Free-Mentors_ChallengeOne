@@ -71,10 +71,10 @@ const Clocktime = () => {
           var all_stars = document.getElementById("review_stars_gustave").querySelectorAll(".fa-star");
           if(review_value==1){
             all_stars[0].style.color = "orange";
-            all_stars[1].style.display = "none";
-            all_stars[2].style.display = "none";
-            all_stars[3].style.display = "none";
-            all_stars[4].style.display = "none";
+            all_stars[1].style.color = "#A6ACAF";
+            all_stars[2].style.color = "#A6ACAF";
+            all_stars[3].style.color = "#A6ACAF";
+            all_stars[4].style.color = "#A6ACAF";
             document.getElementById("mentor_review_div").style.display="none";
             document.getElementById("review_session_btn").disabled= "true";
           }
@@ -82,9 +82,9 @@ const Clocktime = () => {
             for(let i=0; i<=1; i++){
               all_stars[i].style.color="orange";
             }
-            all_stars[2].style.display = "none";
-            all_stars[3].style.display = "none";
-            all_stars[4].style.display = "none";
+            all_stars[2].style.color = "#A6ACAF";
+            all_stars[3].style.color = "#A6ACAF";
+            all_stars[4].style.color = "#A6ACAF";
             document.getElementById("mentor_review_div").style.display="none";
             document.getElementById("review_session_btn").disabled= "true";
           }
@@ -92,8 +92,8 @@ const Clocktime = () => {
             for(let i=0; i<=3; i++){
               all_stars[i].style.color="orange";
             }
-            all_stars[3].style.display = "none";
-            all_stars[4].style.display = "none";
+            all_stars[3].style.color = "#A6ACAF";
+            all_stars[4].style.color = "#A6ACAF";
             document.getElementById("mentor_review_div").style.display="none";
            document.getElementById("review_session_btn").disabled= "true";
           }
@@ -101,7 +101,7 @@ const Clocktime = () => {
             for(let i=0; i<=4; i++){
               all_stars[i].style.color="orange";
             }
-            all_stars[4].style.display = "none";
+            all_stars[4].style.color = "#A6ACAF";
             document.getElementById("mentor_review_div").style.display="none";
             document.getElementById("review_session_btn").disabled= "true";
           }
