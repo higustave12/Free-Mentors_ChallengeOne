@@ -1,0 +1,12 @@
+{
+    "extends": "airbnb",
+    "env": {
+        "node": true,
+        "es6": true,
+        "browser": true
+    },
+    "rules": {
+        "Linebreak-style": 0,
+        "eslint comma-dangle": [2, "always-multiline"]
+    }
+}

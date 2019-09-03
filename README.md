@@ -1,6 +1,8 @@
-# Free-Mentors
-Free Mentors is a social initiative where accomplished professionals become role models to
-young people to provide free mentorship sessions.
+[![Build Status](https://travis-ci.org/higustave12/Free-Mentors_ChallengeOne.svg?branch=develop)](https://travis-ci.org/higustave12/Free-Mentors_ChallengeOne)
+[![Coverage Status](https://coveralls.io/repos/github/higustave12/Free-Mentors_ChallengeOne/badge.svg?branch=develop)](https://coveralls.io/github/higustave12/Free-Mentors_ChallengeOne?branch=develop)
+
+# Free Mentors
+Free Mentors is a social initiative where accomplished professionals become role models to young people to provide free mentorship sessions.
 
 ## Features
 * Users can sign up
@@ -16,18 +18,61 @@ young people to provide free mentorship sessions.
 * Admin can delete a review deemed as inappropriate
 
 ## Pivotal Tracker stories
-* Use the this link to access pivotal tracker stories https://www.pivotaltracker.com/n/projects/2379750
+* PT board link: (https://www.pivotaltracker.com/n/projects/2379750)
 
 ## UI Template
-* use this link to access the UI templates https://higustave123.github.io/Free-Mentors_ChallengeOne/
+* use this link to access the UI templates  https://higustave12.github.io/Free-Mentors_ChallengeOne/
 
-## Installation (Tools)
-* Text editor VS CODE
+## Swagger documentation
+* Swagger documentatoion link:  https://adc-10.herokuapp.com/freementors/
+
+## Installation(Tools)
+* Text Editor: Visual Studio
+* Node/Express
+* Postman
+* POSTGRESQL
+
+## SetUp Project to get Started
+* Clone this repo 
+* install all dependencies using 
+```npm install```
+* Start Server 
+```npm run dev```
+* Run Postman to check API Endpoints on 
+```localhost:3000``` 
+## (.env) file sample(Note: The following are just samples for your reference)
+* SECRET="gaahdjijhdshgygsd537bhwevt!jhbvsc"
+* DATABASE_URL= url (Note: put the correct postgresql database url)
+
+## Methods and paths to test API Endpoints
+
+| Method      | Path                                                           | Description                          |
+|-------------|----------------------------------------------------------------|--------------------------------------|
+| POST        | /api/v1/auth/signup                                            | Create User Account                  |
+| POST        | /api/v1/auth/signin                                            | User login                           |
+| PATCH       | /api/v1/user/:userId                                           | Change a user to a mentor            |
+| GET         | /api/v1/mentors                                                | Get all mentors                      |
+| GET         | /api/v1/mentors/:mentorId                                      | Get a specific mentor                |
+| POST        | /api/v1/sessions                                               | Create a mentorship session request  |
+| PATCH       | /api/v1/sessions/:sessionId/accept                             | A mentor accepts a session request   |
+| PATCH       | /api/v1/sessions/:sessionId/reject                             | A mentor rejects a session request   |
+| GET         | /api/v1/sessions                                               | Get all mentorship session requests  |
+| POST        | /api/v1/sessions/:sessionId/review                             | Review a finished mentorship session |
+| DELETE      | /api/v1/sessions/:sessionId/review                             | Delete inappropriate session review. |
 
 ## Technologies Used
+
+### Bank-End
+* Node / Express js
+* Express
+* Joi
+* ESLint
+* Travis CI
+* Code Climate & Coveralls
+
 ### Front-End
 * HTML
 * CSS
-* JAVASCRIPT
+* JavaScript
 
-## Author : Gustave Harintwari
+## Author: Gustave HARINTWARI 
