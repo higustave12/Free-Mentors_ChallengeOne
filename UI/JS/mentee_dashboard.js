@@ -59,6 +59,10 @@ const Clocktime = () => {
     //Show review div
     function showReviewDiv(){
         document.getElementById("mentor_review_div").style.display= "block";
+        document.getElementById("single_session_div1").style.display="none";
+        document.getElementById("single_session_div2").style.display="none";
+        document.getElementById("single_session_div3").style.display="none";
+        document.getElementById("single_session_div4").style.display="none";
     }
   //Update the review once the Submit review button is clicked
   function updateReview(){
@@ -66,6 +70,12 @@ const Clocktime = () => {
       if(review_value>5 || review_value<1){
           document.getElementById("review_input").style.borderColor="red";
       }else{
+          document.getElementById("mentor_review_div").style.display= "none";
+          document.getElementById("single_session_div1").style.display="block";
+          document.getElementById("single_session_div2").style.display="block";
+          document.getElementById("single_session_div3").style.display="block";
+          document.getElementById("single_session_div4").style.display="block";
+          
           document.getElementById("not_reviewed").style.display="none";
           document.getElementById("review_stars_gustave").style.display="inline-block";
           var all_stars = document.getElementById("review_stars_gustave").querySelectorAll(".fa-star");
