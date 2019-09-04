@@ -19,7 +19,7 @@ class userAccountControler{
             }
             return res.status(400).send({
                 status: 400,
-                error: signup_errors
+                error: signup_errors[0]
             });
         }else{
             const all_user_accounts= accounts.AllAccounts;
@@ -32,7 +32,7 @@ class userAccountControler{
             }else{
                 const createdAccount= accounts.createAccount(req.body);
                 const user_token= {
-                    userId: createdAccount.userId,
+                    id: createdAccount.id,
                     firstName: createdAccount.firstName,
                     lastName: createdAccount.lastName,
                     email: createdAccount.email,
@@ -40,8 +40,8 @@ class userAccountControler{
                     bio: createdAccount.bio,
                     occupation: createdAccount.occupation,
                     expertise: createdAccount.expertise,
-                    is_admin: createdAccount.is_admin,
-                    is_a_mentor: createdAccount.is_a_mentor
+                    isAdmin: createdAccount.isAdmin,
+                    isAmentor: createdAccount.isAmentor
                 };
 
                 const token= jwt.sign(user_token, user_secret, { expiresIn: "1d" });
@@ -52,7 +52,7 @@ class userAccountControler{
                     message : 'User created successfully',
                     data: {
                         token: token,
-                        userId: createdAccount.userId,
+                        id: createdAccount.id,
                         firstName: firstName,
                         lastName: lastName,
                         email: email,
@@ -60,8 +60,8 @@ class userAccountControler{
                         bio: bio,
                         occupation: occupation,
                         expertise: expertise,
-                        is_admin: createdAccount.is_admin,
-                        is_a_mentor: createdAccount.is_a_mentor
+                        isAdmin: createdAccount.isAdmin,
+                        isAmentor: createdAccount.isAmentor
                     }
                 })
             }
@@ -89,7 +89,7 @@ class userAccountControler{
 
             if(account_found && account_found.password===password){
                 const user_token= {
-                    userId: account_found.userId,
+                    id: account_found.id,
                     firstName: account_found.firstName,
                     lastName: account_found.lastName,
                     email: account_found.email,
@@ -97,8 +97,8 @@ class userAccountControler{
                     bio: account_found.bio,
                     occupation: account_found.occupation,
                     expertise: account_found.expertise,
-                    is_admin: account_found.is_admin,
-                    is_a_mentor: account_found.is_a_mentor
+                    isAdmin: account_found.isAdmin,
+                    isAmentor: account_found.isAmentor
                 };
                 const token= jwt.sign(user_token, user_secret, { expiresIn: "1d" });
                 res.header('x-auth-token', token);
@@ -107,7 +107,7 @@ class userAccountControler{
                     message : 'User is successfully logged in',
                     data : {
                         token : token,
-                        userId: account_found.userId,
+                        id: account_found.id,
                         firstName: account_found.firstName,
                         lastName: account_found.lastName,
                         email: account_found.email,
@@ -115,8 +115,8 @@ class userAccountControler{
                         bio: account_found.bio,
                         occupation: account_found.occupation,
                         expertise: account_found.expertise,
-                        is_admin: account_found.is_admin,
-                        is_a_mentor: account_found.is_a_mentor
+                        isAdmin: account_found.isAdmin,
+                        isAmentor: account_found.isAmentor
                     }
                 });
             }else{
@@ -132,18 +132,18 @@ class userAccountControler{
     ChangeUserToMentor(req, res){
         const user_id= parseInt(req.params.userId);
         const all_users= accounts.AllAccounts;
-        const user_found= all_users.find(users=>users.userId===user_id);
+        const user_found= all_users.find(users=>users.id===user_id);
         if(user_found){
             const new_role= true;
-            const admin_role_check= req.user_token.is_admin;
+            const admin_role_check= req.user_token.isAdmin;
             if(admin_role_check===true){
-                user_found.is_a_mentor= new_role;
+                user_found.isAmentor= new_role;
                 const updated_user_acc= user_found;
                 return res.status(200).json({
                     status: 200,
                     message: "User account changed to mentor",
                     data: {
-                        userId: updated_user_acc.userId,
+                        id: updated_user_acc.id,
                         firstName: updated_user_acc.firstName,
                         lastName: updated_user_acc.lastName,
                         email: updated_user_acc.email,
@@ -151,8 +151,8 @@ class userAccountControler{
                         bio: updated_user_acc.bio,
                         occupation: updated_user_acc.occupation,
                         expertise: updated_user_acc.expertise,
-                        is_admin: updated_user_acc.is_admin,
-                        is_a_mentor: updated_user_acc.is_a_mentor
+                        isAdmin: updated_user_acc.isAdmin,
+                        isAmentor: updated_user_acc.isAmentor
                     }
                 });
             }else{
@@ -172,7 +172,7 @@ class userAccountControler{
      //View All mentors
     viewAllMentors(req, res){
         const accs= accounts.AllAccounts;
-        const mentor_users=accs.filter(user=>user.is_a_mentor===true);
+        const mentor_users=accs.filter(user=>user.isAmentor===true);
             return res.status(200).json({
                 status: 200,
                 data: mentor_users
@@ -183,19 +183,19 @@ class userAccountControler{
     viewMentorById(req, res){
         const single_user_id= parseInt(req.params.userId);
         const all_users_accs= accounts.AllAccounts;
-        const user_acc= all_users_accs.find(acc=>acc.userId===single_user_id);
+        const user_acc= all_users_accs.find(acc=>acc.id===single_user_id);
         if(!(user_acc)){
             return res.status(404).json({
                 status: 404,
                 error: "A user with such Id not found"
             });
         }else{
-            const mentor_check_val= user_acc.is_a_mentor;
+            const mentor_check_val= user_acc.isAmentor;
             if(mentor_check_val===true){
                 return res.status(200).json({
                     status: 200,
                     data: {
-                        mentorId: user_acc.userId,
+                        mentorId: user_acc.id,
                         firstName: user_acc.firstName,
                         lastName: user_acc.lastName,
                         email: user_acc.email,
@@ -203,8 +203,8 @@ class userAccountControler{
                         bio: user_acc.bio,
                         occupation: user_acc.occupation,
                         expertise: user_acc.expertise,
-                        is_admin: user_acc.is_admin,
-                        is_a_mentor: user_acc.is_a_mentor
+                        isAdmin: user_acc.isAdmin,
+                        isAmentor: user_acc.isAmentor
                     }
                 });
             }else{

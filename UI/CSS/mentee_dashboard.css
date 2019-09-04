@@ -141,8 +141,14 @@ color: #fff;
 #review_stars_isaac i:nth-of-type(1), #review_stars_isaac i:nth-of-type(2), #review_stars_isaac i:nth-of-type(3){
   color: orange
 }
+#review_stars_isaac i:nth-of-type(4), #review_stars_isaac i:nth-of-type(5){
+  color: #A6ACAF;
+}
 #review_stars_peter i:nth-of-type(1),#review_stars_peter i:nth-of-type(2),#review_stars_peter i:nth-of-type(3),#review_stars_peter i:nth-of-type(4){
   color: orange
+}
+#review_stars_peter i:nth-of-type(5){
+  color: #A6ACAF;
 }
 #review_stars_gustave{
   display: none
@@ -151,22 +157,31 @@ color: #fff;
     cursor: pointer;
 }
 #mentor_review_div{
-    background-color: #000;
+    background-color:#2B3439;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    margin-top: -165px;
+    padding-top: 144px;
+    padding-bottom: 144px;
     display: none;
+    border-radius: 5px
 }
 #mentor_review_div span{
     font-weight: bold;
     color: orange;
     text-decoration: underline
 }
-#mentor_review_div input[type="number"]{
-    text-align: center
+#mentor_review_div textarea{
+    border-radius: 5px;
+    width: 200px;
+    height: 80px;
+    resize: none
+}
+#mentor_review_div input[type="text"]{
+  border-radius: 5px
 }
 .submit_review{
     border-radius: 3px;
-    font-weight: bold
+    font-weight: bold;
+    padding: 10px 20px
 }
 /*Aside div CSS*/
   .aside, .aside2 {
