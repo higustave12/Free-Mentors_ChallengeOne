@@ -32,7 +32,7 @@ class userAccountControler{
             }else{
                 const createdAccount= accounts.createAccount(req.body);
                 const user_token= {
-                    userId: createdAccount.userId,
+                    id: createdAccount.id,
                     firstName: createdAccount.firstName,
                     lastName: createdAccount.lastName,
                     email: createdAccount.email,
@@ -52,7 +52,7 @@ class userAccountControler{
                     message : 'User created successfully',
                     data: {
                         token: token,
-                        userId: createdAccount.userId,
+                        id: createdAccount.id,
                         firstName: firstName,
                         lastName: lastName,
                         email: email,
@@ -89,7 +89,7 @@ class userAccountControler{
 
             if(account_found && account_found.password===password){
                 const user_token= {
-                    userId: account_found.userId,
+                    id: account_found.id,
                     firstName: account_found.firstName,
                     lastName: account_found.lastName,
                     email: account_found.email,
@@ -107,7 +107,7 @@ class userAccountControler{
                     message : 'User is successfully logged in',
                     data : {
                         token : token,
-                        userId: account_found.userId,
+                        id: account_found.id,
                         firstName: account_found.firstName,
                         lastName: account_found.lastName,
                         email: account_found.email,
@@ -132,7 +132,7 @@ class userAccountControler{
     ChangeUserToMentor(req, res){
         const user_id= parseInt(req.params.userId);
         const all_users= accounts.AllAccounts;
-        const user_found= all_users.find(users=>users.userId===user_id);
+        const user_found= all_users.find(users=>users.id===user_id);
         if(user_found){
             const new_role= true;
             const admin_role_check= req.user_token.isAdmin;
@@ -143,7 +143,7 @@ class userAccountControler{
                     status: 200,
                     message: "User account changed to mentor",
                     data: {
-                        userId: updated_user_acc.userId,
+                        id: updated_user_acc.id,
                         firstName: updated_user_acc.firstName,
                         lastName: updated_user_acc.lastName,
                         email: updated_user_acc.email,
@@ -183,7 +183,7 @@ class userAccountControler{
     viewMentorById(req, res){
         const single_user_id= parseInt(req.params.userId);
         const all_users_accs= accounts.AllAccounts;
-        const user_acc= all_users_accs.find(acc=>acc.userId===single_user_id);
+        const user_acc= all_users_accs.find(acc=>acc.id===single_user_id);
         if(!(user_acc)){
             return res.status(404).json({
                 status: 404,
@@ -195,7 +195,7 @@ class userAccountControler{
                 return res.status(200).json({
                     status: 200,
                     data: {
-                        mentorId: user_acc.userId,
+                        mentorId: user_acc.id,
                         firstName: user_acc.firstName,
                         lastName: user_acc.lastName,
                         email: user_acc.email,

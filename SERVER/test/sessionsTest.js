@@ -2,8 +2,6 @@ import chai from 'chai';
 import chaiHttp from 'chai-http';
 import app from '../server';
 import JWT from 'jsonwebtoken';
-import session_inst from '../MODELS/session';
-import accounts from '../MODELS/User_Accounts';
 import dotenv from 'dotenv';
 
 dotenv.config();
@@ -18,7 +16,7 @@ describe("Test on Mentorship sessions", ()=>{
         //Should create a new mentorship session
         it("Should create a new mentorship session", (done)=>{
             const user_token = {
-                userId: 5,
+                id: 5,
                 firstName: "DOROTHE",
                 lastName: "MBARUSHIMANA",
                 email: "dorothembarushimana@gmail.com",
@@ -50,7 +48,7 @@ describe("Test on Mentorship sessions", ()=>{
         //Should create a new mentorship session
         it("Should create a new mentorship session", (done)=>{
             const user_token = {
-                userId: 5,
+                id: 5,
                 firstName: "DOROTHE",
                 lastName: "MBARUSHIMANA",
                 email: "dorothembarushimana@gmail.com",
@@ -82,7 +80,7 @@ describe("Test on Mentorship sessions", ()=>{
         //Should NOT create a new mentorship session: mentorId not found
         it("Should NOT create a new mentorship session: mentorId not found", (done)=>{
             const user_token = {
-                userId: 5,
+                id: 5,
                 firstName: "DOROTHE",
                 lastName: "MBARUSHIMANA",
                 email: "dorothembarushimana@gmail.com",
@@ -114,7 +112,7 @@ describe("Test on Mentorship sessions", ()=>{
         //Should NOT create a new mentorship session: Account not found
         it("Should NOT create a new mentorship session: Account not found", (done)=>{
             const user_token = {
-                userId: 5,
+                id: 5,
                 firstName: "DOROTHE",
                 lastName: "MBARUSHIMANA",
                 email: "dorothembarushimana@gmail.com",
@@ -146,7 +144,7 @@ describe("Test on Mentorship sessions", ()=>{
         //Should NOT create a new mentorship session: Invalid input or Missing input
         it("Should NOT create a new mentorship session: Invalid input or Missing input", (done)=>{
             const user_token = {
-                userId: 5,
+                id: 5,
                 firstName: "DOROTHE",
                 lastName: "MBARUSHIMANA",
                 email: "dorothembarushimana@gmail.com",
@@ -181,7 +179,7 @@ describe("Test on Mentorship sessions", ()=>{
         //Should allow a mentor to accept a mentorship session request
         it("Should allow a mentor to accept a mentorship session request", (done)=>{
             const user_token = {
-                userId: 2,
+                id: 2,
                 firstName: "AUGUSTIN",
                 lastName: "NTAMBARA",
                 email: "augustinntambara@gmail.com",
@@ -209,7 +207,7 @@ describe("Test on Mentorship sessions", ()=>{
         //Should NOT allow a mentor to accept a mentorship session request: You are not a mentor for this session
         it("Should NOT allow a mentor to accept a mentorship session request: You are not a mentor for this session", (done)=>{
             const user_token = {
-                userId: 6,
+                id: 6,
                 firstName: "EUGENE",
                 lastName: "PARK",
                 email: "eugenepark@gmail.com",
@@ -236,7 +234,7 @@ describe("Test on Mentorship sessions", ()=>{
         //Should NOT allow a mentor to accept a mentorship session request: Session with such Id not found
         it("Should NOT allow a mentor to accept a mentorship session request: Session with such Id not found", (done)=>{
             const user_token = {
-                userId: 2,
+                id: 2,
                 firstName: "AUGUSTIN",
                 lastName: "NTAMBARA",
                 email: "augustinntambara@gmail.com",
@@ -266,7 +264,7 @@ describe("Test on Mentorship sessions", ()=>{
         //Should allow a mentor to reject a mentorship session request
         it("Should allow a mentor to reject a mentorship session request", (done)=>{
             const user_token = {
-                userId: 3,
+                id: 3,
                 firstName: "FIDELE",
                 lastName: "BIZIMANA",
                 email: "fidelebizimana@gmail.com",
@@ -293,7 +291,7 @@ describe("Test on Mentorship sessions", ()=>{
         //Should NOT allow a mentor to reject a mentorship session request: You are not a mentor for this session
         it("Should NOT allow a mentor to reject a mentorship session request: You are not a mentor for this session", (done)=>{
             const user_token = {
-                userId: 6,
+                id: 6,
                 firstName: "EUGENE",
                 lastName: "PARK",
                 email: "eugenepark@gmail.com",
@@ -320,7 +318,7 @@ describe("Test on Mentorship sessions", ()=>{
         //Should NOT allow a mentor to reject a mentorship session request: Session with such Id not found
         it("Should NOT allow a mentor to reject a mentorship session request: Session with such Id not found", (done)=>{
             const user_token = {
-                userId: 2,
+                id: 2,
                 firstName: "AUGUSTIN",
                 lastName: "NTAMBARA",
                 email: "augustinntambara@gmail.com",
@@ -350,7 +348,7 @@ describe("Test on Mentorship sessions", ()=>{
         //Should allow a user(Mentee or Mentor) to Get or View all mentorship sessions(Mentee)
         it("Should allow a user(Mentee) to Get or View all mentorship sessions: Mentee", (done)=>{
             const user_token = {
-                userId: 5,
+                id: 5,
                 firstName: "DOROTHE",
                 lastName: "MBARUSHIMANA",
                 email: "dorothembarushimana@gmail.com",
@@ -375,7 +373,7 @@ describe("Test on Mentorship sessions", ()=>{
         //Should NOT allow a user(Mentee or Mentor) to Get or View all mentorship sessions
         it("Should NOT allow a user(Mentee) to Get or View all mentorship sessions: Mentee (No mentorship session found)", (done)=>{
             const user_token = {
-                userId: 7,
+                id: 7,
                 firstName: "AIME",
                 lastName: "SIFA",
                 email: "sifaaime@gmail.com",
@@ -401,7 +399,7 @@ describe("Test on Mentorship sessions", ()=>{
         //Should allow a user(Mentee or Mentor) to Get or View all mentorship sessions(Mentor)
         it("Should allow a user(Mentor) to Get or View all mentorship sessions: Mentor", (done)=>{
             const user_token = {
-                userId: 2,
+                id: 2,
                 firstName: "AUGUSTIN",
                 lastName: "NTAMBARA",
                 email: "augustinntambara@gmail.com",
@@ -426,7 +424,7 @@ describe("Test on Mentorship sessions", ()=>{
         //Should NOT allow a user(Mentee or Mentor) to Get or View all mentorship sessions
         it("Should NOT allow a user(Mentor) to Get or View all mentorship sessions: Mentor (No mentorship session found)", (done)=>{
             const user_token = {
-                userId: 4,
+                id: 4,
                 firstName: "PAUL",
                 lastName: "NSABIMANA",
                 email: "paulnsabimana@gmail.com",
@@ -458,7 +456,7 @@ describe("Test on Mentorship sessions", ()=>{
             const score= 2;
             const remark= "The mentor is good at explaining the subject";
             const user_token = {
-                userId: 5,
+                id: 5,
                 firstName: "DOROTHE",
                 lastName: "MBARUSHIMANA",
                 email: "dorothembarushimana@gmail.com",
@@ -491,7 +489,7 @@ describe("Test on Mentorship sessions", ()=>{
             const score= 3;
             const remark= "The mentor was not good at explaining";
             const user_token = {
-                userId: 4,
+                id: 4,
                 firstName: "PAUL",
                 lastName: "NSABIMANA",
                 email: "paulnsabimana@gmail.com",
@@ -524,7 +522,7 @@ describe("Test on Mentorship sessions", ()=>{
             const score= 4;
             const remark= "The mentor is good at explaining the subject";
             const user_token = {
-                userId: 5,
+                id: 5,
                 firstName: "DOROTHE",
                 lastName: "MBARUSHIMANA",
                 email: "dorothembarushimana@gmail.com",
@@ -557,7 +555,7 @@ describe("Test on Mentorship sessions", ()=>{
             const score= 4;
             //const remark= "The mentor is good at explaining the subject";
             const user_token = {
-                userId: 5,
+                id: 5,
                 firstName: "DOROTHE",
                 lastName: "MBARUSHIMANA",
                 email: "dorothembarushimana@gmail.com",
@@ -591,7 +589,7 @@ describe("Test on Mentorship sessions", ()=>{
         it("Should allow an admin to Delete a session review deemed as inappropriate", (done)=>{
             const sessionId= 1;
             const user_token = {
-                userId: 1,
+                id: 1,
                 firstName: "BRIGITE",
                 lastName: "MUTONI",
                 email: "mutonibrigitte@gmail.com",
@@ -618,7 +616,7 @@ describe("Test on Mentorship sessions", ()=>{
         it("Should NOT allow an admin to Delete a session review: Session to delete not found", (done)=>{
             const sessionId= 1000;
             const user_token = {
-                userId: 1,
+                id: 1,
                 firstName: "BRIGITE",
                 lastName: "MUTONI",
                 email: "mutonibrigitte@gmail.com",
@@ -645,7 +643,7 @@ describe("Test on Mentorship sessions", ()=>{
         it("Should NOT allow an mentee to Delete a session review: Only admin can delete a session review", (done)=>{
             const sessionId= 1000;
             const user_token = {
-                userId: 5,
+                id: 5,
                 firstName: "DOROTHE",
                 lastName: "MBARUSHIMANA",
                 email: "dorothembarushimana@gmail.com",

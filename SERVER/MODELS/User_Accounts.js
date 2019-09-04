@@ -4,7 +4,7 @@ class Accounts{
     }
     createAccount(req){
         const single_acc={
-            userId: this.AllAccounts.length+1,
+            id: this.AllAccounts.length+1,
             firstName: (req.firstName).trim(),
             lastName: (req.lastName).trim(),
             email: ((req.email).trim()).replace(/\s/g,''),
@@ -24,7 +24,7 @@ const accounts= new Accounts();
 
 //Add a dummy ADMIN user 
 const dummy_admin_user = {
-    userId: accounts.AllAccounts.length+1,
+    id: accounts.AllAccounts.length+1,
     firstName: "BRIGITE",
     lastName: "MUTONI",
     email: "mutonibrigitte@gmail.com",
@@ -40,7 +40,7 @@ accounts.AllAccounts.push(dummy_admin_user);
 
 //Add a dummy non admin MENTOR user
 const dummy_mentor_user = {
-    userId: accounts.AllAccounts.length+1,
+    id: accounts.AllAccounts.length+1,
     firstName: "AUGUSTIN",
     lastName: "NTAMBARA",
     email: "augustinntambara@gmail.com",
@@ -56,7 +56,7 @@ accounts.AllAccounts.push(dummy_mentor_user);
 
 //Add a dummy non admin MENTOR user
 const dummy_mentor_user2 = {
-    userId: accounts.AllAccounts.length+1,
+    id: accounts.AllAccounts.length+1,
     firstName: "FIDELE",
     lastName: "BIZIMANA",
     email: "fidelebizimana@gmail.com",
@@ -72,7 +72,7 @@ accounts.AllAccounts.push(dummy_mentor_user2);
 
 //Add a dummy non admin MENTOR user
 const dummy_mentor_user3 = {
-    userId: accounts.AllAccounts.length+1,
+    id: accounts.AllAccounts.length+1,
     firstName: "PAUL",
     lastName: "NSABIMANA",
     email: "paulnsabimana@gmail.com",
@@ -88,7 +88,7 @@ accounts.AllAccounts.push(dummy_mentor_user3);
 
 //Add a dummy non admin non mentor user(MENTEE)
 const dummy_mentee_user = {
-    userId: accounts.AllAccounts.length+1,
+    id: accounts.AllAccounts.length+1,
     firstName: "DOROTHE",
     lastName: "MBARUSHIMANA",
     email: "dorothembarushimana@gmail.com",
