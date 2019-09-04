@@ -57,6 +57,7 @@
                     <span>
                         Not Yet
                     </span><br/><br/>
+                    <span class="titles">Comment: </span><span>None</span><br/><br/>
                     <button type="button" class="review_session_btn pending_btn" disabled>Review Session</button>
                 </div>
                 <div class="col-3 col-s-12 single_session_div" id="single_session_div2">
@@ -70,6 +71,7 @@
                         <i class="fa fa-star"></i>
                         <i class="fa fa-star"></i>
                     </span><br/><br/>
+                    <span class="titles">Comment: </span><span>Explanations were clear</span><br/><br/>
                     <button type="button" class="review_session_btn accepted_reviewed_btn" disabled>Review Session</button>
                 </div>
                 <div class="col-3 col-s-12 single_session_div" id="single_session_div3">
@@ -85,6 +87,8 @@
                         <i class="fa fa-star"></i>
                         <i class="fa fa-star"></i>
                     </span><br/><br/>
+                    <span class="titles">Comment: </span><span id="review_comments_gst">None</span>
+                    <br/><br/>
                     <button type="button" class="review_session_btn accepted_unreviewed_btn" id="review_session_btn" onclick="showReviewDiv();">Review Session</button>
                 </div>
                 <div class="col-3 col-s-12 single_session_div" id="single_session_div4">
@@ -97,11 +101,16 @@
                         <i class="fa fa-star"></i>
                         <i class="fa fa-star"></i>
                     </span><br/><br/>
+                    <span class="titles">Comment: </span><span>Explanations not clear</span><br/><br/>
                     <button type="button" class="review_session_btn accepted_reviewed_btn" disabled>Review Session</button>
                 </div>
                 <div id="mentor_review_div">
                     <br/><span>Review Session (scale of 1~5)</span><br/><br/>
-                    <input type="text" id="review_input" placeholder="1~5" min="1" max="5" autofocus required/><br/><br/>
+                    <input type="number" id="review_input" placeholder="1~5" min="1" max="5" autofocus required/><br/><br/>
+                    <span>Comment (2~24 characters):</span>
+                    <br/><br/>
+                    <input type="text" id="review_comment_input"/>
+                    <br/><br/><br/>
                     <button type="button" class="submit_review" onclick="updateReview()">Submit Review</button><br/><br/>
                 </div>
             </div>

@@ -67,15 +67,21 @@ const Clocktime = () => {
   //Update the review once the Submit review button is clicked
   function updateReview(){
       let review_value= document.getElementById("review_input").value;
+      let review_comment_value= document.getElementById("review_comment_input").value;
+      let comment_length= review_comment_value.length;
       if(review_value>5 || review_value<1){
           document.getElementById("review_input").style.borderColor="red";
       }else{
+        if(comment_length>24){
+          document.getElementById("review_comment_input").style.borderColor="red";
+        }else{
           document.getElementById("mentor_review_div").style.display= "none";
           document.getElementById("single_session_div1").style.display="block";
           document.getElementById("single_session_div2").style.display="block";
           document.getElementById("single_session_div3").style.display="block";
           document.getElementById("single_session_div4").style.display="block";
-          
+          document.getElementById("review_comments_gst").innerHTML=review_comment_value;
+
           document.getElementById("not_reviewed").style.display="none";
           document.getElementById("review_stars_gustave").style.display="inline-block";
           var all_stars = document.getElementById("review_stars_gustave").querySelectorAll(".fa-star");
@@ -122,5 +128,6 @@ const Clocktime = () => {
             document.getElementById("mentor_review_div").style.display="none";
             document.getElementById("review_session_btn").disabled= "true";
           }
+        }
       }
   }
