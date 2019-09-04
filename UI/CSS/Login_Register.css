@@ -129,27 +129,68 @@ color: #fff;
   text-align: center
 }
 .login_div{
-    margin-bottom: 20px;
+    margin-bottom: 0px;
     padding: 20px 0px;
+    text-align: center
+}
+.login_div input[type="email"],.login_div input[type="password"]{
+  width: 25%;
+  height: 30px;
+  border: 2px solid rgb(143, 182, 207);
+  text-align: center;
+  font-weight: bold;
+  border-radius: 5px;
 }
 .login_div button{
     cursor: pointer;
-    padding: 3px 20px;
+    padding: 10px 40px;
+    border-radius: 5px;
+    font-weight: bold;
+    background-color: orange;
+    color: #2E4053;
+    font-size: 15px
 }
 .register_div{
-    box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
-    background-color: rgb(41, 126, 236)
+    text-align: center
+}
+#serapator_hr{
+  padding-bottom: 5px;
+  background-color: orange;
+  border-color: orange;
+  border-radius: 3px
+}
+#signup_form{
+  background-color: #7DCEA0;
+  padding: 20px 5px;
+}
+.register_div h1{
+  color: #2E4053
+}
+.register_div input[type="text"],.register_div input[type="email"],.register_div input[type="password"]{
+  width: 250px;
+  text-align: center;
+  height: 30px;
+  border-radius: 5px;
+  font-weight: bold;
+}
+.register_div button{
+  border-radius: 10px
+}
+textarea{
+  resize: none;
+  height: 100px;
+  width: 200px;
+  border-radius: 8px
 }
 .register_div h1{
   text-decoration: underline
 }
-.register_div label{
-  font-weight: bold
-}
 .register_div button{
   cursor: pointer;
-  padding: 3px 20px;
-  font-weight: bold
+  padding: 10px 40px;
+  font-weight: bold;
+  background-color: #2E86C1;
+  color: #fff
 }
 /*Aside div CSS*/
   .aside, .aside2 {
@@ -161,17 +202,6 @@ color: #fff;
     font-size: 14px;
     box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
     font-weight: bold
-  }
-  .aside a, .aside2 a{
-    color: red
-  }
-  .aside img, .aside2{
-    width: 90%;
-    height: auto
-  }
-  .aside h1, .aside2 h1{
-    color: red;
-    text-decoration: underline
   }
   /*Footer div CSS*/
   .footer {
