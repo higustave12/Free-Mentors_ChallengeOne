@@ -19,7 +19,7 @@ class userAccountControler{
             }
             return res.status(400).send({
                 status: 400,
-                error: signup_errors
+                error: signup_errors[0]
             });
         }else{
             const all_user_accounts= accounts.AllAccounts;
