@@ -137,7 +137,7 @@ class userAccountControler{
             const new_role= true;
             const admin_role_check= req.user_token.isAdmin;
             if(admin_role_check===true){
-                user_found.is_a_mentor= new_role;
+                user_found.isAmentor= new_role;
                 const updated_user_acc= user_found;
                 return res.status(200).json({
                     status: 200,
