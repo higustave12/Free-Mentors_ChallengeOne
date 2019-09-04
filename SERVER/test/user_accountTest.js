@@ -197,7 +197,7 @@ describe("Test on users accounts", ()=>{
         it("Should change a user into a mentor", (done)=>{
             const userId= 6;
             const user_token = {
-                userId: 1,
+                id: 1,
                 firstName: "BRIGITE",
                 lastName: "MUTONI",
                 email: "mutonibrigitte@gmail.com",
@@ -218,7 +218,7 @@ describe("Test on users accounts", ()=>{
                         res.body.should.have.property("message").equal("User account changed to mentor");
                         res.body.should.have.property("data");
                         res.body.data.should.be.an("object");
-                        res.body.data.should.have.property("userId");
+                        res.body.data.should.have.property("id");
                         res.body.data.should.have.property("firstName");
                         res.body.data.should.have.property("lastName");
                         res.body.data.should.have.property("email");
@@ -236,7 +236,7 @@ describe("Test on users accounts", ()=>{
         it("Should NOT change a user into a mentor: userId not Found", (done)=>{
             const userId= 6000;
             const user_token = {
-                userId: 1,
+                id: 1,
                 firstName: "BRIGITE",
                 lastName: "MUTONI",
                 email: "mutonibrigitte@gmail.com",
@@ -263,7 +263,7 @@ describe("Test on users accounts", ()=>{
         it("Should NOT change a user into a mentor: Only admin can change a user to a mentor", (done)=>{
             const userId= 6;
             const user_token = {
-                userId: 2,
+                id: 2,
                 firstName: "AUGUSTIN",
                 lastName: "NTAMBARA",
                 email: "augustinntambara@gmail.com",
@@ -304,7 +304,7 @@ describe("Test on users accounts", ()=>{
         //Should view all mentors
         it("Should view all mentors", (done)=>{
             const user_token = {
-                userId: 5,
+                id: 5,
                 firstName: "DOROTHE",
                 lastName: "MBARUSHIMANA",
                 email: "dorothembarushimana@gmail.com",
@@ -334,7 +334,7 @@ describe("Test on users accounts", ()=>{
         it("Should View a specific mentor by Id", (done)=>{
             const userId= 2;
             const user_token = {
-                userId: 5,
+                id: 5,
                 firstName: "DOROTHE",
                 lastName: "MBARUSHIMANA",
                 email: "dorothembarushimana@gmail.com",
@@ -361,7 +361,7 @@ describe("Test on users accounts", ()=>{
         it("Should NOT View a specific mentor by Id: A user with such Id not found", (done)=>{
             const userId= 20;
             const user_token = {
-                userId: 5,
+                id: 5,
                 firstName: "DOROTHE",
                 lastName: "MBARUSHIMANA",
                 email: "dorothembarushimana@gmail.com",
@@ -388,7 +388,7 @@ describe("Test on users accounts", ()=>{
         it("Should NOT View a specific mentor by Id: A mentor with such Id not found", (done)=>{
             const userId= 5;
             const user_token = {
-                userId: 5,
+                id: 5,
                 firstName: "DOROTHE",
                 lastName: "MBARUSHIMANA",
                 email: "dorothembarushimana@gmail.com",

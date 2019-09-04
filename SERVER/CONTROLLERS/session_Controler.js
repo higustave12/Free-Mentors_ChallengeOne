@@ -20,7 +20,7 @@ class sessionControler{
             });
         }else{
             const allAccs= accounts.AllAccounts;
-            const USER_ACC= allAccs.find(accs=>accs.userId===parseInt(mentorId));
+            const USER_ACC= allAccs.find(accs=>accs.id===parseInt(mentorId));
             if(!(USER_ACC)){
                 return res.status(404).json({
                     status: 404,
@@ -29,7 +29,7 @@ class sessionControler{
             }else{
                 const mentor_checking= USER_ACC.isAmentor;
                 if(mentor_checking===true){
-                    const menteeId= req.user_token.userId;
+                    const menteeId= req.user_token.id;
                     const menteeEmail= req.user_token.email;
                     const status="pending";
                     const input_data= {mentorId, menteeId, questions, menteeEmail, status};
@@ -55,7 +55,7 @@ class sessionControler{
         const all_sess= session_inst.allSessions;
         const session_lookup= all_sess.find(single_sess=>single_sess.sessionId===sessId);
         if(session_lookup){
-            const mentorId= req.user_token.userId;
+            const mentorId= req.user_token.id;
             const check_session_mentor= session_lookup.mentorId;
             if(check_session_mentor===mentorId){
                 const new_status= "accepted";
@@ -85,7 +85,7 @@ class sessionControler{
         const all_sessio= session_inst.allSessions;
         const session_lookups= all_sessio.find(single_sessio=>single_sessio.sessionId===sessioId);
         if(session_lookups){
-            const mentorId= req.user_token.userId;
+            const mentorId= req.user_token.id;
             const check_session_mentors= session_lookups.mentorId;
             if(check_session_mentors===mentorId){
                 const new_session_status= "rejected";
@@ -115,7 +115,7 @@ class sessionControler{
         const allsess= session_inst.allSessions;
 
         if(is_mentor_checking===false){
-            const mentee_ID= req.user_token.userId;
+            const mentee_ID= req.user_token.id;
             const mentee_sessions= allsess.filter(mentee=>mentee.menteeId===mentee_ID);
             if(mentee_sessions.length>=1){
                 return res.status(200).json({
@@ -129,7 +129,7 @@ class sessionControler{
                 });
             }
         }else{
-            const mentor_ID= req.user_token.userId;
+            const mentor_ID= req.user_token.id;
             const mentor_sessions= allsess.filter(mentor=>mentor.mentorId===mentor_ID);
             if(mentor_sessions.length>=1){
                 return res.status(200).json({
@@ -159,7 +159,7 @@ class sessionControler{
             });
         }else{
             const sessioIDs=parseInt(req.params.sessionId);
-            const menteeIDs=req.user_token.userId;
+            const menteeIDs=req.user_token.id;
             const allSESSIONS= session_inst.allSessions;
             const single_session_search= allSESSIONS.find(single_sess=>single_sess.sessionId===sessioIDs);
             if(single_session_search){
