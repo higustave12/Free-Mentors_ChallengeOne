@@ -125,6 +125,7 @@ const Clocktime = () => {
             for(let i of all_stars){
               i.style.color="orange";
             }
+            
             document.getElementById("mentor_review_div").style.display="none";
             document.getElementById("review_session_btn").disabled= "true";
           }
