@@ -40,8 +40,8 @@ class userAccountControler{
                     bio: createdAccount.bio,
                     occupation: createdAccount.occupation,
                     expertise: createdAccount.expertise,
-                    is_admin: createdAccount.is_admin,
-                    is_a_mentor: createdAccount.is_a_mentor
+                    isAdmin: createdAccount.isAdmin,
+                    isAmentor: createdAccount.isAmentor
                 };
 
                 const token= jwt.sign(user_token, user_secret, { expiresIn: "1d" });
@@ -60,8 +60,8 @@ class userAccountControler{
                         bio: bio,
                         occupation: occupation,
                         expertise: expertise,
-                        is_admin: createdAccount.is_admin,
-                        is_a_mentor: createdAccount.is_a_mentor
+                        isAdmin: createdAccount.isAdmin,
+                        isAmentor: createdAccount.isAmentor
                     }
                 })
             }
@@ -97,8 +97,8 @@ class userAccountControler{
                     bio: account_found.bio,
                     occupation: account_found.occupation,
                     expertise: account_found.expertise,
-                    is_admin: account_found.is_admin,
-                    is_a_mentor: account_found.is_a_mentor
+                    isAdmin: account_found.isAdmin,
+                    isAmentor: account_found.isAmentor
                 };
                 const token= jwt.sign(user_token, user_secret, { expiresIn: "1d" });
                 res.header('x-auth-token', token);
@@ -115,8 +115,8 @@ class userAccountControler{
                         bio: account_found.bio,
                         occupation: account_found.occupation,
                         expertise: account_found.expertise,
-                        is_admin: account_found.is_admin,
-                        is_a_mentor: account_found.is_a_mentor
+                        isAdmin: account_found.isAdmin,
+                        isAmentor: account_found.isAmentor
                     }
                 });
             }else{
@@ -135,9 +135,9 @@ class userAccountControler{
         const user_found= all_users.find(users=>users.userId===user_id);
         if(user_found){
             const new_role= true;
-            const admin_role_check= req.user_token.is_admin;
+            const admin_role_check= req.user_token.isAdmin;
             if(admin_role_check===true){
-                user_found.is_a_mentor= new_role;
+                user_found.isAmentor= new_role;
                 const updated_user_acc= user_found;
                 return res.status(200).json({
                     status: 200,
@@ -151,8 +151,8 @@ class userAccountControler{
                         bio: updated_user_acc.bio,
                         occupation: updated_user_acc.occupation,
                         expertise: updated_user_acc.expertise,
-                        is_admin: updated_user_acc.is_admin,
-                        is_a_mentor: updated_user_acc.is_a_mentor
+                        isAdmin: updated_user_acc.isAdmin,
+                        isAmentor: updated_user_acc.isAmentor
                     }
                 });
             }else{
@@ -172,7 +172,7 @@ class userAccountControler{
      //View All mentors
     viewAllMentors(req, res){
         const accs= accounts.AllAccounts;
-        const mentor_users=accs.filter(user=>user.is_a_mentor===true);
+        const mentor_users=accs.filter(user=>user.isAmentor===true);
             return res.status(200).json({
                 status: 200,
                 data: mentor_users
@@ -190,7 +190,7 @@ class userAccountControler{
                 error: "A user with such Id not found"
             });
         }else{
-            const mentor_check_val= user_acc.is_a_mentor;
+            const mentor_check_val= user_acc.isAmentor;
             if(mentor_check_val===true){
                 return res.status(200).json({
                     status: 200,
@@ -203,8 +203,8 @@ class userAccountControler{
                         bio: user_acc.bio,
                         occupation: user_acc.occupation,
                         expertise: user_acc.expertise,
-                        is_admin: user_acc.is_admin,
-                        is_a_mentor: user_acc.is_a_mentor
+                        isAdmin: user_acc.isAdmin,
+                        isAmentor: user_acc.isAmentor
                     }
                 });
             }else{

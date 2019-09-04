@@ -13,8 +13,8 @@ class Accounts{
             bio: (req.bio).trim(),
             occupation: (req.occupation).trim(),
             expertise: (req.expertise).trim(),
-            is_admin: false,
-            is_a_mentor: false
+            isAdmin: false,
+            isAmentor: false
         }
         this.AllAccounts.push(single_acc);
         return single_acc;
@@ -33,8 +33,8 @@ const dummy_admin_user = {
     bio: "JAVASCRIPT ENTHUSIAST",
     occupation: "STUDENT",
     expertise: "NODEJS",
-    is_admin: true,
-    is_a_mentor: false
+    isAdmin: true,
+    isAmentor: false
 };
 accounts.AllAccounts.push(dummy_admin_user);
 
@@ -49,8 +49,8 @@ const dummy_mentor_user = {
     bio: "PYTHON ENTHUSIAST",
     occupation: "PROFESSOR",
     expertise: "PYTHON",
-    is_admin: false,
-    is_a_mentor: true
+    isAdmin: false,
+    isAmentor: true
 };
 accounts.AllAccounts.push(dummy_mentor_user);
 
@@ -65,8 +65,8 @@ const dummy_mentor_user2 = {
     bio: "RUBY ENTHUSIAST",
     occupation: "STUDEN",
     expertise: "RUBY",
-    is_admin: false,
-    is_a_mentor: true
+    isAdmin: false,
+    isAmentor: true
 };
 accounts.AllAccounts.push(dummy_mentor_user2);
 
@@ -81,8 +81,8 @@ const dummy_mentor_user3 = {
     bio: "C++ ENTHUSIAST",
     occupation: "STUDENT",
     expertise: "C++",
-    is_admin: false,
-    is_a_mentor: true
+    isAdmin: false,
+    isAmentor: true
 };
 accounts.AllAccounts.push(dummy_mentor_user3);
 
@@ -97,8 +97,8 @@ const dummy_mentee_user = {
     bio: "C# ENTHUSIAST",
     occupation: "ASSISTANT PROF",
     expertise: "C#",
-    is_admin: false,
-    is_a_mentor: false
+    isAdmin: false,
+    isAmentor: false
 };
 accounts.AllAccounts.push(dummy_mentee_user);
 

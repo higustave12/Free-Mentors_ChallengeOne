@@ -27,8 +27,8 @@ describe("Test on Mentorship sessions", ()=>{
                 bio: "C# ENTHUSIAST",
                 occupation: "ASSISTANT PROF",
                 expertise: "C#",
-                is_admin: false,
-                is_a_mentor: false
+                isAdmin: false,
+                isAmentor: false
             };
             const mentorId= 2;
             const questions= "I want to improve my javascript skills. Thank you";
@@ -59,8 +59,8 @@ describe("Test on Mentorship sessions", ()=>{
                 bio: "C# ENTHUSIAST",
                 occupation: "ASSISTANT PROF",
                 expertise: "C#",
-                is_admin: false,
-                is_a_mentor: false
+                isAdmin: false,
+                isAmentor: false
             };
             const mentorId= 3;
             const questions= "I want to learn Python. Thank you";
@@ -91,8 +91,8 @@ describe("Test on Mentorship sessions", ()=>{
                 bio: "C# ENTHUSIAST",
                 occupation: "ASSISTANT PROF",
                 expertise: "C#",
-                is_admin: false,
-                is_a_mentor: false
+                isAdmin: false,
+                isAmentor: false
             };
             const mentorId= 1;
             const questions= "I want to improve my javascript skills. Thank you";
@@ -123,8 +123,8 @@ describe("Test on Mentorship sessions", ()=>{
                 bio: "C# ENTHUSIAST",
                 occupation: "ASSISTANT PROF",
                 expertise: "C#",
-                is_admin: false,
-                is_a_mentor: false
+                isAdmin: false,
+                isAmentor: false
             };
             const mentorId= 100;
             const questions= "I want to improve my javascript skills. Thank you";
@@ -155,8 +155,8 @@ describe("Test on Mentorship sessions", ()=>{
                 bio: "C# ENTHUSIAST",
                 occupation: "ASSISTANT PROF",
                 expertise: "C#",
-                is_admin: false,
-                is_a_mentor: false
+                isAdmin: false,
+                isAmentor: false
             };
             const mentorId= 2;
             //const questions= "I want to improve my javascript skills. Thank you";
@@ -190,8 +190,8 @@ describe("Test on Mentorship sessions", ()=>{
                 bio: "PYTHON ENTHUSIAST",
                 occupation: "PROFESSOR",
                 expertise: "PYTHON",
-                is_admin: false,
-                is_a_mentor: true
+                isAdmin: false,
+                isAmentor: true
             };
             const sessionId= 1;
             //const questions= "I want to improve my javascript skills. Thank you";
@@ -218,8 +218,8 @@ describe("Test on Mentorship sessions", ()=>{
                 bio: "RUBY STUDENT",
                 occupation: "STUDENT",
                 expertise: "RUBY",
-                is_admin: false,
-                is_a_mentor: true
+                isAdmin: false,
+                isAmentor: true
             };
             const sessionId= 1;
             const token =JWT.sign(user_token, process.env.SECRET);
@@ -245,8 +245,8 @@ describe("Test on Mentorship sessions", ()=>{
                 bio: "PYTHON ENTHUSIAST",
                 occupation: "PROFESSOR",
                 expertise: "PYTHON",
-                is_admin: false,
-                is_a_mentor: true
+                isAdmin: false,
+                isAmentor: true
             };
             const sessionId= 10000;
             const token =JWT.sign(user_token, process.env.SECRET);
@@ -275,8 +275,8 @@ describe("Test on Mentorship sessions", ()=>{
                 bio: "RUBY ENTHUSIAST",
                 occupation: "STUDEN",
                 expertise: "RUBY",
-                is_admin: false,
-                is_a_mentor: true
+                isAdmin: false,
+                isAmentor: true
             };
             const sessionId= 2;
             const token =JWT.sign(user_token, process.env.SECRET);
@@ -302,8 +302,8 @@ describe("Test on Mentorship sessions", ()=>{
                 bio: "RUBY STUDENT",
                 occupation: "STUDENT",
                 expertise: "RUBY",
-                is_admin: false,
-                is_a_mentor: true
+                isAdmin: false,
+                isAmentor: true
             };
             const sessionId= 2;
             const token =JWT.sign(user_token, process.env.SECRET);
@@ -329,8 +329,8 @@ describe("Test on Mentorship sessions", ()=>{
                 bio: "PYTHON ENTHUSIAST",
                 occupation: "PROFESSOR",
                 expertise: "PYTHON",
-                is_admin: false,
-                is_a_mentor: true
+                isAdmin: false,
+                isAmentor: true
             };
             const sessionId= 3895;
             const token =JWT.sign(user_token, process.env.SECRET);
@@ -359,8 +359,8 @@ describe("Test on Mentorship sessions", ()=>{
                 bio: "C# ENTHUSIAST",
                 occupation: "ASSISTANT PROF",
                 expertise: "C#",
-                is_admin: false,
-                is_a_mentor: false
+                isAdmin: false,
+                isAmentor: false
             };
             const token =JWT.sign(user_token, process.env.SECRET);
             chai.request(app)
@@ -384,8 +384,8 @@ describe("Test on Mentorship sessions", ()=>{
                 bio: "PHP STUDENT",
                 occupation: "STUDENT",
                 expertise: "PHP",
-                is_admin: false,
-                is_a_mentor: false
+                isAdmin: false,
+                isAmentor: false
             };
             const token =JWT.sign(user_token, process.env.SECRET);
             chai.request(app)
@@ -410,8 +410,8 @@ describe("Test on Mentorship sessions", ()=>{
                 bio: "PYTHON ENTHUSIAST",
                 occupation: "PROFESSOR",
                 expertise: "PYTHON",
-                is_admin: false,
-                is_a_mentor: true
+                isAdmin: false,
+                isAmentor: true
             };
             const token =JWT.sign(user_token, process.env.SECRET);
             chai.request(app)
@@ -435,8 +435,8 @@ describe("Test on Mentorship sessions", ()=>{
                 bio: "C++ ENTHUSIAST",
                 occupation: "STUDENT",
                 expertise: "C++",
-                is_admin: false,
-                is_a_mentor: true
+                isAdmin: false,
+                isAmentor: true
             };
             const token =JWT.sign(user_token, process.env.SECRET);
             chai.request(app)
@@ -467,8 +467,8 @@ describe("Test on Mentorship sessions", ()=>{
                 bio: "C# ENTHUSIAST",
                 occupation: "ASSISTANT PROF",
                 expertise: "C#",
-                is_admin: false,
-                is_a_mentor: false
+                isAdmin: false,
+                isAmentor: false
             };
             const token =JWT.sign(user_token, process.env.SECRET);
             chai.request(app)
@@ -500,8 +500,8 @@ describe("Test on Mentorship sessions", ()=>{
                 bio: "C++ ENTHUSIAST",
                 occupation: "STUDENT",
                 expertise: "C++",
-                is_admin: false,
-                is_a_mentor: true
+                isAdmin: false,
+                isAmentor: true
             };
             const token =JWT.sign(user_token, process.env.SECRET);
             chai.request(app)
@@ -533,8 +533,8 @@ describe("Test on Mentorship sessions", ()=>{
                 bio: "C# ENTHUSIAST",
                 occupation: "ASSISTANT PROF",
                 expertise: "C#",
-                is_admin: false,
-                is_a_mentor: false
+                isAdmin: false,
+                isAmentor: false
             };
             const token =JWT.sign(user_token, process.env.SECRET);
             chai.request(app)
@@ -566,8 +566,8 @@ describe("Test on Mentorship sessions", ()=>{
                 bio: "C# ENTHUSIAST",
                 occupation: "ASSISTANT PROF",
                 expertise: "C#",
-                is_admin: false,
-                is_a_mentor: false
+                isAdmin: false,
+                isAmentor: false
             };
             const token =JWT.sign(user_token, process.env.SECRET);
             chai.request(app)
@@ -600,8 +600,8 @@ describe("Test on Mentorship sessions", ()=>{
                 bio: "JAVASCRIPT ENTHUSIAST",
                 occupation: "STUDENT",
                 expertise: "NODEJS",
-                is_admin: true,
-                is_a_mentor: false
+                isAdmin: true,
+                isAmentor: false
             };
             const token =JWT.sign(user_token, process.env.SECRET);
             chai.request(app)
@@ -627,8 +627,8 @@ describe("Test on Mentorship sessions", ()=>{
                 bio: "JAVASCRIPT ENTHUSIAST",
                 occupation: "STUDENT",
                 expertise: "NODEJS",
-                is_admin: true,
-                is_a_mentor: false
+                isAdmin: true,
+                isAmentor: false
             };
             const token =JWT.sign(user_token, process.env.SECRET);
             chai.request(app)
@@ -654,8 +654,8 @@ describe("Test on Mentorship sessions", ()=>{
                 bio: "C# ENTHUSIAST",
                 occupation: "ASSISTANT PROF",
                 expertise: "C#",
-                is_admin: false,
-                is_a_mentor: false
+                isAdmin: false,
+                isAmentor: false
             };
             const token =JWT.sign(user_token, process.env.SECRET);
             chai.request(app)

@@ -27,7 +27,7 @@ class sessionControler{
                     error: "A user with such Id not found"
                 });
             }else{
-                const mentor_checking= USER_ACC.is_a_mentor;
+                const mentor_checking= USER_ACC.isAmentor;
                 if(mentor_checking===true){
                     const menteeId= req.user_token.userId;
                     const menteeEmail= req.user_token.email;
@@ -111,7 +111,7 @@ class sessionControler{
 
     //Get or View all sessions
     getAllSession(req, res){
-        const is_mentor_checking= req.user_token.is_a_mentor;
+        const is_mentor_checking= req.user_token.isAmentor;
         const allsess= session_inst.allSessions;
 
         if(is_mentor_checking===false){
@@ -198,7 +198,7 @@ class sessionControler{
 
     //Delete a review deemed as inappropriate (By admin only)
     deleteSessionReview(req, res){
-        const is_admin_check= req.user_token.is_admin;
+        const is_admin_check= req.user_token.isAdmin;
         if(is_admin_check===true){
             const sess_rev_id= parseInt(req.params.sessionId);
             const session_arr= session_inst.allSessions;
