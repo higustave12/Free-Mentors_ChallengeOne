@@ -163,10 +163,11 @@ color: #fff;
     color: orange;
     text-decoration: underline
 }
-#mentor_review_div input[type="number"]{
-    text-align: center;
+#mentor_review_div textarea{
     border-radius: 5px;
-    width: 50px
+    width: 200px;
+    height: 80px;
+    resize: none
 }
 #mentor_review_div input[type="text"]{
   border-radius: 5px
