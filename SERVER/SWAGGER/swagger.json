@@ -170,7 +170,7 @@
           ],
           "parameters": [
             {
-              "name":"x-auth-token",
+              "name":"Token",
               "in": "header",
               "description" :"User Token",
               "required":true
@@ -216,7 +216,7 @@
           ],
           "parameters": [
             {
-              "name":"x-auth-token",
+              "name":"Token",
               "in": "header",
               "description" :"User Token",
               "required":true
@@ -252,7 +252,7 @@
           ],
           "parameters": [
             {
-              "name":"x-auth-token",
+              "name":"Token",
               "in": "header",
               "description" :"User Token",
               "required":true
@@ -297,7 +297,7 @@
           ],
           "parameters": [
             {
-              "name":"x-auth-token",
+              "name":"Token",
               "in": "header",
               "description" :"User Token",
               "required":true
@@ -349,7 +349,7 @@
           ],
           "parameters": [
             {
-              "name":"x-auth-token",
+              "name":"Token",
               "in": "header",
               "description" :"User Token",
               "required":true
@@ -391,7 +391,7 @@
           ],
           "parameters": [
             {
-              "name":"x-auth-token",
+              "name":"Token",
               "in": "header",
               "description" :"User Token",
               "required":true
@@ -433,7 +433,7 @@
           ],
           "parameters": [
             {
-              "name":"x-auth-token",
+              "name":"Token",
               "in": "header",
               "description" :"User Token",
               "required":true
@@ -468,7 +468,7 @@
           ],
           "parameters": [
             {
-              "name":"x-auth-token",
+              "name":"Token",
               "in": "header",
               "description" :"User Token",
               "required":true
@@ -524,7 +524,7 @@
           ],
           "parameters": [
             {
-              "name":"x-auth-token",
+              "name":"Token",
               "in": "header",
               "description" :"User Token",
               "required":true

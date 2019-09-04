@@ -2,7 +2,6 @@ import chai from 'chai';
 import chaiHttp from 'chai-http';
 import app from '../server';
 import JWT from 'jsonwebtoken';
-import accounts from '../MODELS/User_Accounts';
 
 import dotenv from 'dotenv';
 
@@ -207,8 +206,8 @@ describe("Test on users accounts", ()=>{
                 bio: "JAVASCRIPT ENTHUSIAST",
                 occupation: "STUDENT",
                 expertise: "NODEJS",
-                is_admin: true,
-                is_a_mentor: false
+                isAdmin: true,
+                isAmentor: false
             };
             const token =JWT.sign(user_token, process.env.SECRET);
             chai.request(app)
@@ -227,8 +226,8 @@ describe("Test on users accounts", ()=>{
                         res.body.data.should.have.property("bio");
                         res.body.data.should.have.property("occupation");
                         res.body.data.should.have.property("expertise");
-                        res.body.data.should.have.property("is_admin");
-                        res.body.data.should.have.property("is_a_mentor");
+                        res.body.data.should.have.property("isAdmin");
+                        res.body.data.should.have.property("isAmentor");
                         done();
                 });
         });
@@ -246,8 +245,8 @@ describe("Test on users accounts", ()=>{
                 bio: "JAVASCRIPT ENTHUSIAST",
                 occupation: "STUDENT",
                 expertise: "NODEJS",
-                is_admin: true,
-                is_a_mentor: false
+                isAdmin: true,
+                isAmentor: false
             };
             const token =JWT.sign(user_token, process.env.SECRET);
             chai.request(app)
@@ -273,8 +272,8 @@ describe("Test on users accounts", ()=>{
                 bio: "PYTHON ENTHUSIAST",
                 occupation: "PROFESSOR",
                 expertise: "PYTHON",
-                is_admin: false,
-                is_a_mentor: true
+                isAdmin: false,
+                isAmentor: true
             };
             const token =JWT.sign(user_token, process.env.SECRET);
             chai.request(app)
@@ -314,8 +313,8 @@ describe("Test on users accounts", ()=>{
                 bio: "C# ENTHUSIAST",
                 occupation: "ASSISTANT PROF",
                 expertise: "C#",
-                is_admin: false,
-                is_a_mentor: false
+                isAdmin: false,
+                isAmentor: false
             };
             const token =JWT.sign(user_token, process.env.SECRET);
             chai.request(app)
@@ -344,8 +343,8 @@ describe("Test on users accounts", ()=>{
                 bio: "C# ENTHUSIAST",
                 occupation: "ASSISTANT PROF",
                 expertise: "C#",
-                is_admin: false,
-                is_a_mentor: false
+                isAdmin: false,
+                isAmentor: false
             };
             const token =JWT.sign(user_token, process.env.SECRET);
             chai.request(app)
@@ -371,8 +370,8 @@ describe("Test on users accounts", ()=>{
                 bio: "C# ENTHUSIAST",
                 occupation: "ASSISTANT PROF",
                 expertise: "C#",
-                is_admin: false,
-                is_a_mentor: false
+                isAdmin: false,
+                isAmentor: false
             };
             const token =JWT.sign(user_token, process.env.SECRET);
             chai.request(app)
@@ -387,8 +386,7 @@ describe("Test on users accounts", ()=>{
 
         //Should NOT View a specific mentor by Id: A mentor with such Id not found
         it("Should NOT View a specific mentor by Id: A mentor with such Id not found", (done)=>{
-            const userId= 2;
-            accounts.AllAccounts[1].is_a_mentor=false;
+            const userId= 5;
             const user_token = {
                 userId: 5,
                 firstName: "DOROTHE",
@@ -399,8 +397,8 @@ describe("Test on users accounts", ()=>{
                 bio: "C# ENTHUSIAST",
                 occupation: "ASSISTANT PROF",
                 expertise: "C#",
-                is_admin: false,
-                is_a_mentor: false
+                isAdmin: false,
+                isAmentor: false
             };
             const token =JWT.sign(user_token, process.env.SECRET);
             chai.request(app)
