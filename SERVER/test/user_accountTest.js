@@ -26,6 +26,33 @@ describe("Test on Welcome Message", ()=>{
         });
     });
 });
+
+//Handling invalid URL 
+describe("Test on Handling invalid URL", ()=>{
+    describe("Handling invalid URL", ()=>{
+        //Should Handle invalid URL
+        it("Should Handle invalid URL", (done)=>{
+            chai.request(app)
+                .post("/api/v1/auth/")
+                .send({
+                    firstName: "EUGENE",
+                    lastName: "PARK",
+                    email: "eugenepark@gmail.com",
+                    password: "12345",
+                    address: "KOREA",
+                    bio: "RUBY STUDENT",
+                    occupation: "STUDENT",
+                    expertise: "RUBY",
+                })
+                .end((req,res)=>{
+                    res.should.have.status(404);
+                    res.body.should.have.property("status");
+                    res.body.should.have.property("error").equal("Ressources not found");
+                    done();
+                });
+        });
+    });
+});
 //Create user account test
 describe("Test on users accounts", ()=>{
     //CREATE ACCOUNT
