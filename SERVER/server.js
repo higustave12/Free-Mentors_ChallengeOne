@@ -19,6 +19,19 @@ app.get('/',(req,res)=>{
 
 app.use(router);
 
+app.use((req, _res, next) => {
+    const error = new Error('Ressources not found');
+    error.status = 404;
+    next(error);
+});
+app.use((error, req, res, next) => {
+    res.status(error.status);
+    res.json({
+        status: '404',
+        error: error.message,
+    });
+});
+  
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () =>{
     console.log(`Connected to port ${PORT}`);
