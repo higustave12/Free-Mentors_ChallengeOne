@@ -1,4 +1,4 @@
-import accounts from '../MODELS/User_Accounts';
+import pool from '../test/MODELS/create';
 import create_acc_schema from '../JOI_VALIDATION/create_acc_validation';
 import login_schema from '../JOI_VALIDATION/login_user_validation';
 import Joi from '@hapi/joi';
@@ -6,7 +6,6 @@ import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
 
 class userAccountControler{
-    //Create account
     createUseraccount(req, res){
         dotenv.config();
         const user_secret= process.env.SECRET;
@@ -14,58 +13,59 @@ class userAccountControler{
         const create_acc_validation = Joi.validate(req.body, create_acc_schema);
         if(create_acc_validation.error){
             const signup_errors=[];
-            for(let index=0; index<create_acc_validation.error.details.length; index++){
-                signup_errors.push(create_acc_validation.error.details[index].message.split('"').join(" "));
+            for(let i=0; i<create_acc_validation.error.details.length; i++){
+                signup_errors.push(create_acc_validation.error.details[i].message.split('"').join(" "));
             }
             return res.status(400).send({
                 status: 400,
                 error: signup_errors[0]
             });
         }else{
-            const all_user_accounts= accounts.AllAccounts;
-            const acc_exists= all_user_accounts.find(acc=>acc.email===email);
-            if(acc_exists){
-                return res.status(409).json({
-                    status:409,
-                    message: `This account already exists.Try another one.`
-                });
-            }else{
-                const createdAccount= accounts.createAccount(req.body);
-                const user_token= {
-                    id: createdAccount.id,
-                    firstName: createdAccount.firstName,
-                    lastName: createdAccount.lastName,
-                    email: createdAccount.email,
-                    address: createdAccount.address,
-                    bio: createdAccount.bio,
-                    occupation: createdAccount.occupation,
-                    expertise: createdAccount.expertise,
-                    isAdmin: createdAccount.isAdmin,
-                    isAmentor: createdAccount.isAmentor
-                };
+            pool.connect((err, client, done) => {
+                const query = `SELECT * FROM users WHERE email = $1`; 
+                const values = [email.trim()];
+                client.query(query, values, (error, result) => {
+                    if (result.rows[0]) {
+                        return res.status(409).send({
+                            status: 409,
+                            error: `This account already exists.Try another one.`
+                        });
+                    }else {
+                        const is_admin=false;
+                        const is_a_mentor=false;
+                        pool.connect((err, client, done) => {
+                            const create_account_query = 'INSERT INTO users(firstname,lastname,email,password,address,bio,occupation,expertise,is_admin,is_a_mentor) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10) RETURNING *';
+                            var create_user_values = [firstName.trim(), lastName.trim(), email.trim(), password.trim(), address.trim(), bio.trim(), occupation.trim(), expertise.trim(), is_admin, is_a_mentor];
 
-                const token= jwt.sign(user_token, user_secret, { expiresIn: "1d" });
-                res.header('x-auth-token', token);
-
-                return res.status(201).json({
-                    status: 201,
-                    message : 'User created successfully',
-                    data: {
-                        token: token,
-                        id: createdAccount.id,
-                        firstName: firstName,
-                        lastName: lastName,
-                        email: email,
-                        address: address,
-                        bio: bio,
-                        occupation: occupation,
-                        expertise: expertise,
-                        isAdmin: createdAccount.isAdmin,
-                        isAmentor: createdAccount.isAmentor
+                            client.query(create_account_query, create_user_values, (error, result) => {
+                                const user_token= result.rows[0];
+                                const token= jwt.sign(user_token, user_secret, { expiresIn: "1d" });
+                                res.header('x-auth-token', token);
+                                return res.status(201).send({
+                                    status: 201,
+                                    message: `User created successfully`,
+                                    data: {
+                                        token: token,
+                                        id: result.rows[0].userid,
+                                        firstName: result.rows[0].firstname,
+                                        lastName: result.rows[0].lastname,
+                                        email: result.rows[0].email,
+                                        address: result.rows[0].address,
+                                        bio: result.rows[0].bio,
+                                        occupation: result.rows[0].occupation,
+                                        expertise: result.rows[0].expertise,
+                                        isAdmin: result.rows[0].is_admin,
+                                        isAmentor: result.rows[0].is_a_mentor
+                                    }
+                                });
+                            });
+                            done();
+                        });
                     }
-                })
-            }
-        }
+                });
+                done();
+            });
+        } 
     }
 
     //Login controler
