@@ -1,5 +1,5 @@
-const {Pool}= require("pg");
-const dotenv= require("dotenv");
+import {Pool} from 'pg';
+import dotenv from 'dotenv';
 
 dotenv.config();
 
@@ -7,13 +7,8 @@ const pool= new Pool({
     connectionString: process.env.DATABASE_URL
 });
 
-pool.on('connect', () => {
-    //console.log('connected to the db');
-});
-
-//Create all tables
 export const createAlltables=()=>{
-    const all_tables= `CREATE TABLE IF NOT EXISTS 
+    const allTables= `CREATE TABLE IF NOT EXISTS 
     users(
         userid SERIAL,
         firstname varchar(255) NOT NULL,
@@ -61,7 +56,7 @@ export const createAlltables=()=>{
     INSERT INTO users(firstname, lastname, email, password, address, bio, occupation, expertise, is_admin, is_a_mentor) 
     VALUES ('DOROTHE','MBARUSHIMANA','dorothembarushimana@gmail.com','12345','KIGALI-RWANDA','C# STUDENT','STUDENT','C#','false','false');`
 
-    pool.query(all_tables)
+    pool.query(allTables)
         .then((res)=>{
             console.log(res)
         })
