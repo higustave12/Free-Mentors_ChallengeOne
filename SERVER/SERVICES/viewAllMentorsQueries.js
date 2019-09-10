@@ -1,0 +1,1 @@
+export const viewAllMentorsQuery = `SELECT * FROM users WHERE mentor=$1`;
