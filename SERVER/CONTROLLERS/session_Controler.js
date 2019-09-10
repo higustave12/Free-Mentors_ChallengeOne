@@ -1,8 +1,8 @@
-import session_inst from '../MODELS/session';
-import accounts from '../MODELS/User_Accounts';
+import pool from '../test/MODELS/create';
 import session_schema from '../JOI_VALIDATION/session_validation';
-import session_review_schema from '../JOI_VALIDATION/session_review';
 import Joi from '@hapi/joi';
+import {acceptSessionSelectQuery} from '../SERVICES/mentorAcceptSessionQueries';
+import {updateSessionStatusQuery} from '../SERVICES/mentorAcceptSessionQueries';
 
 class sessionControler{
     createSession(req, res){
@@ -49,36 +49,43 @@ class sessionControler{
         }
     }
 
-    //Mentor accept mentorship session
     acceptSessionRequest(req, res){
         const sessId= parseInt(req.params.sessionId);
-        const all_sess= session_inst.allSessions;
-        const session_lookup= all_sess.find(single_sess=>single_sess.sessionId===sessId);
-        if(session_lookup){
-            const mentorId= req.user_token.id;
-            const check_session_mentor= session_lookup.mentorId;
-            if(check_session_mentor===mentorId){
-                const new_status= "accepted";
-                session_lookup.status= new_status;
-                const updatedSession= session_lookup;
-                return res.status(200).json({
-                    status: 200,
-                    data: updatedSession
-                });
-            }else{
-                return res.status(404).json({
-                    status: 404,
-                    error: "You are not a mentor for this session"
-                })
-            }
-        }else{
-            return res.status(404).json({
-                status: 404,
-                error: "No session with such Id found"
-            })
-        }
+        pool.connect((err, client, done) => {
+            const select_query_value=[sessId];
+            client.query(acceptSessionSelectQuery, select_query_value, (error, result) => {
+                if(result.rows[0]){
+                    const mentorId= req.user_token.id;
+                    const check_session_mentor= result.rows[0].mentorid;
+                    if(check_session_mentor==mentorId){
+                        const new_status= "accepted";
+                            const update_session_status_values=[new_status, mentorId, sessId];
+                            client.query(updateSessionStatusQuery, update_session_status_values, ()=>{
+                                    const sel_query_values=[sessId];
+                                    client.query(acceptSessionSelectQuery, sel_query_values, (error, result)=>{
+                                        const {sessionid, mentorid, menteeid, questions, menteeemail, status}= result.rows[0];
+                                        return res.status(200).json({
+                                            status: 200,
+                                            data: {sessionId:sessionid, mentorId:mentorid, menteeId:menteeid, questions, menteeEmail:menteeemail, status}
+                                        });
+                                    });
+                            });
+                    }else{
+                        return res.status(404).json({
+                            status: 404,
+                            error: "You are not a mentor for this session"
+                        })
+                    }
+                }else{
+                    return res.status(404).json({
+                        status: 404,
+                        error: "No session with such Id found"
+                    })
+                }
+            });
+            done();
+        });
     }
-
     //Mentor reject mentorship session
     rejectSessionRequest(req, res){
         const sessioId= parseInt(req.params.sessionId);
