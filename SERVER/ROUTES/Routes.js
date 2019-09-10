@@ -7,7 +7,7 @@ const router= express.Router();
 
 router.post('/api/v2/auth/signup',account_controler.createUseraccount);
 router.post('/api/v2/auth/signin',account_controler.userLogin); 
-router.patch('/api/v1/user/:userId',verifyToken, account_controler.ChangeUserToMentor); 
+router.patch('/api/v2/user/:userId',verifyToken, account_controler.ChangeUserToMentor); 
 router.get('/api/v1/mentors',verifyToken, account_controler.viewAllMentors); 
 router.get('/api/v1/mentors/:userId',verifyToken, account_controler.viewMentorById); 
 

@@ -4,6 +4,8 @@ import {createAccountQuery} from '../SERVICES/userSignupQueries';
 import {admin} from '../SERVICES/userSignupQueries';
 import {mentor} from '../SERVICES/userSignupQueries';
 import {loginSelectQuery} from '../SERVICES/userLoginQueries';
+import {changeUserToMentorSelectQuery} from '../SERVICES/changeUserToMentorQueries';
+import {updateMentorStatusQuery} from '../SERVICES/changeUserToMentorQueries';
 import create_acc_schema from '../JOI_VALIDATION/create_acc_validation';
 import login_schema from '../JOI_VALIDATION/login_user_validation';
 import Joi from '@hapi/joi';
@@ -37,9 +39,8 @@ class userAccountControler{
                     } else {
                         const createUserValues = [firstName.trim(), lastName.trim(), email.trim(), password.trim(), address.trim(), bio.trim(), occupation.trim(), expertise.trim(), admin, mentor];
                         client.query(createAccountQuery, createUserValues, (error, result) => {
-                            const user_token = result.rows[0];
                             const { id, firstname, lastname, email, address, bio, occupation, expertise, admin, mentor } = result.rows[0];
-                            const token = jwt.sign(user_token, user_secret, { expiresIn: "1d" });
+                            const token = jwt.sign({id, email, admin, mentor}, user_secret, { expiresIn: "1d" });
                             res.header('x-auth-token', token);
                             return res.status(201).send({
                                 status: 201,
@@ -75,9 +76,8 @@ class userAccountControler{
                 const values = [email.trim(), password.trim()];
                 client.query(loginSelectQuery, values, (error, result) => {
                     if (result.rows[0]) {
-                        const user_token = result.rows[0];
-                        const token = jwt.sign(user_token, user_secret, { expiresIn: "1d" });
                         const { id, firstname, lastname, email, address, bio, occupation, expertise, admin, mentor } = result.rows[0];
+                        const token = jwt.sign({id, email, admin, mentor}, user_secret, { expiresIn: "1d" });
                         res.header('x-auth-token', token)
                         return res.status(200).send({
                             status: 200,
@@ -99,42 +99,43 @@ class userAccountControler{
 
     ChangeUserToMentor(req, res){
         const user_id= parseInt(req.params.userId);
-        const all_users= accounts.AllAccounts;
-        const user_found= all_users.find(users=>users.id===user_id);
-        if(user_found){
-            const new_role= true;
-            const admin_role_check= req.user_token.isAdmin;
-            if(admin_role_check===true){
-                user_found.isAmentor= new_role;
-                const updated_user_acc= user_found;
-                return res.status(200).json({
-                    status: 200,
-                    message: "User account changed to mentor",
-                    data: {
-                        id: updated_user_acc.id,
-                        firstName: updated_user_acc.firstName,
-                        lastName: updated_user_acc.lastName,
-                        email: updated_user_acc.email,
-                        address: updated_user_acc.address,
-                        bio: updated_user_acc.bio,
-                        occupation: updated_user_acc.occupation,
-                        expertise: updated_user_acc.expertise,
-                        isAdmin: updated_user_acc.isAdmin,
-                        isAmentor: updated_user_acc.isAmentor
+        pool.connect((err, client, done) => {
+            const values = [user_id];
+            client.query(changeUserToMentorSelectQuery, values, (error, result) => {
+                if (result.rows[0]) {
+                    const new_role= true;
+                    const admin_role_check= req.user_token.admin;
+                    if(admin_role_check===true){
+                            const updateMentorStatusValues = [new_role, user_id];
+                            client.query(updateMentorStatusQuery, updateMentorStatusValues, () => {
+                
+                                    const values = [user_id];
+                                    client.query(changeUserToMentorSelectQuery, values, (error, result) => {
+                                        const { id, firstname, lastname, email, address, bio, occupation, expertise, admin, mentor } = result.rows[0];
+                                        return res.status(200).json({
+                                            status: 200,
+                                            message: "User account changed to mentor",
+                                            data: {id, firstname, lastname, email, address, bio, occupation, expertise, admin, mentor}
+                                        });
+                                    });
+                                
+                            });
+                           
+                    }else{
+                        return res.status(400).json({
+                            status: 400,
+                            error: "Only Administrator can change a user to a mentor"
+                        });
                     }
-                });
-            }else{
-                return res.status(400).json({
-                    status: 400,
-                    error: "Only Administrator can change a user to a mentor"
-                });
-            }
-        }else{
-            return res.status(404).json({
-                status: 404,
-                error: "A mentee with such userId not found"
+                }else{
+                    return res.status(404).json({
+                        status: 404,
+                        error: "A mentee with such userId not found"
+                    });
+                }
             });
-        }
+            done();
+        });
     }
 
     viewAllMentors(req, res){
