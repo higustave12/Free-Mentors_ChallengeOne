@@ -1,4 +1,8 @@
-import accounts from '../MODELS/User_Accounts';
+import pool from '../test/MODELS/create';
+import {selectQuery} from '../SERVICES/userSignupQueries';
+import {createAccountQuery} from '../SERVICES/userSignupQueries';
+import {admin} from '../SERVICES/userSignupQueries';
+import {mentor} from '../SERVICES/userSignupQueries';
 import create_acc_schema from '../JOI_VALIDATION/create_acc_validation';
 import login_schema from '../JOI_VALIDATION/login_user_validation';
 import Joi from '@hapi/joi';
@@ -6,69 +10,50 @@ import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
 
 class userAccountControler{
-    //Create account
-    createUseraccount(req, res){
+    createUseraccount(req, res) {
         dotenv.config();
-        const user_secret= process.env.SECRET;
-        const {firstName, lastName, email, password, address, bio, occupation, expertise}= req.body;
+        const user_secret = process.env.SECRET;
+        const { firstName, lastName, email, password, address, bio, occupation, expertise } = req.body;
         const create_acc_validation = Joi.validate(req.body, create_acc_schema);
-        if(create_acc_validation.error){
-            const signup_errors=[];
-            for(let index=0; index<create_acc_validation.error.details.length; index++){
-                signup_errors.push(create_acc_validation.error.details[index].message.split('"').join(" "));
+        if (create_acc_validation.error) {
+            const signup_errors = [];
+            for (let i = 0; i < create_acc_validation.error.details.length; i++) {
+                signup_errors.push(create_acc_validation.error.details[i].message.split('"').join(" "));
             }
             return res.status(400).send({
                 status: 400,
                 error: signup_errors[0]
             });
-        }else{
-            const all_user_accounts= accounts.AllAccounts;
-            const acc_exists= all_user_accounts.find(acc=>acc.email===email);
-            if(acc_exists){
-                return res.status(409).json({
-                    status:409,
-                    message: `This account already exists.Try another one.`
-                });
-            }else{
-                const createdAccount= accounts.createAccount(req.body);
-                const user_token= {
-                    id: createdAccount.id,
-                    firstName: createdAccount.firstName,
-                    lastName: createdAccount.lastName,
-                    email: createdAccount.email,
-                    address: createdAccount.address,
-                    bio: createdAccount.bio,
-                    occupation: createdAccount.occupation,
-                    expertise: createdAccount.expertise,
-                    isAdmin: createdAccount.isAdmin,
-                    isAmentor: createdAccount.isAmentor
-                };
-
-                const token= jwt.sign(user_token, user_secret, { expiresIn: "1d" });
-                res.header('x-auth-token', token);
-
-                return res.status(201).json({
-                    status: 201,
-                    message : 'User created successfully',
-                    data: {
-                        token: token,
-                        id: createdAccount.id,
-                        firstName: firstName,
-                        lastName: lastName,
-                        email: email,
-                        address: address,
-                        bio: bio,
-                        occupation: occupation,
-                        expertise: expertise,
-                        isAdmin: createdAccount.isAdmin,
-                        isAmentor: createdAccount.isAmentor
+        } else {
+            pool.connect((err, client, done) => {
+                const values = [email.trim()];
+                client.query(selectQuery, values, (error, result) => {
+                    if (result.rows[0]) {
+                        return res.status(409).send({
+                            status: 409,
+                            error: `This account already exists.Try another one.`
+                        });
+                    } else {
+                        const createUserValues = [firstName.trim(), lastName.trim(), email.trim(), password.trim(), address.trim(), bio.trim(), occupation.trim(), expertise.trim(), admin, mentor];
+                        client.query(createAccountQuery, createUserValues, (error, result) => {
+                            const user_token = result.rows[0];
+                            const { id, firstname, lastname, email, address, bio, occupation, expertise, admin, mentor } = result.rows[0];
+                            const token = jwt.sign(user_token, user_secret, { expiresIn: "1d" });
+                            res.header('x-auth-token', token);
+                            return res.status(201).send({
+                                status: 201,
+                                message: `User created successfully`,
+                                data: { token, id, firstname, lastname, email, address, bio, occupation, expertise, admin, mentor }
+                            });
+                        });
                     }
-                })
-            }
+                });
+                done();
+            });
         }
     }
 
-    //Login controler
+    
     userLogin(req, res){
         dotenv.config();
         const user_secret= process.env.SECRET;
@@ -128,7 +113,6 @@ class userAccountControler{
         }
     }
 
-    //Change a user to a mentor(Done By admin)
     ChangeUserToMentor(req, res){
         const user_id= parseInt(req.params.userId);
         const all_users= accounts.AllAccounts;
@@ -169,7 +153,6 @@ class userAccountControler{
         }
     }
 
-     //View All mentors
     viewAllMentors(req, res){
         const accs= accounts.AllAccounts;
         const mentor_users=accs.filter(user=>user.isAmentor===true);
@@ -179,7 +162,6 @@ class userAccountControler{
             });
     }
 
-    //View a specific mentor by Id
     viewMentorById(req, res){
         const single_user_id= parseInt(req.params.userId);
         const all_users_accs= accounts.AllAccounts;

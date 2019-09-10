@@ -10,10 +10,8 @@ dotenv.config();
 chai.should();
 chai.use(chaiHttp);
 
-//Show welcome message test
 describe("Test on Welcome Message", ()=>{
     describe("GET/ Show Welcome Message", ()=>{
-        //Should show a Welcome message
         it("Should show a Welcome Message", (done)=>{
             chai.request(app)
                 .get("/")
@@ -26,11 +24,9 @@ describe("Test on Welcome Message", ()=>{
         });
     });
 });
-
-//Handling invalid URL 
+ 
 describe("Test on Handling invalid URL", ()=>{
     describe("Handling invalid URL", ()=>{
-        //Should Handle invalid URL
         it("Should Handle invalid URL", (done)=>{
             chai.request(app)
                 .post("/api/v1/auth/")
@@ -53,11 +49,11 @@ describe("Test on Handling invalid URL", ()=>{
         });
     });
 });
-//Create user account test
+
 describe("Test on users accounts", ()=>{
-    //CREATE ACCOUNT
+    
     describe("POST/ Create user account", ()=>{
-        //Should create a new user account
+        
         it("Should create an account for a new user", (done)=>{
             chai.request(app)
                 .post("/api/v1/auth/signup")
@@ -88,7 +84,7 @@ describe("Test on users accounts", ()=>{
                });
         });
 
-        //Should create a new user account
+        
         it("Should create an account for a new user", (done)=>{
             chai.request(app)
                 .post("/api/v1/auth/signup")
@@ -119,13 +115,12 @@ describe("Test on users accounts", ()=>{
                });
         });
 
-        //Should NOT create a new user account: Invalid input(lastName is required)
+        
         it("Should NOT create an account for a new user: Invalid/Insufficient input", (done)=>{
             chai.request(app)
                 .post("/api/v1/auth/signup")
                 .send({
                     firstName: "EUGENE",
-                    //lastName: "PARK",
                     email: "eugenepark@gmail.com",
                     password: "12345",
                     address: "KOREA",
@@ -140,7 +135,7 @@ describe("Test on users accounts", ()=>{
                });
         });
 
-        //Should NOT create a new user account: User already exists
+        
         it("Should NOT create an account for a new user: User already exists", (done)=>{
             chai.request(app)
                 .post("/api/v1/auth/signup")
@@ -162,9 +157,9 @@ describe("Test on users accounts", ()=>{
         });
     });
 
-    //LOGIN A USER
+    
     describe("POST/ Login into user account", ()=>{
-        //Should Login into user account
+        
         it("Should Login into user account", (done)=>{
             chai.request(app)
                 .post(`/api/v1/auth/signin`)
@@ -188,7 +183,7 @@ describe("Test on users accounts", ()=>{
                     done();
                });
         });
-        //Should NOT Login into user account: Invalid Email or Password
+        
         it("Should NOT Login into user account: Invalid Email or Password", (done)=>{
             chai.request(app)
                 .post(`/api/v1/auth/signin`)
@@ -202,13 +197,12 @@ describe("Test on users accounts", ()=>{
                     done();
                });
         });
-        //Should NOT Login into user account: Invalid or Insufficient input(password is required)
+        
         it("Should NOT Login into user account: Invalid or Insufficient input", (done)=>{
             chai.request(app)
                 .post(`/api/v1/auth/signin`)
                 .send({
                     email: "dorothembarushimana@gmail.com",
-                    //password: "12345"
                 })
                .end((req, res)=>{
                     res.should.have.status(400);
@@ -218,9 +212,9 @@ describe("Test on users accounts", ()=>{
         });
     });
 
-    //CHANGE A USER TO A MENTOR (By Admin only)
+    
     describe("PATCH/ Change a user to a mentor", ()=>{
-        //Should change a user into a mentor
+        
         it("Should change a user into a mentor", (done)=>{
             const userId= 6;
             const user_token = {
@@ -259,7 +253,7 @@ describe("Test on users accounts", ()=>{
                 });
         });
 
-        //Should NOT change a user into a mentor: userId not Found
+        
         it("Should NOT change a user into a mentor: userId not Found", (done)=>{
             const userId= 6000;
             const user_token = {
@@ -286,7 +280,7 @@ describe("Test on users accounts", ()=>{
                 });
         });
 
-        //Should NOT change a user into a mentor: Only admin can change a user to a mentor
+        
         it("Should NOT change a user into a mentor: Only admin can change a user to a mentor", (done)=>{
             const userId= 6;
             const user_token = {
@@ -313,7 +307,7 @@ describe("Test on users accounts", ()=>{
                 });
         });
 
-        //Should NOT change a user into a mentor: No token provided
+        
         it("Should NOT change a user into a mentor: No token provided", (done)=>{
             const userId= 6;
             chai.request(app)
@@ -326,9 +320,9 @@ describe("Test on users accounts", ()=>{
         });
     });
 
-    //VIEW ALL MENTORS
+    
     describe("GET/ View all mentors", ()=>{
-        //Should view all mentors
+        
         it("Should view all mentors", (done)=>{
             const user_token = {
                 id: 5,
@@ -355,9 +349,9 @@ describe("Test on users accounts", ()=>{
         });
     });
 
-    //VIEW A SPECIFIC MENTOR BY Id
+    
     describe("GET/ View a specific mentor by Id", ()=>{
-        //Should View a specific mentor by Id
+        
         it("Should View a specific mentor by Id", (done)=>{
             const userId= 2;
             const user_token = {
@@ -384,7 +378,7 @@ describe("Test on users accounts", ()=>{
                 });
         });
 
-        //Should NOT View a specific mentor by Id: A user with such Id not found
+        
         it("Should NOT View a specific mentor by Id: A user with such Id not found", (done)=>{
             const userId= 20;
             const user_token = {
@@ -411,7 +405,7 @@ describe("Test on users accounts", ()=>{
                 });
         });
 
-        //Should NOT View a specific mentor by Id: A mentor with such Id not found
+        
         it("Should NOT View a specific mentor by Id: A mentor with such Id not found", (done)=>{
             const userId= 5;
             const user_token = {

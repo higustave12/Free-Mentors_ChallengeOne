@@ -9,11 +9,8 @@ dotenv.config();
 chai.should();
 chai.use(chaiHttp);
 
-//Mentorship session test
 describe("Test on Mentorship sessions", ()=>{
-    //CREATE A MENTORSHIP SESSION
     describe("POST/ Create a mentorship session", ()=>{
-        //Should create a new mentorship session
         it("Should create a new mentorship session", (done)=>{
             const user_token = {
                 id: 5,
@@ -45,7 +42,6 @@ describe("Test on Mentorship sessions", ()=>{
                 });
         });
 
-        //Should create a new mentorship session
         it("Should create a new mentorship session", (done)=>{
             const user_token = {
                 id: 5,
@@ -77,7 +73,6 @@ describe("Test on Mentorship sessions", ()=>{
                 });
         });
 
-        //Should NOT create a new mentorship session: mentorId not found
         it("Should NOT create a new mentorship session: mentorId not found", (done)=>{
             const user_token = {
                 id: 5,
@@ -109,7 +104,6 @@ describe("Test on Mentorship sessions", ()=>{
                 });
         });
 
-        //Should NOT create a new mentorship session: Account not found
         it("Should NOT create a new mentorship session: Account not found", (done)=>{
             const user_token = {
                 id: 5,
@@ -141,7 +135,6 @@ describe("Test on Mentorship sessions", ()=>{
                 });
         });
 
-        //Should NOT create a new mentorship session: Invalid input or Missing input
         it("Should NOT create a new mentorship session: Invalid input or Missing input", (done)=>{
             const user_token = {
                 id: 5,
@@ -157,13 +150,11 @@ describe("Test on Mentorship sessions", ()=>{
                 isAmentor: false
             };
             const mentorId= 2;
-            //const questions= "I want to improve my javascript skills. Thank you";
             const token =JWT.sign(user_token, process.env.SECRET);
             chai.request(app)
                 .post(`/api/v1/session`)
                 .send({
                     mentorId,
-                    //questions
                 })
                 .set('x-auth-token', token)
                 .end((req, res)=>{
@@ -174,9 +165,8 @@ describe("Test on Mentorship sessions", ()=>{
         });
     });
 
-    //Accept mentorship session request (By a mentor)
     describe("PATCH/ Accept a mentorship session request", ()=>{
-        //Should allow a mentor to accept a mentorship session request
+        
         it("Should allow a mentor to accept a mentorship session request", (done)=>{
             const user_token = {
                 id: 2,
@@ -192,7 +182,6 @@ describe("Test on Mentorship sessions", ()=>{
                 isAmentor: true
             };
             const sessionId= 1;
-            //const questions= "I want to improve my javascript skills. Thank you";
             const token =JWT.sign(user_token, process.env.SECRET);
             chai.request(app)
                 .patch(`/api/v1/sessions/${sessionId}/accept`)
@@ -204,7 +193,6 @@ describe("Test on Mentorship sessions", ()=>{
                 });
         });
 
-        //Should NOT allow a mentor to accept a mentorship session request: You are not a mentor for this session
         it("Should NOT allow a mentor to accept a mentorship session request: You are not a mentor for this session", (done)=>{
             const user_token = {
                 id: 6,
@@ -231,7 +219,6 @@ describe("Test on Mentorship sessions", ()=>{
                 });
         });
 
-        //Should NOT allow a mentor to accept a mentorship session request: Session with such Id not found
         it("Should NOT allow a mentor to accept a mentorship session request: Session with such Id not found", (done)=>{
             const user_token = {
                 id: 2,
@@ -259,9 +246,7 @@ describe("Test on Mentorship sessions", ()=>{
         });
     });
 
-    //Reject mentorship session request (By a mentor)
     describe("PATCH/ Reject a mentorship session request", ()=>{
-        //Should allow a mentor to reject a mentorship session request
         it("Should allow a mentor to reject a mentorship session request", (done)=>{
             const user_token = {
                 id: 3,
@@ -288,7 +273,6 @@ describe("Test on Mentorship sessions", ()=>{
                 });
         });
 
-        //Should NOT allow a mentor to reject a mentorship session request: You are not a mentor for this session
         it("Should NOT allow a mentor to reject a mentorship session request: You are not a mentor for this session", (done)=>{
             const user_token = {
                 id: 6,
@@ -315,7 +299,6 @@ describe("Test on Mentorship sessions", ()=>{
                 });
         });
 
-        //Should NOT allow a mentor to reject a mentorship session request: Session with such Id not found
         it("Should NOT allow a mentor to reject a mentorship session request: Session with such Id not found", (done)=>{
             const user_token = {
                 id: 2,
@@ -343,9 +326,7 @@ describe("Test on Mentorship sessions", ()=>{
         });
     });
 
-    //Get or View all mentorship sessions
     describe("GET/ Get or View all mentorship sessions", ()=>{
-        //Should allow a user(Mentee or Mentor) to Get or View all mentorship sessions(Mentee)
         it("Should allow a user(Mentee) to Get or View all mentorship sessions: Mentee", (done)=>{
             const user_token = {
                 id: 5,
@@ -370,7 +351,6 @@ describe("Test on Mentorship sessions", ()=>{
                         done();
                 });
         });
-        //Should NOT allow a user(Mentee or Mentor) to Get or View all mentorship sessions
         it("Should NOT allow a user(Mentee) to Get or View all mentorship sessions: Mentee (No mentorship session found)", (done)=>{
             const user_token = {
                 id: 7,
@@ -396,7 +376,6 @@ describe("Test on Mentorship sessions", ()=>{
                 });
         });
 
-        //Should allow a user(Mentee or Mentor) to Get or View all mentorship sessions(Mentor)
         it("Should allow a user(Mentor) to Get or View all mentorship sessions: Mentor", (done)=>{
             const user_token = {
                 id: 2,
@@ -421,7 +400,6 @@ describe("Test on Mentorship sessions", ()=>{
                         done();
                 });
         });
-        //Should NOT allow a user(Mentee or Mentor) to Get or View all mentorship sessions
         it("Should NOT allow a user(Mentor) to Get or View all mentorship sessions: Mentor (No mentorship session found)", (done)=>{
             const user_token = {
                 id: 4,
@@ -448,9 +426,7 @@ describe("Test on Mentorship sessions", ()=>{
         });
     });
 
-    //Review a finished mentorship session (By a mentee)
     describe("POST/ Review a finished mentorship session", ()=>{
-        //Should allow a mentee to review a finished mentorship session
         it("Should allow a mentee to review a finished mentorship session", (done)=>{
             const sessionId= 1;
             const score= 2;
@@ -483,7 +459,6 @@ describe("Test on Mentorship sessions", ()=>{
                 });
         });
 
-         //Should NOT allow a mentee to review a finished mentorship session: A Reviewer is Not a mentee for this session
          it("Should NOT allow a mentee to review a finished mentorship session: A Reviewer is Not a mentee for this session", (done)=>{
             const sessionId= 1;
             const score= 3;
@@ -516,7 +491,6 @@ describe("Test on Mentorship sessions", ()=>{
                 });
         });
 
-        //Should NOT allow a mentee to review a finished mentorship session: Session not found
         it("Should NOT allow a mentee to review a finished mentorship session: Session not found", (done)=>{
             const sessionId= 980;
             const score= 4;
@@ -549,11 +523,9 @@ describe("Test on Mentorship sessions", ()=>{
                 });
         });
 
-        //Should NOT allow a mentee to review a finished mentorship session: Invalid or Insufficient input
         it("Should NOT allow a mentee to review a finished mentorship session: Invalid or Insufficient input", (done)=>{
             const sessionId= 1;
             const score= 4;
-            //const remark= "The mentor is good at explaining the subject";
             const user_token = {
                 id: 5,
                 firstName: "DOROTHE",
@@ -583,9 +555,7 @@ describe("Test on Mentorship sessions", ()=>{
         });
     });
 
-    //Delete a session review deemed as inappropriate (By admin)
     describe("DELETE/ Delete a session review deemed as inappropriate", ()=>{
-        //Should allow an admin to Delete a session review deemed as inappropriate
         it("Should allow an admin to Delete a session review deemed as inappropriate", (done)=>{
             const sessionId= 1;
             const user_token = {
@@ -612,7 +582,6 @@ describe("Test on Mentorship sessions", ()=>{
                 });
         });
 
-        //Should NOT allow an admin to Delete a session review: Session to delete not found
         it("Should NOT allow an admin to Delete a session review: Session to delete not found", (done)=>{
             const sessionId= 1000;
             const user_token = {
@@ -639,7 +608,6 @@ describe("Test on Mentorship sessions", ()=>{
                 });
         });
 
-        //Should NOT allow an admin to Delete a session review: Only admin can delete a session review
         it("Should NOT allow an mentee to Delete a session review: Only admin can delete a session review", (done)=>{
             const sessionId= 1000;
             const user_token = {
