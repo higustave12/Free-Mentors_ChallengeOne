@@ -3,6 +3,7 @@ import {selectQuery} from '../SERVICES/userSignupQueries';
 import {createAccountQuery} from '../SERVICES/userSignupQueries';
 import {admin} from '../SERVICES/userSignupQueries';
 import {mentor} from '../SERVICES/userSignupQueries';
+import {loginSelectQuery} from '../SERVICES/userLoginQueries';
 import create_acc_schema from '../JOI_VALIDATION/create_acc_validation';
 import login_schema from '../JOI_VALIDATION/login_user_validation';
 import Joi from '@hapi/joi';
@@ -56,60 +57,43 @@ class userAccountControler{
     
     userLogin(req, res){
         dotenv.config();
-        const user_secret= process.env.SECRET;
-        const {email, password} = req.body;
+        const user_secret = process.env.SECRET;
+        const { email, password } = req.body;
         const login_user_validation = Joi.validate(req.body, login_schema);
-        if(login_user_validation.error){
-            const login_errors=[];
-            for(let index=0; index<login_user_validation.error.details.length; index++){
-                login_errors.push(login_user_validation.error.details[index].message.split('"').join(" "));
+        if (login_user_validation.error) {
+            const login_errors = [];
+            for (let j = 0; j < login_user_validation.error.details.length; j++) {
+                login_errors.push(login_user_validation.error.details[j].message.split('"').join(" "));
             }
             return res.status(400).send({
                 status: 400,
                 error: login_errors[0]
             });
-        }else{
-            const registered_accounts= accounts.AllAccounts;
-            const account_found= registered_accounts.find(acc=>acc.email===email);
+        } else {
 
-            if(account_found && account_found.password===password){
-                const user_token= {
-                    id: account_found.id,
-                    firstName: account_found.firstName,
-                    lastName: account_found.lastName,
-                    email: account_found.email,
-                    address: account_found.address,
-                    bio: account_found.bio,
-                    occupation: account_found.occupation,
-                    expertise: account_found.expertise,
-                    isAdmin: account_found.isAdmin,
-                    isAmentor: account_found.isAmentor
-                };
-                const token= jwt.sign(user_token, user_secret, { expiresIn: "1d" });
-                res.header('x-auth-token', token);
-                return res.status(200).json({
-                    status:200,
-                    message : 'User is successfully logged in',
-                    data : {
-                        token : token,
-                        id: account_found.id,
-                        firstName: account_found.firstName,
-                        lastName: account_found.lastName,
-                        email: account_found.email,
-                        address: account_found.address,
-                        bio: account_found.bio,
-                        occupation: account_found.occupation,
-                        expertise: account_found.expertise,
-                        isAdmin: account_found.isAdmin,
-                        isAmentor: account_found.isAmentor
+            pool.connect((err, client, done) => {
+                const values = [email.trim(), password.trim()];
+                client.query(loginSelectQuery, values, (error, result) => {
+                    if (result.rows[0]) {
+                        const user_token = result.rows[0];
+                        const token = jwt.sign(user_token, user_secret, { expiresIn: "1d" });
+                        const { id, firstname, lastname, email, address, bio, occupation, expertise, admin, mentor } = result.rows[0];
+                        res.header('x-auth-token', token)
+                        return res.status(200).send({
+                            status: 200,
+                            message: `User is successfully logged in`,
+                            data: {token, id, firstname, lastname, email, address, bio, occupation, expertise, admin, mentor}
+                        });
+
+                    }else{
+                        return res.status(404).send({
+                            status: 404,
+                            error: `Account not found. Incorrect Username or Password`
+                        })
                     }
                 });
-            }else{
-                return res.status(404).json({
-                    status:404,
-                    error: `Account not found. Incorrect Username or Password`
-                });
-            }
+                done();
+            });
         }
     }
 
