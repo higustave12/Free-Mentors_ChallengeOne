@@ -5,19 +5,17 @@ import {verifyToken} from '../JWT/jwt_conf';
 
 const router= express.Router();
 
-//User accounts routes
-router.post('/api/v2/auth/signup',account_controler.createUseraccount); //Endpoint to create user account
-router.post('/api/v1/auth/signin',account_controler.userLogin); //Endpoint to login a user
-router.patch('/api/v1/user/:userId',verifyToken, account_controler.ChangeUserToMentor); //Endpoint to change user to mentor
-router.get('/api/v1/mentors',verifyToken, account_controler.viewAllMentors); //Endpoint to view all registered mentors
-router.get('/api/v1/mentors/:userId',verifyToken, account_controler.viewMentorById); //Endpoint to view a specific mentor by Id
+router.post('/api/v2/auth/signup',account_controler.createUseraccount);
+router.post('/api/v1/auth/signin',account_controler.userLogin); 
+router.patch('/api/v1/user/:userId',verifyToken, account_controler.ChangeUserToMentor); 
+router.get('/api/v1/mentors',verifyToken, account_controler.viewAllMentors); 
+router.get('/api/v1/mentors/:userId',verifyToken, account_controler.viewMentorById); 
 
-//Mentorship session routes
-router.post('/api/v1/session',verifyToken, session_contrl.createSession); //Create mentorship session
-router.patch('/api/v1/sessions/:sessionId/accept',verifyToken, session_contrl.acceptSessionRequest); //Accept session req
-router.patch('/api/v1/sessions/:sessionId/reject',verifyToken, session_contrl.rejectSessionRequest); //Reject session req
-router.get('/api/v1/sessions',verifyToken, session_contrl.getAllSession); //Get all mentorship sessions
-router.post('/api/v1/session/:sessionId/review',verifyToken,session_contrl.reviewSession); //Review a mentorship session
-router.delete('/api/v1/sessions/:sessionId/review',verifyToken,session_contrl.deleteSessionReview); //Delete session review
+router.post('/api/v1/session',verifyToken, session_contrl.createSession); 
+router.patch('/api/v1/sessions/:sessionId/accept',verifyToken, session_contrl.acceptSessionRequest); 
+router.patch('/api/v1/sessions/:sessionId/reject',verifyToken, session_contrl.rejectSessionRequest); 
+router.get('/api/v1/sessions',verifyToken, session_contrl.getAllSession); 
+router.post('/api/v1/session/:sessionId/review',verifyToken,session_contrl.reviewSession); 
+router.delete('/api/v1/sessions/:sessionId/review',verifyToken,session_contrl.deleteSessionReview); 
 
 export default router;
