@@ -1,51 +1,53 @@
-import session_inst from '../MODELS/session';
-import accounts from '../MODELS/User_Accounts';
+import pool from '../test/MODELS/create';
 import session_schema from '../JOI_VALIDATION/session_validation';
-import session_review_schema from '../JOI_VALIDATION/session_review';
+import {createSessionInsertQuery} from '../SERVICES/createSessionQueries';
+import {createSessionSelectQuery} from '../SERVICES/createSessionQueries';
 import Joi from '@hapi/joi';
 
 class sessionControler{
     createSession(req, res){
-        const mentorId= parseInt(req.body.mentorId);
-        const questions= req.body.questions;
         const create_session_validation = Joi.validate(req.body, session_schema);
         if(create_session_validation.error){
             const create_session_errors=[];
-            for(let index=0; index<create_session_validation.error.details.length; index++){
-                create_session_errors.push(create_session_validation.error.details[index].message.split('"').join(" "));
+            for(let m=0; m<create_session_validation.error.details.length; m++){
+                create_session_errors.push(create_session_validation.error.details[m].message.split('"').join(" "));
             }
             return res.status(400).send({
                 status: 400,
                 error: create_session_errors[0]
             });
         }else{
-            const allAccs= accounts.AllAccounts;
-            const USER_ACC= allAccs.find(accs=>accs.id===parseInt(mentorId));
-            if(!(USER_ACC)){
-                return res.status(404).json({
-                    status: 404,
-                    error: "A user with such Id not found"
+            const mentorId= parseInt(req.body.mentorId);
+            pool.connect((err, client, done) => {
+                const values = [mentorId];
+                client.query(createSessionSelectQuery, values, (error, result) => {
+                    if(!(result.rows[0])){
+                        return res.status(404).json({
+                            status: 404,
+                            error: "A user with such Id not found"
+                        });
+                    }else{
+                        const mentor_checking= result.rows[0].mentor;
+                        if (mentor_checking===true) {
+                            const menteeId = req.user_token.id, menteeEmail = req.user_token.email, questions= req.body.questions, status = "pending", score=null, menteeFullName=null, remark=null;
+                                const input_data=[mentorId,menteeId,questions.trim(),menteeEmail.trim(),status,score,menteeFullName,remark];
+                                client.query(createSessionInsertQuery, input_data, (error, result) => {
+                                    const {sessionid, mentorid, menteeid, questions, menteeemail, status}= result.rows[0];
+                                    return res.status(200).json({
+                                        status: 200,
+                                        data: {sessionId:sessionid, mentorId:mentorid, menteeId:menteeid, questions, menteeEmail:menteeemail, status}
+                                    });
+                                });                         
+                        }else{
+                            return res.status(404).json({
+                                status: 404,
+                                error: "A mentor with such Id not found"
+                            });
+                        }
+                    }
                 });
-            }else{
-                const mentor_checking= USER_ACC.isAmentor;
-                if(mentor_checking===true){
-                    const menteeId= req.user_token.id;
-                    const menteeEmail= req.user_token.email;
-                    const status="pending";
-                    const input_data= {mentorId, menteeId, questions, menteeEmail, status};
-                    
-                    const createdSession= session_inst.createSession(input_data);
-                    return res.status(200).json({
-                        status: 200,
-                        data: createdSession
-                    });
-                }else{
-                    return res.status(404).json({
-                        status: 404,
-                        error: "A mentor with such Id not found"
-                    });
-                }
-            }
+                done();
+            });
         }
     }
 

@@ -1,0 +1,2 @@
+export const createSessionInsertQuery= 'INSERT INTO sessions(mentorid,menteeid,questions,menteeemail,status,score,menteefullname,remark) VALUES($1,$2,$3,$4,$5,$6,$7,$8) RETURNING *';
+export const createSessionSelectQuery = `SELECT * FROM users WHERE id = $1`; 
