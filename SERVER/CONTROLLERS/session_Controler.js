@@ -1,6 +1,7 @@
 import pool from '../test/MODELS/create';
 import session_schema from '../JOI_VALIDATION/session_validation';
 import Joi from '@hapi/joi';
+import getAllSessions from '../SERVICES/getAllSessionsQueries';
 
 class sessionControler{
     createSession(req, res){
@@ -107,7 +108,40 @@ class sessionControler{
         }
     }
 
-    getAllSession(req, res){
+    async getAllSession(req, res){
+        const is_mentor_checking = req.user_token.mentor;
+        if(!is_mentor_checking){
+            const getAllMenteeSessionRes= await getAllSessions.getAllMenteeSessionsSelectFn(req);
+            if(getAllMenteeSessionRes.length>0){
+                return res.status(200).json({
+                    status: 200,
+                    data: getAllMenteeSessionRes
+                });
+            }else{
+                return res.status(404).json({
+                    status: 404,
+                    error: "No mentorship session found"
+                });
+            }
+        }else{
+            const getAllMentorSessionRes= await getAllSessions.getAllMentorSessionsSelectFn(req);
+            if(getAllMentorSessionRes.length>0){
+                return res.status(200).json({
+                    status: 200,
+                    data: getAllMentorSessionRes
+                });
+            }else{
+                return res.status(404).json({
+                    status: 404,
+                    error: "No mentorship session found"
+                });
+            }
+        }
+       /*
+        const getAllSessionRes= await getAllSessions.getAllSessionsSelectFn(req);
+        if(getAllSessionRes.me)
+
+
         const is_mentor_checking= req.user_token.mentor;
         if(is_mentor_checking===false){
             const mentee_ID= req.user_token.id;
@@ -149,7 +183,7 @@ class sessionControler{
                 });
                 done();
             });
-        }
+        }*/
     }
 
     //Review a specific mentorship session
