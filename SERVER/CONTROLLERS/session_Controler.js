@@ -2,10 +2,11 @@ import pool from '../test/MODELS/create';
 import session_schema from '../JOI_VALIDATION/session_validation';
 import {createSessionInsertQuery} from '../SERVICES/createSessionQueries';
 import {createSessionSelectQuery} from '../SERVICES/createSessionQueries';
+import createSession from '../SERVICES/createSessionQueries';
 import Joi from '@hapi/joi';
 
 class sessionControler{
-    createSession(req, res){
+    async createSession(req, res){
         const create_session_validation = Joi.validate(req.body, session_schema);
         if(create_session_validation.error){
             const create_session_errors=[];
@@ -18,36 +19,31 @@ class sessionControler{
             });
         }else{
             const mentorId= parseInt(req.body.mentorId);
-            pool.connect((err, client, done) => {
-                const values = [mentorId];
-                client.query(createSessionSelectQuery, values, (error, result) => {
-                    if(!(result.rows[0])){
-                        return res.status(404).json({
-                            status: 404,
-                            error: "A user with such Id not found"
-                        });
-                    }else{
-                        const mentor_checking= result.rows[0].mentor;
-                        if (mentor_checking===true) {
-                            const menteeId = req.user_token.id, menteeEmail = req.user_token.email, questions= req.body.questions, status = "pending", score=null, menteeFullName=null, remark=null;
-                                const input_data=[mentorId,menteeId,questions.trim(),menteeEmail.trim(),status,score,menteeFullName,remark];
-                                client.query(createSessionInsertQuery, input_data, (error, result) => {
-                                    const {sessionid, mentorid, menteeid, questions, menteeemail, status}= result.rows[0];
-                                    return res.status(200).json({
-                                        status: 200,
-                                        data: {sessionId:sessionid, mentorId:mentorid, menteeId:menteeid, questions, menteeEmail:menteeemail, status}
-                                    });
-                                });                         
-                        }else{
-                            return res.status(404).json({
-                                status: 404,
-                                error: "A mentor with such Id not found"
-                            });
-                        }
-                    }
+            const selectMentorResult = await createSession.createSessionSelectFn(mentorId);
+            if(!selectMentorResult){
+                return res.status(404).json({
+                    status: 404,
+                    error: "A user with such Id not found"
                 });
-                done();
-            });
+            }else{
+                const mentor_checking= selectMentorResult.mentor;
+                if (mentor_checking===true) {
+                    const insertSessionResult= await createSession.insertSessionSelectFn(req);
+                    if(insertSessionResult){
+                        const {sessionid, mentorid,menteeid,questions,menteeemail,status}=insertSessionResult;
+                        return res.status(200).json({
+                            status: 200,
+                            data: {sessionId:sessionid, mentorId:mentorid, menteeId:menteeid, questions, menteeEmail:menteeemail, status}
+                        });
+                    }
+                }else{
+                    return res.status(404).json({
+                        status: 404,
+                        error: "A mentor with such Id not found"
+                    });
+                }
+
+            }
         }
     }
 
