@@ -1,7 +1,5 @@
-import session_inst from '../MODELS/session';
-import accounts from '../MODELS/User_Accounts';
+import pool from '../test/MODELS/create';
 import session_schema from '../JOI_VALIDATION/session_validation';
-import session_review_schema from '../JOI_VALIDATION/session_review';
 import Joi from '@hapi/joi';
 
 class sessionControler{
@@ -109,39 +107,48 @@ class sessionControler{
         }
     }
 
-    //Get or View all sessions
     getAllSession(req, res){
-        const is_mentor_checking= req.user_token.isAmentor;
-        const allsess= session_inst.allSessions;
-
+        const is_mentor_checking= req.user_token.mentor;
         if(is_mentor_checking===false){
             const mentee_ID= req.user_token.id;
-            const mentee_sessions= allsess.filter(mentee=>mentee.menteeId===mentee_ID);
-            if(mentee_sessions.length>=1){
-                return res.status(200).json({
-                    status: 200,
-                    data: mentee_sessions
+            pool.connect((err, client, done) => {
+                const select_query = `SELECT * FROM sessions WHERE menteeid= $1`;
+                const values=[mentee_ID];
+                client.query(select_query, values, (error, result) => {
+                    if(result.rows.length>0){
+                        return res.status(200).json({
+                            status: 200,
+                            data: result.rows
+                        });
+                    }else{
+                        return res.status(404).json({
+                            status: 404,
+                            error: "No mentorship session found"
+                        });
+                    }
                 });
-            }else{
-                return res.status(404).json({
-                    status: 404,
-                    error: "No mentorship session found"
-                });
-            }
+                done();
+            });
         }else{
             const mentor_ID= req.user_token.id;
-            const mentor_sessions= allsess.filter(mentor=>mentor.mentorId===mentor_ID);
-            if(mentor_sessions.length>=1){
-                return res.status(200).json({
-                    status: 200,
-                    data: mentor_sessions
+            pool.connect((err, client, done) => {
+                const select_query = `SELECT * FROM sessions WHERE mentorid= $1`;
+                const values=[mentor_ID];
+                client.query(select_query, values, (error, result) => {
+                    if(result.rows.length>0){
+                        return res.status(200).json({
+                            status: 200,
+                            data: result.rows
+                        });
+                    }else{
+                        return res.status(404).json({
+                            status: 404,
+                            error: "No mentorship session found"
+                        });
+                    }
                 });
-            }else{
-                return res.status(404).json({
-                    status: 404,
-                    error: "No mentorship session found"
-                });
-            }
+                done();
+            });
         }
     }
 
