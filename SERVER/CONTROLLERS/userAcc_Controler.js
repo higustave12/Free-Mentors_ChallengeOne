@@ -6,7 +6,7 @@ import {mentor} from '../SERVICES/userSignupQueries';
 import {loginSelectQuery} from '../SERVICES/userLoginQueries';
 import {changeUserToMentorSelectQuery} from '../SERVICES/changeUserToMentorQueries';
 import {updateMentorStatusQuery} from '../SERVICES/changeUserToMentorQueries';
-import ViewMentorByIdQuery from '../SERVICES/viewMentorByIdQueries';
+import viewMentor from '../SERVICES/viewMentorByIdQueries';
 import create_acc_schema from '../JOI_VALIDATION/create_acc_validation';
 import login_schema from '../JOI_VALIDATION/login_user_validation';
 import Joi from '@hapi/joi';
@@ -148,34 +148,21 @@ class userAccountControler{
             });
     }
 
-    viewMentorById(req, res){
+    async viewMentorById(req, res){
         const single_user_id= parseInt(req.params.userId);
-        pool.connect((err, client, done) => {
-            const values = [single_user_id];
-            client.query(ViewMentorByIdQuery,values, (error, result) => {
-                if(!(result.rows[0])){
-                    return res.status(404).json({
-                        status: 404,
-                        error: "A user with such Id not found"
-                    });
-                }else{
-                    const { id, firstname, lastname, email, address, bio, occupation, expertise, admin, mentor } = result.rows[0];
-                    const mentor_check_val= result.rows[0].mentor;
-                    if(mentor_check_val===true){
-                        return res.status(200).json({
-                            status: 200,
-                            data: {mentorId:id, firstname, lastname, email, address, bio, occupation, expertise, admin, mentor}
-                        });
-                    }else{
-                        return res.status(404).json({
-                            status: 404,
-                            error: "A mentor for this Id not found"
-                        });
-                    }
-                }
+        const singleMentor = await viewMentor.viewSpecificMentor(single_user_id);
+        const datas=singleMentor;
+        if(singleMentor){
+            return res.status(200).json({
+                status: 200,
+                data: datas
             });
-            done();
-        });
+        }else{
+            return res.status(404).json({
+                status: 404,
+                error: "Mentor not found"
+            });
+        }
     }
 
 }
