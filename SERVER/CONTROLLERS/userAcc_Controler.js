@@ -6,7 +6,7 @@ import {mentor} from '../SERVICES/userSignupQueries';
 import {loginSelectQuery} from '../SERVICES/userLoginQueries';
 import {changeUserToMentorSelectQuery} from '../SERVICES/changeUserToMentorQueries';
 import {updateMentorStatusQuery} from '../SERVICES/changeUserToMentorQueries';
-import {viewAllMentorsQuery} from '../SERVICES/viewAllMentorsQueries';
+import viewMentors from '../SERVICES/viewAllMentorsQueries';
 import create_acc_schema from '../JOI_VALIDATION/create_acc_validation';
 import login_schema from '../JOI_VALIDATION/login_user_validation';
 import Joi from '@hapi/joi';
@@ -139,17 +139,11 @@ class userAccountControler{
         });
     }
 
-    viewAllMentors(req, res){
-        const Is_a_mentor=true;
-        pool.connect((err, client, done) => {
-            const values = [Is_a_mentor];
-            client.query(viewAllMentorsQuery,values, (error, result) => {
-                return res.status(200).json({
-                    status: 200,
-                    data: result.rows
-                });
-            });
-            done();
+    async viewAllMentors(req, res) {
+        const allMentors = await viewMentors.viewAllMentors();
+        return res.status(200).json({
+            status: 200,
+            data: allMentors
         });
     }
 
