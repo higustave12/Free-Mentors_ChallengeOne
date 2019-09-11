@@ -1,7 +1,6 @@
-import session_inst from '../MODELS/session';
-import accounts from '../MODELS/User_Accounts';
+import pool from '../test/MODELS/create';
 import session_schema from '../JOI_VALIDATION/session_validation';
-import session_review_schema from '../JOI_VALIDATION/session_review';
+//import session_review_schema from '../JOI_VALIDATION/session_review';
 import Joi from '@hapi/joi';
 
 class sessionControler{
@@ -79,34 +78,46 @@ class sessionControler{
         }
     }
 
-    //Mentor reject mentorship session
-    rejectSessionRequest(req, res){
-        const sessioId= parseInt(req.params.sessionId);
-        const all_sessio= session_inst.allSessions;
-        const session_lookups= all_sessio.find(single_sessio=>single_sessio.sessionId===sessioId);
-        if(session_lookups){
-            const mentorId= req.user_token.id;
-            const check_session_mentors= session_lookups.mentorId;
-            if(check_session_mentors===mentorId){
-                const new_session_status= "rejected";
-                session_lookups.status= new_session_status;
-                const updatedSessions= session_lookups;
-                return res.status(200).json({
-                    status: 200,
-                    data: updatedSessions
-                });
-            }else{
-                return res.status(404).json({
-                    status: 404,
-                    error: "You are not a mentor for this session"
-                })
-            }
-        }else{
-            return res.status(404).json({
-                status: 404,
-                error: "No session with such Id found"
-            })
-        }
+    
+    rejectSessionRequest(req, res) {
+        const sessioId = parseInt(req.params.sessionId);
+        pool.connect((err, client, done) => {
+            const select_query = `SELECT * FROM sessions WHERE sessionid= $1`;
+            const select_query_value = [sessioId];
+            client.query(select_query, select_query_value, (error, result) => {
+                if (result.rows[0]) {
+                    const slct_mentorId = req.user_token.id;
+                    const check_sessions_mentor = result.rows[0].mentorid;
+                    if (check_sessions_mentor == slct_mentorId) {
+                        const new_session_status = "rejected";
+                        const update_session_status_reject = 'UPDATE sessions SET status=$1 WHERE mentorid=$2 AND sessionid=$3';
+                        const update_session_status_reject_values = [new_session_status, slct_mentorId, sessioId];
+                        client.query(update_session_status_reject, update_session_status_reject_values, () => {
+                            const sel_reject_query = 'SELECT * FROM sessions WHERE sessionid=$1';
+                            const sel_reject_query_values = [sessioId];
+                            client.query(sel_reject_query, sel_reject_query_values, (error, result) => {
+                                const {sessionid, mentorid, menteeid, questions, menteeemail, status}= result.rows[0];
+                                return res.status(200).json({
+                                    status: 200,
+                                    data: {sessionId: sessionid, mentorId: mentorid, menteeId: menteeid, questions, menteeEmail: menteeemail, status}
+                                });
+                            });
+                        });
+                    } else {
+                        return res.status(404).json({
+                            status: 404,
+                            error: "You are not a mentor for this session"
+                        })
+                    }
+                } else {
+                    return res.status(404).json({
+                        status: 404,
+                        error: "No session with such Id found"
+                    })
+                }
+            });
+            done();
+        });
     }
 
     //Get or View all sessions
