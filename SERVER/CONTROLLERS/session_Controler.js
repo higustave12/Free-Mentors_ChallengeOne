@@ -137,53 +137,6 @@ class sessionControler{
                 });
             }
         }
-       /*
-        const getAllSessionRes= await getAllSessions.getAllSessionsSelectFn(req);
-        if(getAllSessionRes.me)
-
-
-        const is_mentor_checking= req.user_token.mentor;
-        if(is_mentor_checking===false){
-            const mentee_ID= req.user_token.id;
-            pool.connect((err, client, done) => {
-                const select_query = `SELECT * FROM sessions WHERE menteeid= $1`;
-                const values=[mentee_ID];
-                client.query(select_query, values, (error, result) => {
-                    if(result.rows.length>0){
-                        return res.status(200).json({
-                            status: 200,
-                            data: result.rows
-                        });
-                    }else{
-                        return res.status(404).json({
-                            status: 404,
-                            error: "No mentorship session found"
-                        });
-                    }
-                });
-                done();
-            });
-        }else{
-            const mentor_ID= req.user_token.id;
-            pool.connect((err, client, done) => {
-                const select_query = `SELECT * FROM sessions WHERE mentorid= $1`;
-                const values=[mentor_ID];
-                client.query(select_query, values, (error, result) => {
-                    if(result.rows.length>0){
-                        return res.status(200).json({
-                            status: 200,
-                            data: result.rows
-                        });
-                    }else{
-                        return res.status(404).json({
-                            status: 404,
-                            error: "No mentorship session found"
-                        });
-                    }
-                });
-                done();
-            });
-        }*/
     }
 
     //Review a specific mentorship session
