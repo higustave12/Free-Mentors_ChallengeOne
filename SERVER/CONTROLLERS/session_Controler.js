@@ -1,6 +1,4 @@
-import pool from '../test/MODELS/create';
 import session_schema from '../JOI_VALIDATION/session_validation';
-//import session_review_schema from '../JOI_VALIDATION/session_review';
 import Joi from '@hapi/joi';
 import mentorRejectSession from '../SERVICES/rejectSessionQueries';
 
