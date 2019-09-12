@@ -85,6 +85,7 @@ describe("Test on users accounts", ()=>{
                     res.body.data.should.have.property("bio");
                     res.body.data.should.have.property("occupation");
                     res.body.data.should.have.property("expertise");
+                    done();
                });
         });
 
@@ -376,7 +377,7 @@ describe("Test on users accounts", ()=>{
                 .set('x-auth-token', token)
                 .end((req, res)=>{
                         res.should.have.status(404);
-                        res.body.should.have.property("error").equal("A user with such Id not found");
+                        res.body.should.have.property("error").equal("Mentor not found");
                         done();
                 });
         });
@@ -398,7 +399,7 @@ describe("Test on users accounts", ()=>{
                 .set('x-auth-token', token)
                 .end((req, res)=>{
                         res.should.have.status(404);
-                        res.body.should.have.property("error").equal("A mentor for this Id not found");
+                        res.body.should.have.property("error").equal("Mentor not found");
                         done();
                 });
         });

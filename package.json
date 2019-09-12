@@ -6,7 +6,7 @@
   "scripts": {
     "start": "npm run drop && npm run create && nodemon --exec babel-node SERVER/server.js",
     "dev": "nodemon --exec babel-node SERVER/server.js",
-    "test": "npm run drop && npm run create && nyc --reporter=html --reporter=text mocha  --require  @babel/register  SERVER/test/*.js --exit",
+    "test": "npm run drop && npm run create && nyc --reporter=html --reporter=text mocha  --require  @babel/register SERVER/test/*.js --exit",
     "create": "babel-node SERVER/test/MODELS/create.js createAlltables",
     "drop": "babel-node SERVER/test/MODELS/drop.js dropAllTables",
     "coverage": "nyc report --reporter=text-lcov | coveralls",
