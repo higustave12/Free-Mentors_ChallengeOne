@@ -1,8 +1,8 @@
 import session_schema from '../JOI_VALIDATION/session_validation';
 import Joi from '@hapi/joi';
+import getAllSessions from '../SERVICES/getAllSessionsQueries';
 import mentorRejectSession from '../SERVICES/rejectSessionQueries';
 import mentorAcceptSession from '../SERVICES/mentorAcceptSessionQueries';
-
 
 class sessionControler{
     createSession(req, res){
@@ -104,18 +104,14 @@ class sessionControler{
         }
     }
 
-    //Get or View all sessions
-    getAllSession(req, res){
-        const is_mentor_checking= req.user_token.isAmentor;
-        const allsess= session_inst.allSessions;
-
-        if(is_mentor_checking===false){
-            const mentee_ID= req.user_token.id;
-            const mentee_sessions= allsess.filter(mentee=>mentee.menteeId===mentee_ID);
-            if(mentee_sessions.length>=1){
+    async getAllSession(req, res){
+        const is_mentor_checking = req.user_token.mentor;
+        if(!is_mentor_checking){
+            const getAllMenteeSessionRes= await getAllSessions.getAllMenteeSessionsSelectFn(req);
+            if(getAllMenteeSessionRes.length>0){
                 return res.status(200).json({
                     status: 200,
-                    data: mentee_sessions
+                    data: getAllMenteeSessionRes
                 });
             }else{
                 return res.status(404).json({
@@ -124,12 +120,11 @@ class sessionControler{
                 });
             }
         }else{
-            const mentor_ID= req.user_token.id;
-            const mentor_sessions= allsess.filter(mentor=>mentor.mentorId===mentor_ID);
-            if(mentor_sessions.length>=1){
+            const getAllMentorSessionRes= await getAllSessions.getAllMentorSessionsSelectFn(req);
+            if(getAllMentorSessionRes.length>0){
                 return res.status(200).json({
                     status: 200,
-                    data: mentor_sessions
+                    data: getAllMentorSessionRes
                 });
             }else{
                 return res.status(404).json({
