@@ -1,3 +1,4 @@
+/*
 import chai from 'chai';
 import chaiHttp from 'chai-http';
 import app from '../server';
@@ -14,22 +15,17 @@ describe("Test on Mentorship sessions", ()=>{
         it("Should create a new mentorship session", (done)=>{
             const user_token = {
                 id: 5,
-                firstName: "DOROTHE",
-                lastName: "MBARUSHIMANA",
+                firstname: "DOROTHE",
+                lastname: "MBARUSHIMANA",
                 email: "dorothembarushimana@gmail.com",
-                password: "12345",
-                address: "ITALY",
-                bio: "C# ENTHUSIAST",
-                occupation: "ASSISTANT PROF",
-                expertise: "C#",
-                isAdmin: false,
-                isAmentor: false
+                admin: false,
+                mentor: false
             };
             const mentorId= 2;
             const questions= "I want to improve my javascript skills. Thank you";
             const token =JWT.sign(user_token, process.env.SECRET);
             chai.request(app)
-                .post(`/api/v1/session`)
+                .post(`/api/v2/session`)
                 .send({
                     mentorId,
                     questions
@@ -45,22 +41,17 @@ describe("Test on Mentorship sessions", ()=>{
         it("Should create a new mentorship session", (done)=>{
             const user_token = {
                 id: 5,
-                firstName: "DOROTHE",
-                lastName: "MBARUSHIMANA",
+                firstname: "DOROTHE",
+                lastname: "MBARUSHIMANA",
                 email: "dorothembarushimana@gmail.com",
-                password: "12345",
-                address: "ITALY",
-                bio: "C# ENTHUSIAST",
-                occupation: "ASSISTANT PROF",
-                expertise: "C#",
-                isAdmin: false,
-                isAmentor: false
+                admin: false,
+                mentor: false
             };
             const mentorId= 3;
             const questions= "I want to learn Python. Thank you";
             const token =JWT.sign(user_token, process.env.SECRET);
             chai.request(app)
-                .post(`/api/v1/session`)
+                .post(`/api/v2/session`)
                 .send({
                     mentorId,
                     questions
@@ -76,22 +67,17 @@ describe("Test on Mentorship sessions", ()=>{
         it("Should NOT create a new mentorship session: mentorId not found", (done)=>{
             const user_token = {
                 id: 5,
-                firstName: "DOROTHE",
-                lastName: "MBARUSHIMANA",
+                firstname: "DOROTHE",
+                lastname: "MBARUSHIMANA",
                 email: "dorothembarushimana@gmail.com",
-                password: "12345",
-                address: "ITALY",
-                bio: "C# ENTHUSIAST",
-                occupation: "ASSISTANT PROF",
-                expertise: "C#",
-                isAdmin: false,
-                isAmentor: false
+                admin: false,
+                mentor: false
             };
             const mentorId= 1;
             const questions= "I want to improve my javascript skills. Thank you";
             const token =JWT.sign(user_token, process.env.SECRET);
             chai.request(app)
-                .post(`/api/v1/session`)
+                .post(`/api/v2/session`)
                 .send({
                     mentorId,
                     questions
@@ -107,22 +93,17 @@ describe("Test on Mentorship sessions", ()=>{
         it("Should NOT create a new mentorship session: Account not found", (done)=>{
             const user_token = {
                 id: 5,
-                firstName: "DOROTHE",
-                lastName: "MBARUSHIMANA",
+                firstname: "DOROTHE",
+                lastname: "MBARUSHIMANA",
                 email: "dorothembarushimana@gmail.com",
-                password: "12345",
-                address: "ITALY",
-                bio: "C# ENTHUSIAST",
-                occupation: "ASSISTANT PROF",
-                expertise: "C#",
-                isAdmin: false,
-                isAmentor: false
+                admin: false,
+                mentor: false
             };
             const mentorId= 100;
             const questions= "I want to improve my javascript skills. Thank you";
             const token =JWT.sign(user_token, process.env.SECRET);
             chai.request(app)
-                .post(`/api/v1/session`)
+                .post(`/api/v2/session`)
                 .send({
                     mentorId,
                     questions
@@ -138,21 +119,16 @@ describe("Test on Mentorship sessions", ()=>{
         it("Should NOT create a new mentorship session: Invalid input or Missing input", (done)=>{
             const user_token = {
                 id: 5,
-                firstName: "DOROTHE",
-                lastName: "MBARUSHIMANA",
+                firstname: "DOROTHE",
+                lastname: "MBARUSHIMANA",
                 email: "dorothembarushimana@gmail.com",
-                password: "12345",
-                address: "ITALY",
-                bio: "C# ENTHUSIAST",
-                occupation: "ASSISTANT PROF",
-                expertise: "C#",
-                isAdmin: false,
-                isAmentor: false
+                admin: false,
+                mentor: false
             };
             const mentorId= 2;
             const token =JWT.sign(user_token, process.env.SECRET);
             chai.request(app)
-                .post(`/api/v1/session`)
+                .post(`/api/v2/session`)
                 .send({
                     mentorId,
                 })
@@ -170,21 +146,16 @@ describe("Test on Mentorship sessions", ()=>{
         it("Should allow a mentor to accept a mentorship session request", (done)=>{
             const user_token = {
                 id: 2,
-                firstName: "AUGUSTIN",
-                lastName: "NTAMBARA",
+                firstname: "AUGUSTIN",
+                lastname: "NTAMBARA",
                 email: "augustinntambara@gmail.com",
-                password: "12345",
-                address: "FRANCE",
-                bio: "PYTHON ENTHUSIAST",
-                occupation: "PROFESSOR",
-                expertise: "PYTHON",
-                isAdmin: false,
-                isAmentor: true
+                admin: false,
+                mentor: true
             };
             const sessionId= 1;
             const token =JWT.sign(user_token, process.env.SECRET);
             chai.request(app)
-                .patch(`/api/v1/sessions/${sessionId}/accept`)
+                .patch(`/api/v2/sessions/${sessionId}/accept`)
                 .set('x-auth-token', token)
                 .end((req, res)=>{
                         res.should.have.status(200);
@@ -196,21 +167,16 @@ describe("Test on Mentorship sessions", ()=>{
         it("Should NOT allow a mentor to accept a mentorship session request: You are not a mentor for this session", (done)=>{
             const user_token = {
                 id: 6,
-                firstName: "EUGENE",
-                lastName: "PARK",
+                firstname: "EUGENE",
+                lastname: "PARK",
                 email: "eugenepark@gmail.com",
-                password: "12345",
-                address: "KOREA",
-                bio: "RUBY STUDENT",
-                occupation: "STUDENT",
-                expertise: "RUBY",
-                isAdmin: false,
-                isAmentor: true
+                admin: false,
+                mentor: true
             };
             const sessionId= 1;
             const token =JWT.sign(user_token, process.env.SECRET);
             chai.request(app)
-                .patch(`/api/v1/sessions/${sessionId}/accept`)
+                .patch(`/api/v2/sessions/${sessionId}/accept`)
                 .set('x-auth-token', token)
                 .end((req, res)=>{
                         res.should.have.status(404);
@@ -222,21 +188,16 @@ describe("Test on Mentorship sessions", ()=>{
         it("Should NOT allow a mentor to accept a mentorship session request: Session with such Id not found", (done)=>{
             const user_token = {
                 id: 2,
-                firstName: "AUGUSTIN",
-                lastName: "NTAMBARA",
+                firstname: "AUGUSTIN",
+                lastname: "NTAMBARA",
                 email: "augustinntambara@gmail.com",
-                password: "12345",
-                address: "FRANCE",
-                bio: "PYTHON ENTHUSIAST",
-                occupation: "PROFESSOR",
-                expertise: "PYTHON",
-                isAdmin: false,
-                isAmentor: true
+                admin: false,
+                mentor: true
             };
             const sessionId= 10000;
             const token =JWT.sign(user_token, process.env.SECRET);
             chai.request(app)
-                .patch(`/api/v1/sessions/${sessionId}/accept`)
+                .patch(`/api/v2/sessions/${sessionId}/accept`)
                 .set('x-auth-token', token)
                 .end((req, res)=>{
                         res.should.have.status(404);
@@ -250,21 +211,16 @@ describe("Test on Mentorship sessions", ()=>{
         it("Should allow a mentor to reject a mentorship session request", (done)=>{
             const user_token = {
                 id: 3,
-                firstName: "FIDELE",
-                lastName: "BIZIMANA",
+                firstname: "FIDELE",
+                lastname: "BIZIMANA",
                 email: "fidelebizimana@gmail.com",
-                password: "12345",
-                address: "GISENYI",
-                bio: "RUBY ENTHUSIAST",
-                occupation: "STUDEN",
-                expertise: "RUBY",
-                isAdmin: false,
-                isAmentor: true
+                admin: false,
+                mentor: true
             };
             const sessionId= 2;
             const token =JWT.sign(user_token, process.env.SECRET);
             chai.request(app)
-                .patch(`/api/v1/sessions/${sessionId}/reject`)
+                .patch(`/api/v2/sessions/${sessionId}/reject`)
                 .set('x-auth-token', token)
                 .end((req, res)=>{
                         res.should.have.status(200);
@@ -276,21 +232,16 @@ describe("Test on Mentorship sessions", ()=>{
         it("Should NOT allow a mentor to reject a mentorship session request: You are not a mentor for this session", (done)=>{
             const user_token = {
                 id: 6,
-                firstName: "EUGENE",
-                lastName: "PARK",
+                firstname: "EUGENE",
+                lastname: "PARK",
                 email: "eugenepark@gmail.com",
-                password: "12345",
-                address: "KOREA",
-                bio: "RUBY STUDENT",
-                occupation: "STUDENT",
-                expertise: "RUBY",
-                isAdmin: false,
-                isAmentor: true
+                admin: false,
+                mentor: true
             };
             const sessionId= 2;
             const token =JWT.sign(user_token, process.env.SECRET);
             chai.request(app)
-                .patch(`/api/v1/sessions/${sessionId}/reject`)
+                .patch(`/api/v2/sessions/${sessionId}/reject`)
                 .set('x-auth-token', token)
                 .end((req, res)=>{
                         res.should.have.status(404);
@@ -302,21 +253,16 @@ describe("Test on Mentorship sessions", ()=>{
         it("Should NOT allow a mentor to reject a mentorship session request: Session with such Id not found", (done)=>{
             const user_token = {
                 id: 2,
-                firstName: "AUGUSTIN",
-                lastName: "NTAMBARA",
+                firstname: "AUGUSTIN",
+                lastname: "NTAMBARA",
                 email: "augustinntambara@gmail.com",
-                password: "12345",
-                address: "FRANCE",
-                bio: "PYTHON ENTHUSIAST",
-                occupation: "PROFESSOR",
-                expertise: "PYTHON",
-                isAdmin: false,
-                isAmentor: true
+                admin: false,
+                mentor: true
             };
             const sessionId= 3895;
             const token =JWT.sign(user_token, process.env.SECRET);
             chai.request(app)
-                .patch(`/api/v1/sessions/${sessionId}/reject`)
+                .patch(`/api/v2/sessions/${sessionId}/reject`)
                 .set('x-auth-token', token)
                 .end((req, res)=>{
                         res.should.have.status(404);
@@ -330,20 +276,15 @@ describe("Test on Mentorship sessions", ()=>{
         it("Should allow a user(Mentee) to Get or View all mentorship sessions: Mentee", (done)=>{
             const user_token = {
                 id: 5,
-                firstName: "DOROTHE",
-                lastName: "MBARUSHIMANA",
+                firstname: "DOROTHE",
+                lastname: "MBARUSHIMANA",
                 email: "dorothembarushimana@gmail.com",
-                password: "12345",
-                address: "ITALY",
-                bio: "C# ENTHUSIAST",
-                occupation: "ASSISTANT PROF",
-                expertise: "C#",
-                isAdmin: false,
-                isAmentor: false
+                admin: false,
+                mentor: false
             };
             const token =JWT.sign(user_token, process.env.SECRET);
             chai.request(app)
-                .get(`/api/v1/sessions`)
+                .get(`/api/v2/sessions`)
                 .set('x-auth-token', token)
                 .end((req, res)=>{
                         res.should.have.status(200);
@@ -354,20 +295,15 @@ describe("Test on Mentorship sessions", ()=>{
         it("Should NOT allow a user(Mentee) to Get or View all mentorship sessions: Mentee (No mentorship session found)", (done)=>{
             const user_token = {
                 id: 7,
-                firstName: "AIME",
-                lastName: "SIFA",
+                firstname: "AIME",
+                lastname: "SIFA",
                 email: "sifaaime@gmail.com",
-                password: "12345",
-                address: "TANZANIA",
-                bio: "PHP STUDENT",
-                occupation: "STUDENT",
-                expertise: "PHP",
-                isAdmin: false,
-                isAmentor: false
+                admin: false,
+                mentor: false
             };
             const token =JWT.sign(user_token, process.env.SECRET);
             chai.request(app)
-                .get(`/api/v1/sessions`)
+                .get(`/api/v2/sessions`)
                 .set('x-auth-token', token)
                 .end((req, res)=>{
                         res.should.have.status(404);
@@ -379,20 +315,15 @@ describe("Test on Mentorship sessions", ()=>{
         it("Should allow a user(Mentor) to Get or View all mentorship sessions: Mentor", (done)=>{
             const user_token = {
                 id: 2,
-                firstName: "AUGUSTIN",
-                lastName: "NTAMBARA",
+                firstname: "AUGUSTIN",
+                lastname: "NTAMBARA",
                 email: "augustinntambara@gmail.com",
-                password: "12345",
-                address: "FRANCE",
-                bio: "PYTHON ENTHUSIAST",
-                occupation: "PROFESSOR",
-                expertise: "PYTHON",
-                isAdmin: false,
-                isAmentor: true
+                admin: false,
+                mentor: true
             };
             const token =JWT.sign(user_token, process.env.SECRET);
             chai.request(app)
-                .get(`/api/v1/sessions`)
+                .get(`/api/v2/sessions`)
                 .set('x-auth-token', token)
                 .end((req, res)=>{
                         res.should.have.status(200);
@@ -403,20 +334,15 @@ describe("Test on Mentorship sessions", ()=>{
         it("Should NOT allow a user(Mentor) to Get or View all mentorship sessions: Mentor (No mentorship session found)", (done)=>{
             const user_token = {
                 id: 4,
-                firstName: "PAUL",
-                lastName: "NSABIMANA",
+                firstname: "PAUL",
+                lastname: "NSABIMANA",
                 email: "paulnsabimana@gmail.com",
-                password: "12345",
-                address: "ERWANDA",
-                bio: "C++ ENTHUSIAST",
-                occupation: "STUDENT",
-                expertise: "C++",
-                isAdmin: false,
-                isAmentor: true
+                admin: false,
+                mentor: true
             };
             const token =JWT.sign(user_token, process.env.SECRET);
             chai.request(app)
-                .get(`/api/v1/sessions`)
+                .get(`/api/v2/sessions`)
                 .set('x-auth-token', token)
                 .end((req, res)=>{
                         res.should.have.status(404);
@@ -433,20 +359,15 @@ describe("Test on Mentorship sessions", ()=>{
             const remark= "The mentor is good at explaining the subject";
             const user_token = {
                 id: 5,
-                firstName: "DOROTHE",
-                lastName: "MBARUSHIMANA",
+                firstname: "DOROTHE",
+                lastname: "MBARUSHIMANA",
                 email: "dorothembarushimana@gmail.com",
-                password: "12345",
-                address: "ITALY",
-                bio: "C# ENTHUSIAST",
-                occupation: "ASSISTANT PROF",
-                expertise: "C#",
-                isAdmin: false,
-                isAmentor: false
+                admin: false,
+                mentor: false
             };
             const token =JWT.sign(user_token, process.env.SECRET);
             chai.request(app)
-                .post(`/api/v1/session/${sessionId}/review`)
+                .post(`/api/v2/session/${sessionId}/review`)
                 .send({
                     score,
                     remark
@@ -465,20 +386,15 @@ describe("Test on Mentorship sessions", ()=>{
             const remark= "The mentor was not good at explaining";
             const user_token = {
                 id: 4,
-                firstName: "PAUL",
-                lastName: "NSABIMANA",
+                firstname: "PAUL",
+                lastname: "NSABIMANA",
                 email: "paulnsabimana@gmail.com",
-                password: "12345",
-                address: "ERWANDA",
-                bio: "C++ ENTHUSIAST",
-                occupation: "STUDENT",
-                expertise: "C++",
-                isAdmin: false,
-                isAmentor: true
+                admin: false,
+                mentor: true
             };
             const token =JWT.sign(user_token, process.env.SECRET);
             chai.request(app)
-                .post(`/api/v1/session/${sessionId}/review`)
+                .post(`/api/v2/session/${sessionId}/review`)
                 .send({
                     score,
                     remark
@@ -497,20 +413,15 @@ describe("Test on Mentorship sessions", ()=>{
             const remark= "The mentor is good at explaining the subject";
             const user_token = {
                 id: 5,
-                firstName: "DOROTHE",
-                lastName: "MBARUSHIMANA",
+                firstname: "DOROTHE",
+                lastname: "MBARUSHIMANA",
                 email: "dorothembarushimana@gmail.com",
-                password: "12345",
-                address: "ITALY",
-                bio: "C# ENTHUSIAST",
-                occupation: "ASSISTANT PROF",
-                expertise: "C#",
-                isAdmin: false,
-                isAmentor: false
+                admin: false,
+                mentor: false
             };
             const token =JWT.sign(user_token, process.env.SECRET);
             chai.request(app)
-                .post(`/api/v1/session/${sessionId}/review`)
+                .post(`/api/v2/session/${sessionId}/review`)
                 .send({
                     score,
                     remark
@@ -528,20 +439,15 @@ describe("Test on Mentorship sessions", ()=>{
             const score= 4;
             const user_token = {
                 id: 5,
-                firstName: "DOROTHE",
-                lastName: "MBARUSHIMANA",
+                firstname: "DOROTHE",
+                lastname: "MBARUSHIMANA",
                 email: "dorothembarushimana@gmail.com",
-                password: "12345",
-                address: "ITALY",
-                bio: "C# ENTHUSIAST",
-                occupation: "ASSISTANT PROF",
-                expertise: "C#",
-                isAdmin: false,
-                isAmentor: false
+                admin: false,
+                mentor: false
             };
             const token =JWT.sign(user_token, process.env.SECRET);
             chai.request(app)
-                .post(`/api/v1/session/${sessionId}/review`)
+                .post(`/api/v2/session/${sessionId}/review`)
                 .send({
                     score,
                     //remark
@@ -560,20 +466,15 @@ describe("Test on Mentorship sessions", ()=>{
             const sessionId= 1;
             const user_token = {
                 id: 1,
-                firstName: "BRIGITE",
-                lastName: "MUTONI",
+                firstname: "BRIGITE",
+                lastname: "MUTONI",
                 email: "mutonibrigitte@gmail.com",
-                password: "12345",
-                address: "BELGIUM",
-                bio: "JAVASCRIPT ENTHUSIAST",
-                occupation: "STUDENT",
-                expertise: "NODEJS",
-                isAdmin: true,
-                isAmentor: false
+                admin: true,
+                mentor: false
             };
             const token =JWT.sign(user_token, process.env.SECRET);
             chai.request(app)
-                .delete(`/api/v1/sessions/${sessionId}/review`)
+                .delete(`/api/v2/sessions/${sessionId}/review`)
                 .set('x-auth-token', token)
                 .end((req, res)=>{
                         res.should.have.status(200);
@@ -586,20 +487,15 @@ describe("Test on Mentorship sessions", ()=>{
             const sessionId= 1000;
             const user_token = {
                 id: 1,
-                firstName: "BRIGITE",
-                lastName: "MUTONI",
+                firstname: "BRIGITE",
+                lastname: "MUTONI",
                 email: "mutonibrigitte@gmail.com",
-                password: "12345",
-                address: "BELGIUM",
-                bio: "JAVASCRIPT ENTHUSIAST",
-                occupation: "STUDENT",
-                expertise: "NODEJS",
-                isAdmin: true,
-                isAmentor: false
+                admin: true,
+                mentor: false
             };
             const token =JWT.sign(user_token, process.env.SECRET);
             chai.request(app)
-                .delete(`/api/v1/sessions/${sessionId}/review`)
+                .delete(`/api/v2/sessions/${sessionId}/review`)
                 .set('x-auth-token', token)
                 .end((req, res)=>{
                         res.should.have.status(404);
@@ -612,20 +508,15 @@ describe("Test on Mentorship sessions", ()=>{
             const sessionId= 1000;
             const user_token = {
                 id: 5,
-                firstName: "DOROTHE",
-                lastName: "MBARUSHIMANA",
+                firstname: "DOROTHE",
+                lastname: "MBARUSHIMANA",
                 email: "dorothembarushimana@gmail.com",
-                password: "12345",
-                address: "ITALY",
-                bio: "C# ENTHUSIAST",
-                occupation: "ASSISTANT PROF",
-                expertise: "C#",
-                isAdmin: false,
-                isAmentor: false
+                admin: false,
+                mentor: false
             };
             const token =JWT.sign(user_token, process.env.SECRET);
             chai.request(app)
-                .delete(`/api/v1/sessions/${sessionId}/review`)
+                .delete(`/api/v2/sessions/${sessionId}/review`)
                 .set('x-auth-token', token)
                 .end((req, res)=>{
                         res.should.have.status(400);
@@ -635,3 +526,4 @@ describe("Test on Mentorship sessions", ()=>{
         });
     });
 });
+*/
