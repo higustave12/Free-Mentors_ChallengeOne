@@ -2,6 +2,7 @@ import pool from '../test/MODELS/create';
 import session_schema from '../JOI_VALIDATION/session_validation';
 import session_review_schema from '../JOI_VALIDATION/session_review';
 import Joi from '@hapi/joi';
+import sessionReview from '../SERVICES/sessionReviewQueries';
 
 class sessionControler{
     createSession(req, res){
@@ -153,59 +154,43 @@ class sessionControler{
         }
     }
 
-    reviewSession(req, res) {
+    async reviewSession(req, res){
         const session_review_validation = Joi.validate(req.body, session_review_schema);
-        if (session_review_validation.error) {
-            const session_review_errors = [];
-            for (let index = 0; index < session_review_validation.error.details.length; index++) {
+        if(session_review_validation.error){
+            const session_review_errors=[];
+            for(let index=0; index<session_review_validation.error.details.length; index++){
                 session_review_errors.push(session_review_validation.error.details[index].message.split('"').join(" "));
             }
             return res.status(400).send({
                 status: 400,
                 error: session_review_errors[0]
             });
-        } else {
-            const sessioIDs = parseInt(req.params.sessionId);
-            const menteeIDs = req.user_token.id;
-
-            pool.connect((err, client, done) => {
-                const select_query = `SELECT * FROM sessions WHERE sessionid= $1`;
-                const values = [sessioIDs];
-                client.query(select_query, values, (error, result) => {
-                    if (result.rows[0]) {
-                        const foundSessionMenteeId = result.rows[0].menteeid;
-                        const foundSessionStatus = result.rows[0].status;
-                        if (foundSessionMenteeId === menteeIDs && foundSessionStatus === "accepted") {
-                            const score = parseInt(req.body.score), firstname = req.user_token.firstName;
-                            const lastname = req.user_token.lastName, menteeFullName = firstname + " " + lastname, remark = req.body.remark;
-                            const updateSessionReviewQuery = `UPDATE sessions SET score=$1 AND menteeFullname=$2 AND remark=$3 WHERE sessionid=$4`;
-                            const updateSessionValues = [score, menteeFullName, remark, sessioIDs];
-                            client.query(updateSessionReviewQuery, updateSessionValues, (error, result) => {
-                                const reviewSelectQuery = `SELECT * FROM sessions WHERE sessionid=$1`;
-                                const selectsessionVal = [sessioIDs];
-                                client.query(reviewSelectQuery, selectsessionVal, (error, result) => {
-                                    const { sessionid, mentorid, menteeid, questions, menteeemail, status, score, menteefullname, remark } = result.rows[0];
-                                    return res.status(200).json({
-                                        status: 200,
-                                        data: {sessionId:sessionid, mentorId:mentorid, menteeId:menteeid, questions, menteeEmail:menteeemail, status, score, menteeFullName:menteefullname, remark}
-                                    });
-                                });
-                            });
-                        } else {
-                            return res.status(404).json({
-                                status: 404,
-                                error: "You are not allowed to review this session"
-                            });
-                        }
-                    } else {
-                        return res.status(404).json({
-                            status: 404,
-                            error: "mentorship session not found"
-                        });
-                    }
+        }else{
+            const sessioIDs=parseInt(req.params.sessionId);
+            const menteeIDs=req.user_token.id;
+            const selectQueryRes= await sessionReview.sessionReviewSelectFn(sessioIDs);
+            if (selectQueryRes) {
+                const foundSessionMenteeId = selectQueryRes.menteeid, foundSessionStatus = selectQueryRes.status, score = parseInt(req.body.score);
+                const firstname = req.user_token.firstname, lastname = req.user_token.lastname, menteeFullName = firstname + " " + lastname;
+                const remarks = req.body.remarks;
+                if (foundSessionMenteeId === menteeIDs && foundSessionStatus === "accepted") {
+                    const insertReviewRes= await sessionReview.sessionReviewInsertFn(req, score, menteeFullName, remarks, sessioIDs);
+                    return res.status(200).json({
+                        status: 200,
+                        data: insertReviewRes
+                    });
+                }else{
+                    return res.status(404).json({
+                        status: 404,
+                        error: "You are not allowed to review this session"
+                    });
+                }
+            }else{
+                return res.status(404).json({
+                    status: 404,
+                    error: "mentorship session not found"
                 });
-                done();
-            });
+            }
         }
     }
 

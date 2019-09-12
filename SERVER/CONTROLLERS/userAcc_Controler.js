@@ -40,7 +40,7 @@ class userAccountControler{
                         const createUserValues = [firstName.trim(), lastName.trim(), email.trim(), password.trim(), address.trim(), bio.trim(), occupation.trim(), expertise.trim(), admin, mentor];
                         client.query(createAccountQuery, createUserValues, (error, result) => {
                             const { id, firstname, lastname, email, address, bio, occupation, expertise, admin, mentor } = result.rows[0];
-                            const token = jwt.sign({id, email, admin, mentor}, user_secret, { expiresIn: "1d" });
+                            const token = jwt.sign({id, firstname, lastname, email, admin, mentor}, user_secret, { expiresIn: "1d" });
                             res.header('x-auth-token', token);
                             return res.status(201).send({
                                 status: 201,
@@ -77,7 +77,7 @@ class userAccountControler{
                 client.query(loginSelectQuery, values, (error, result) => {
                     if (result.rows[0]) {
                         const { id, firstname, lastname, email, address, bio, occupation, expertise, admin, mentor } = result.rows[0];
-                        const token = jwt.sign({id, email, admin, mentor}, user_secret, { expiresIn: "1d" });
+                        const token = jwt.sign({id, firstname, lastname, email, admin, mentor}, user_secret, { expiresIn: "1d" });
                         res.header('x-auth-token', token)
                         return res.status(200).send({
                             status: 200,
