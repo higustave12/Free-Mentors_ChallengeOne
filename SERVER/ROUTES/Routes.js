@@ -16,6 +16,6 @@ router.patch('/api/v1/sessions/:sessionId/accept',verifyToken, session_contrl.ac
 router.patch('/api/v1/sessions/:sessionId/reject',verifyToken, session_contrl.rejectSessionRequest); 
 router.get('/api/v2/sessions',verifyToken, session_contrl.getAllSession); 
 router.post('/api/v1/session/:sessionId/review',verifyToken,session_contrl.reviewSession); 
-router.delete('/api/v1/sessions/:sessionId/review',verifyToken,session_contrl.deleteSessionReview); 
+router.delete('/api/v2/sessions/:sessionId/review',verifyToken,session_contrl.deleteSessionReview); 
 
 export default router;
