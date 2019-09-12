@@ -1,8 +1,10 @@
-import pool from '../test/MODELS/create';
 import session_schema from '../JOI_VALIDATION/session_validation';
 import session_review_schema from '../JOI_VALIDATION/session_review';
 import Joi from '@hapi/joi';
 import sessionReview from '../SERVICES/sessionReviewQueries';
+import getAllSessions from '../SERVICES/getAllSessionsQueries';
+import mentorRejectSession from '../SERVICES/rejectSessionQueries';
+import mentorAcceptSession from '../SERVICES/mentorAcceptSessionQueries';
 
 class sessionControler{
     createSession(req, res){
@@ -49,21 +51,23 @@ class sessionControler{
         }
     }
 
-    //Mentor accept mentorship session
-    acceptSessionRequest(req, res){
+    async acceptSessionRequest(req, res){
         const sessId= parseInt(req.params.sessionId);
-        const all_sess= session_inst.allSessions;
-        const session_lookup= all_sess.find(single_sess=>single_sess.sessionId===sessId);
-        if(session_lookup){
+        const sessionResp= await mentorAcceptSession.mentorAcceptSelectFn(sessId);
+        if(!sessionResp){
+            return res.status(404).json({
+                status: 404,
+                error: "No session with such Id found"
+            })
+        }else{
             const mentorId= req.user_token.id;
-            const check_session_mentor= session_lookup.mentorId;
-            if(check_session_mentor===mentorId){
-                const new_status= "accepted";
-                session_lookup.status= new_status;
-                const updatedSession= session_lookup;
+            const checkSessionMentor= sessionResp.mentorid; 
+            if(checkSessionMentor===mentorId){
+                const updateSessionResp= await mentorAcceptSession.updateSessionFn(req,sessId);
+                const {sessionid, mentorid,menteeid,questions,menteeemail,status}= updateSessionResp;
                 return res.status(200).json({
                     status: 200,
-                    data: updatedSession
+                    data: {sessionId:sessionid, mentorId:mentorid, menteeId:menteeid, questions, menteeEmail:menteeemail, status}
                 });
             }else{
                 return res.status(404).json({
@@ -71,29 +75,27 @@ class sessionControler{
                     error: "You are not a mentor for this session"
                 })
             }
-        }else{
+        }
+    }
+    
+    async rejectSessionRequest(req, res) {
+        const sessioId = parseInt(req.params.sessionId);
+        const sessionRejectResp= await mentorRejectSession.mentorRejectSelectFn(sessioId);
+        if(!sessionRejectResp){
             return res.status(404).json({
                 status: 404,
                 error: "No session with such Id found"
             })
-        }
-    }
+        }else{
 
-    //Mentor reject mentorship session
-    rejectSessionRequest(req, res){
-        const sessioId= parseInt(req.params.sessionId);
-        const all_sessio= session_inst.allSessions;
-        const session_lookups= all_sessio.find(single_sessio=>single_sessio.sessionId===sessioId);
-        if(session_lookups){
             const mentorId= req.user_token.id;
-            const check_session_mentors= session_lookups.mentorId;
-            if(check_session_mentors===mentorId){
-                const new_session_status= "rejected";
-                session_lookups.status= new_session_status;
-                const updatedSessions= session_lookups;
+            const checkSessionRejectMentorId= sessionRejectResp.mentorid; 
+            if(checkSessionRejectMentorId===mentorId){
+                const updateSessionRejectResp= await mentorRejectSession.updateSessionRejectFn(req, sessioId);
+                const {sessionid, mentorid,menteeid,questions,menteeemail,status}= updateSessionRejectResp;
                 return res.status(200).json({
                     status: 200,
-                    data: updatedSessions
+                    data: {sessionId:sessionid, mentorId:mentorid, menteeId:menteeid, questions, menteeEmail:menteeemail, status}
                 });
             }else{
                 return res.status(404).json({
@@ -101,56 +103,37 @@ class sessionControler{
                     error: "You are not a mentor for this session"
                 })
             }
-        }else{
-            return res.status(404).json({
-                status: 404,
-                error: "No session with such Id found"
-            })
         }
     }
 
-    getAllSession(req, res){
-        const is_mentor_checking= req.user_token.mentor;
-        if(is_mentor_checking===false){
-            const mentee_ID= req.user_token.id;
-            pool.connect((err, client, done) => {
-                const select_query = `SELECT * FROM sessions WHERE menteeid= $1`;
-                const values=[mentee_ID];
-                client.query(select_query, values, (error, result) => {
-                    if(result.rows.length>0){
-                        return res.status(200).json({
-                            status: 200,
-                            data: result.rows
-                        });
-                    }else{
-                        return res.status(404).json({
-                            status: 404,
-                            error: "No mentorship session found"
-                        });
-                    }
+    async getAllSession(req, res){
+        const is_mentor_checking = req.user_token.mentor;
+        if(!is_mentor_checking){
+            const getAllMenteeSessionRes= await getAllSessions.getAllMenteeSessionsSelectFn(req);
+            if(getAllMenteeSessionRes.length>0){
+                return res.status(200).json({
+                    status: 200,
+                    data: getAllMenteeSessionRes
                 });
-                done();
-            });
+            }else{
+                return res.status(404).json({
+                    status: 404,
+                    error: "No mentorship session found"
+                });
+            }
         }else{
-            const mentor_ID= req.user_token.id;
-            pool.connect((err, client, done) => {
-                const select_query = `SELECT * FROM sessions WHERE mentorid= $1`;
-                const values=[mentor_ID];
-                client.query(select_query, values, (error, result) => {
-                    if(result.rows.length>0){
-                        return res.status(200).json({
-                            status: 200,
-                            data: result.rows
-                        });
-                    }else{
-                        return res.status(404).json({
-                            status: 404,
-                            error: "No mentorship session found"
-                        });
-                    }
+            const getAllMentorSessionRes= await getAllSessions.getAllMentorSessionsSelectFn(req);
+            if(getAllMentorSessionRes.length>0){
+                return res.status(200).json({
+                    status: 200,
+                    data: getAllMentorSessionRes
                 });
-                done();
-            });
+            }else{
+                return res.status(404).json({
+                    status: 404,
+                    error: "No mentorship session found"
+                });
+            }
         }
     }
 

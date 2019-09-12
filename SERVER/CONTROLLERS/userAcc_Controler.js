@@ -6,6 +6,7 @@ import {mentor} from '../SERVICES/userSignupQueries';
 import {loginSelectQuery} from '../SERVICES/userLoginQueries';
 import {changeUserToMentorSelectQuery} from '../SERVICES/changeUserToMentorQueries';
 import {updateMentorStatusQuery} from '../SERVICES/changeUserToMentorQueries';
+import viewMentor from '../SERVICES/viewMentorByIdQueries';
 import create_acc_schema from '../JOI_VALIDATION/create_acc_validation';
 import login_schema from '../JOI_VALIDATION/login_user_validation';
 import Joi from '@hapi/joi';
@@ -147,39 +148,20 @@ class userAccountControler{
             });
     }
 
-    viewMentorById(req, res){
+    async viewMentorById(req, res){
         const single_user_id= parseInt(req.params.userId);
-        const all_users_accs= accounts.AllAccounts;
-        const user_acc= all_users_accs.find(acc=>acc.id===single_user_id);
-        if(!(user_acc)){
-            return res.status(404).json({
-                status: 404,
-                error: "A user with such Id not found"
+        const singleMentor = await viewMentor.viewSpecificMentor(single_user_id);
+        const datas=singleMentor;
+        if(singleMentor){
+            return res.status(200).json({
+                status: 200,
+                data: datas
             });
         }else{
-            const mentor_check_val= user_acc.isAmentor;
-            if(mentor_check_val===true){
-                return res.status(200).json({
-                    status: 200,
-                    data: {
-                        mentorId: user_acc.id,
-                        firstName: user_acc.firstName,
-                        lastName: user_acc.lastName,
-                        email: user_acc.email,
-                        address: user_acc.address,
-                        bio: user_acc.bio,
-                        occupation: user_acc.occupation,
-                        expertise: user_acc.expertise,
-                        isAdmin: user_acc.isAdmin,
-                        isAmentor: user_acc.isAmentor
-                    }
-                });
-            }else{
-                return res.status(404).json({
-                    status: 404,
-                    error: "A mentor for this Id not found"
-                });
-            }
+            return res.status(404).json({
+                status: 404,
+                error: "Mentor not found"
+            });
         }
     }
 
