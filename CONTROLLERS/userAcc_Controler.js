@@ -37,13 +37,25 @@ class userAccountControler{
                             const create_account_query = 'INSERT INTO users(firstname,lastname,email,password,address,bio,occupation,expertise,is_admin,is_a_mentor) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10) RETURNING *';
                             var create_user_values = [firstName.trim(), lastName.trim(), email.trim(), password.trim(), address.trim(), bio.trim(), occupation.trim(), expertise.trim(), is_admin, is_a_mentor];
                             client.query(create_account_query, create_user_values, (error, result) => {
-                                const {userid,firstname,lastname,email,password,address,bio,occupation,expertise,is_admin,is_a_mentor}= result.rows[0];
-                                const token= jwt.sign({userid,firstname,lastname,email,is_admin,is_a_mentor}, user_secret, { expiresIn: "1d" });
+                                const user_token= result.rows[0];
+                                const token= jwt.sign(user_token, user_secret, { expiresIn: "1d" });
                                 res.header('x-auth-token', token);
                                 return res.status(201).send({
                                     status: 201,
                                     message: `User created successfully`,
-                                    data: {token, userId:userid,firstName:firstname,lastName:lastname,email,address,bio,occupation,expertise,isAdmin:is_admin,isAmentor:is_a_mentor}
+                                    data: {
+                                        token: token,
+                                        userId: result.rows[0].userid,
+                                        firstName: result.rows[0].firstname,
+                                        lastName: result.rows[0].lastname,
+                                        email: result.rows[0].email,
+                                        address: result.rows[0].address,
+                                        bio: result.rows[0].bio,
+                                        occupation: result.rows[0].occupation,
+                                        expertise: result.rows[0].expertise,
+                                        is_admin: result.rows[0].is_admin,
+                                        is_a_mentor: result.rows[0].is_a_mentor
+                                    }
                                 });
                             });
                             done();
@@ -76,13 +88,25 @@ class userAccountControler{
                 const values = [email, password];
                 client.query(query, values, (error, result) => {
                     if (result.rows[0]) {
-                        const {userid,firstname,lastname,email,password,address,bio,occupation,expertise,is_admin,is_a_mentor}= result.rows[0];
-                        const token = jwt.sign({userid,firstname,lastname,email,is_admin,is_a_mentor}, user_secret, { expiresIn: "1d" });
+                        const user_token = result.rows[0];
+                        const token = jwt.sign(user_token, user_secret, { expiresIn: "1d" });
                         res.header('x-auth-token', token)
                         return res.status(200).send({
                             status: 200,
                             message: `User is successfully logged in`,
-                            data: {token, userId:userid,firstName:firstname,lastName:lastname,email,address,bio,occupation,expertise,isAdmin:is_admin,isAmentor:is_a_mentor}
+                            data: {
+                                token: token,
+                                userId: result.rows[0].userid,
+                                firstName: result.rows[0].firstname,
+                                lastName: result.rows[0].lastname,
+                                email: result.rows[0].email,
+                                address: result.rows[0].address,
+                                bio: result.rows[0].bio,
+                                occupation: result.rows[0].occupation,
+                                expertise: result.rows[0].expertise,
+                                is_admin: result.rows[0].is_admin,
+                                is_a_mentor: result.rows[0].is_a_mentor
+                            }
                         });
 
                     }else{
@@ -115,11 +139,21 @@ class userAccountControler{
                                     const query = `SELECT * FROM users WHERE userid=$1`;
                                     const values = [user_id];
                                     client.query(query, values, (error, result) => {
-                                        const {userid,firstname,lastname,email,password,address,bio,occupation,expertise,is_admin,is_a_mentor}= result.rows[0];
                                         return res.status(200).json({
                                             status: 200,
                                             message: "User account changed to mentor",
-                                            data: {token, userId:userid,firstName:firstname,lastName:lastname,email,address,bio,occupation,expertise,isAdmin:is_admin,isAmentor:is_a_mentor}
+                                            data: {
+                                                userId: result.rows[0].userid,
+                                                firstName: result.rows[0].firstname,
+                                                lastName: result.rows[0].lastname,
+                                                email: result.rows[0].email,
+                                                address: result.rows[0].address,
+                                                bio: result.rows[0].bio,
+                                                occupation: result.rows[0].occupation,
+                                                expertise: result.rows[0].expertise,
+                                                is_admin: result.rows[0].is_admin,
+                                                is_a_mentor: result.rows[0].is_a_mentor
+                                            }
                                         });
                                     });
                                     done();
@@ -173,10 +207,20 @@ class userAccountControler{
                 }else{
                     const mentor_check_val= result.rows[0].is_a_mentor;
                     if(mentor_check_val===true){
-                        const {token, userid,firstname,lastname,email,address,bio,occupation,expertise,is_admin,is_a_mentor}=result.rows[0];
                         return res.status(200).json({
                             status: 200,
-                            data: {token, userId:userid,firstName:firstname,lastName:lastname,email,address,bio,occupation,expertise,isAdmin:is_admin,isAmentor:is_a_mentor}
+                            data: {
+                                mentorId: result.rows[0].userid,
+                                firstName: result.rows[0].firstname,
+                                lastName: result.rows[0].lastname,
+                                email: result.rows[0].email,
+                                address: result.rows[0].address,
+                                bio: result.rows[0].bio,
+                                occupation: result.rows[0].occupation,
+                                expertise: result.rows[0].expertise,
+                                is_admin: result.rows[0].is_admin,
+                                is_a_mentor: result.rows[0].is_a_mentor
+                            }
                         });
                     }else{
                         return res.status(404).json({
