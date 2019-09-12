@@ -1,5 +1,7 @@
 import session_schema from '../JOI_VALIDATION/session_validation';
+import session_review_schema from '../JOI_VALIDATION/session_review';
 import Joi from '@hapi/joi';
+import sessionReview from '../SERVICES/sessionReviewQueries';
 import getAllSessions from '../SERVICES/getAllSessionsQueries';
 import mentorRejectSession from '../SERVICES/rejectSessionQueries';
 import mentorAcceptSession from '../SERVICES/mentorAcceptSessionQueries';
@@ -135,8 +137,7 @@ class sessionControler{
         }
     }
 
-    //Review a specific mentorship session
-    reviewSession(req, res){
+    async reviewSession(req, res){
         const session_review_validation = Joi.validate(req.body, session_review_schema);
         if(session_review_validation.error){
             const session_review_errors=[];
@@ -150,26 +151,16 @@ class sessionControler{
         }else{
             const sessioIDs=parseInt(req.params.sessionId);
             const menteeIDs=req.user_token.id;
-            const allSESSIONS= session_inst.allSessions;
-            const single_session_search= allSESSIONS.find(single_sess=>single_sess.sessionId===sessioIDs);
-            if(single_session_search){
-                const found_session_menteeId= single_session_search.menteeId;
-                const found_session_status= single_session_search.status;
-                if(found_session_menteeId===menteeIDs && found_session_status==="accepted"){
-                    const score= parseInt(req.body.score);
-                    const firstname= req.user_token.firstName;
-                    const lastname= req.user_token.lastName;
-                    const menteeFullName= firstname +" " +lastname;
-                    const remark= req.body.remark;
-
-                    //Add properties to a session
-                    single_session_search.score=score;
-                    single_session_search.menteeFullName= menteeFullName;
-                    single_session_search.remark= remark;
-
+            const selectQueryRes= await sessionReview.sessionReviewSelectFn(sessioIDs);
+            if (selectQueryRes) {
+                const foundSessionMenteeId = selectQueryRes.menteeid, foundSessionStatus = selectQueryRes.status, score = parseInt(req.body.score);
+                const firstname = req.user_token.firstname, lastname = req.user_token.lastname, menteeFullName = firstname + " " + lastname;
+                const remarks = req.body.remarks;
+                if (foundSessionMenteeId === menteeIDs && foundSessionStatus === "accepted") {
+                    const insertReviewRes= await sessionReview.sessionReviewInsertFn(req, score, menteeFullName, remarks, sessioIDs);
                     return res.status(200).json({
                         status: 200,
-                        data: single_session_search
+                        data: insertReviewRes
                     });
                 }else{
                     return res.status(404).json({
