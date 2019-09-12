@@ -42,13 +42,9 @@ class sessionControler{
                                 client.query(create_session_query, input_data, (error, result) => {
                                     return res.status(200).json({
                                         status: 200,
-                                        data: {
-                                            sessionId: result.rows[0].sessionid,
-                                            mentorId: result.rows[0].mentorid,
-                                            menteeId: result.rows[0].menteeid,
-                                            questions: result.rows[0].questions,
-                                            menteeEmail: result.rows[0].menteeemail,
-                                            status: result.rows[0].status
+                                        data: {sessionId: result.rows[0].sessionid,mentorId: result.rows[0].mentorid,
+                                            menteeId: result.rows[0].menteeid,questions: result.rows[0].questions,
+                                            menteeEmail: result.rows[0].menteeemail,status: result.rows[0].status
                                         }
                                     });
                                 });
@@ -71,8 +67,9 @@ class sessionControler{
     acceptSessionRequest(req, res){
         const sessId= parseInt(req.params.sessionId);
         pool.connect((err, client, done) => {
-            const select_query = `SELECT * FROM sessions WHERE sessionid= $1`;
-            const select_query_value=[sessId];
+            const sessionStatus="pending";
+            const select_query = `SELECT * FROM sessions WHERE sessionid=$1 AND status=$2`;
+            const select_query_value=[sessId, sessionStatus];
             client.query(select_query, select_query_value, (error, result) => {
                 if(result.rows[0]){
                     const mentorId= req.user_token.userid;
@@ -90,12 +87,9 @@ class sessionControler{
                                         return res.status(200).json({
                                             status: 200,
                                             data: {
-                                                sessionId: result.rows[0].sessionid,
-                                                mentorId: result.rows[0].mentorid,
-                                                menteeId: result.rows[0].menteeid,
-                                                questions: result.rows[0].questions,
-                                                menteeEmail: result.rows[0].menteeemail,
-                                                status: result.rows[0].status
+                                                sessionId: result.rows[0].sessionid,mentorId: result.rows[0].mentorid,
+                                                menteeId: result.rows[0].menteeid,questions: result.rows[0].questions,
+                                                menteeEmail: result.rows[0].menteeemail,status: result.rows[0].status
                                             }
                                         });
                                     });
@@ -112,7 +106,7 @@ class sessionControler{
                 }else{
                     return res.status(404).json({
                         status: 404,
-                        error: "No session with such Id found"
+                        error: "No Pending session with such Id found"
                     })
                 }
             });
@@ -123,8 +117,9 @@ class sessionControler{
     rejectSessionRequest(req, res){
         const sessioId= parseInt(req.params.sessionId);
         pool.connect((err, client, done) => {
-            const select_query = `SELECT * FROM sessions WHERE sessionid= $1`;
-            const select_query_value=[sessioId];
+            const sessionStatus="pending";
+            const select_query = `SELECT * FROM sessions WHERE sessionid= $1 AND status=$2`;
+            const select_query_value=[sessioId, sessionStatus];
             client.query(select_query, select_query_value, (error, result) => {
                 if(result.rows[0]){
                     const slct_mentorId= req.user_token.userid;
@@ -142,12 +137,9 @@ class sessionControler{
                                         return res.status(200).json({
                                             status: 200,
                                             data: {
-                                                sessionId: result.rows[0].sessionid,
-                                                mentorId: result.rows[0].mentorid,
-                                                menteeId: result.rows[0].menteeid,
-                                                questions: result.rows[0].questions,
-                                                menteeEmail: result.rows[0].menteeemail,
-                                                status: result.rows[0].status
+                                                sessionId: result.rows[0].sessionid,mentorId: result.rows[0].mentorid,
+                                                menteeId: result.rows[0].menteeid,questions: result.rows[0].questions,
+                                                menteeEmail: result.rows[0].menteeemail,status: result.rows[0].status
                                             }
                                         });
                                     });
@@ -165,7 +157,7 @@ class sessionControler{
                 }else{
                     return res.status(404).json({
                         status: 404,
-                        error: "No session with such Id found"
+                        error: "No Pending session with such Id found"
                     })
                 }
             });
