@@ -1,65 +1,75 @@
-import pool from '../test/MODELS/create';
 import session_schema from '../JOI_VALIDATION/session_validation';
 import Joi from '@hapi/joi';
 import deleteSession from '../SERVICES/deleteSessionReviewQueries';
+import session_review_schema from '../JOI_VALIDATION/session_review';
+import Joi from '@hapi/joi';
+import sessionReview from '../SERVICES/sessionReviewQueries';
+import getAllSessions from '../SERVICES/getAllSessionsQueries';
+import mentorRejectSession from '../SERVICES/rejectSessionQueries';
+import mentorAcceptSession from '../SERVICES/mentorAcceptSessionQueries';
 
 class sessionControler{
-    async createSession(req, res){
+    createSession(req, res){
+        const mentorId= parseInt(req.body.mentorId);
+        const questions= req.body.questions;
         const create_session_validation = Joi.validate(req.body, session_schema);
         if(create_session_validation.error){
             const create_session_errors=[];
-            for(let m=0; m<create_session_validation.error.details.length; m++){
-                create_session_errors.push(create_session_validation.error.details[m].message.split('"').join(" "));
+            for(let index=0; index<create_session_validation.error.details.length; index++){
+                create_session_errors.push(create_session_validation.error.details[index].message.split('"').join(" "));
             }
             return res.status(400).send({
                 status: 400,
                 error: create_session_errors[0]
             });
         }else{
-            const mentorId= parseInt(req.body.mentorId);
-            const selectMentorResult = await createSession.createSessionSelectFn(mentorId);
-            if(!selectMentorResult){
+            const allAccs= accounts.AllAccounts;
+            const USER_ACC= allAccs.find(accs=>accs.id===parseInt(mentorId));
+            if(!(USER_ACC)){
                 return res.status(404).json({
                     status: 404,
                     error: "A user with such Id not found"
                 });
             }else{
-                const mentor_checking= selectMentorResult.mentor;
-                if (mentor_checking===true) {
-                    const insertSessionResult= await createSession.insertSessionSelectFn(req);
-                    if(insertSessionResult){
-                        const {sessionid, mentorid,menteeid,questions,menteeemail,status}=insertSessionResult;
-                        return res.status(200).json({
-                            status: 200,
-                            data: {sessionId:sessionid, mentorId:mentorid, menteeId:menteeid, questions, menteeEmail:menteeemail, status}
-                        });
-                    }
+                const mentor_checking= USER_ACC.isAmentor;
+                if(mentor_checking===true){
+                    const menteeId= req.user_token.id;
+                    const menteeEmail= req.user_token.email;
+                    const status="pending";
+                    const input_data= {mentorId, menteeId, questions, menteeEmail, status};
+                    
+                    const createdSession= session_inst.createSession(input_data);
+                    return res.status(200).json({
+                        status: 200,
+                        data: createdSession
+                    });
                 }else{
                     return res.status(404).json({
                         status: 404,
                         error: "A mentor with such Id not found"
                     });
                 }
-
             }
         }
     }
 
-    //Mentor accept mentorship session
-    acceptSessionRequest(req, res){
+    async acceptSessionRequest(req, res){
         const sessId= parseInt(req.params.sessionId);
-        const all_sess= session_inst.allSessions;
-        const session_lookup= all_sess.find(single_sess=>single_sess.sessionId===sessId);
-        if(session_lookup){
+        const sessionResp= await mentorAcceptSession.mentorAcceptSelectFn(sessId);
+        if(!sessionResp){
+            return res.status(404).json({
+                status: 404,
+                error: "No session with such Id found"
+            })
+        }else{
             const mentorId= req.user_token.id;
-            const check_session_mentor= session_lookup.mentorId;
-            if(check_session_mentor===mentorId){
-                const new_status= "accepted";
-                session_lookup.status= new_status;
-                const updatedSession= session_lookup;
+            const checkSessionMentor= sessionResp.mentorid; 
+            if(checkSessionMentor===mentorId){
+                const updateSessionResp= await mentorAcceptSession.updateSessionFn(req,sessId);
+                const {sessionid, mentorid,menteeid,questions,menteeemail,status}= updateSessionResp;
                 return res.status(200).json({
                     status: 200,
-                    data: updatedSession
+                    data: {sessionId:sessionid, mentorId:mentorid, menteeId:menteeid, questions, menteeEmail:menteeemail, status}
                 });
             }else{
                 return res.status(404).json({
@@ -67,29 +77,27 @@ class sessionControler{
                     error: "You are not a mentor for this session"
                 })
             }
-        }else{
+        }
+    }
+    
+    async rejectSessionRequest(req, res) {
+        const sessioId = parseInt(req.params.sessionId);
+        const sessionRejectResp= await mentorRejectSession.mentorRejectSelectFn(sessioId);
+        if(!sessionRejectResp){
             return res.status(404).json({
                 status: 404,
                 error: "No session with such Id found"
             })
-        }
-    }
+        }else{
 
-    //Mentor reject mentorship session
-    rejectSessionRequest(req, res){
-        const sessioId= parseInt(req.params.sessionId);
-        const all_sessio= session_inst.allSessions;
-        const session_lookups= all_sessio.find(single_sessio=>single_sessio.sessionId===sessioId);
-        if(session_lookups){
             const mentorId= req.user_token.id;
-            const check_session_mentors= session_lookups.mentorId;
-            if(check_session_mentors===mentorId){
-                const new_session_status= "rejected";
-                session_lookups.status= new_session_status;
-                const updatedSessions= session_lookups;
+            const checkSessionRejectMentorId= sessionRejectResp.mentorid; 
+            if(checkSessionRejectMentorId===mentorId){
+                const updateSessionRejectResp= await mentorRejectSession.updateSessionRejectFn(req, sessioId);
+                const {sessionid, mentorid,menteeid,questions,menteeemail,status}= updateSessionRejectResp;
                 return res.status(200).json({
                     status: 200,
-                    data: updatedSessions
+                    data: {sessionId:sessionid, mentorId:mentorid, menteeId:menteeid, questions, menteeEmail:menteeemail, status}
                 });
             }else{
                 return res.status(404).json({
@@ -97,61 +105,41 @@ class sessionControler{
                     error: "You are not a mentor for this session"
                 })
             }
+        }
+    }
+  
+    async getAllSession(req, res){
+        const is_mentor_checking = req.user_token.mentor;
+        if(!is_mentor_checking){
+            const getAllMenteeSessionRes= await getAllSessions.getAllMenteeSessionsSelectFn(req);
+            if(getAllMenteeSessionRes.length>0){
+                return res.status(200).json({
+                    status: 200,
+                    data: getAllMenteeSessionRes
+                });
+            }else{
+                return res.status(404).json({
+                    status: 404,
+                    error: "No mentorship session found"
+                });
         }else{
-            return res.status(404).json({
-                status: 404,
-                error: "No session with such Id found"
-            })
+
+            const getAllMentorSessionRes= await getAllSessions.getAllMentorSessionsSelectFn(req);
+            if(getAllMentorSessionRes.length>0){
+                return res.status(200).json({
+                    status: 200,
+                    data: getAllMentorSessionRes
+                });
+            }else{
+                return res.status(404).json({
+                    status: 404,
+                    error: "No mentorship session found"
+                });
+  
         }
     }
 
-    getAllSession(req, res){
-        const is_mentor_checking= req.user_token.mentor;
-        if(is_mentor_checking===false){
-            const mentee_ID= req.user_token.id;
-            pool.connect((err, client, done) => {
-                const select_query = `SELECT * FROM sessions WHERE menteeid= $1`;
-                const values=[mentee_ID];
-                client.query(select_query, values, (error, result) => {
-                    if(result.rows.length>0){
-                        return res.status(200).json({
-                            status: 200,
-                            data: result.rows
-                        });
-                    }else{
-                        return res.status(404).json({
-                            status: 404,
-                            error: "No mentorship session found"
-                        });
-                    }
-                });
-                done();
-            });
-        }else{
-            const mentor_ID= req.user_token.id;
-            pool.connect((err, client, done) => {
-                const select_query = `SELECT * FROM sessions WHERE mentorid= $1`;
-                const values=[mentor_ID];
-                client.query(select_query, values, (error, result) => {
-                    if(result.rows.length>0){
-                        return res.status(200).json({
-                            status: 200,
-                            data: result.rows
-                        });
-                    }else{
-                        return res.status(404).json({
-                            status: 404,
-                            error: "No mentorship session found"
-                        });
-                    }
-                });
-                done();
-            });
-        }
-    }
-
-    //Review a specific mentorship session
-    reviewSession(req, res){
+    async reviewSession(req, res){
         const session_review_validation = Joi.validate(req.body, session_review_schema);
         if(session_review_validation.error){
             const session_review_errors=[];
@@ -165,26 +153,16 @@ class sessionControler{
         }else{
             const sessioIDs=parseInt(req.params.sessionId);
             const menteeIDs=req.user_token.id;
-            const allSESSIONS= session_inst.allSessions;
-            const single_session_search= allSESSIONS.find(single_sess=>single_sess.sessionId===sessioIDs);
-            if(single_session_search){
-                const found_session_menteeId= single_session_search.menteeId;
-                const found_session_status= single_session_search.status;
-                if(found_session_menteeId===menteeIDs && found_session_status==="accepted"){
-                    const score= parseInt(req.body.score);
-                    const firstname= req.user_token.firstName;
-                    const lastname= req.user_token.lastName;
-                    const menteeFullName= firstname +" " +lastname;
-                    const remark= req.body.remark;
-
-                    //Add properties to a session
-                    single_session_search.score=score;
-                    single_session_search.menteeFullName= menteeFullName;
-                    single_session_search.remark= remark;
-
+            const selectQueryRes= await sessionReview.sessionReviewSelectFn(sessioIDs);
+            if (selectQueryRes) {
+                const foundSessionMenteeId = selectQueryRes.menteeid, foundSessionStatus = selectQueryRes.status, score = parseInt(req.body.score);
+                const firstname = req.user_token.firstname, lastname = req.user_token.lastname, menteeFullName = firstname + " " + lastname;
+                const remarks = req.body.remarks;
+                if (foundSessionMenteeId === menteeIDs && foundSessionStatus === "accepted") {
+                    const insertReviewRes= await sessionReview.sessionReviewInsertFn(req, score, menteeFullName, remarks, sessioIDs);
                     return res.status(200).json({
                         status: 200,
-                        data: single_session_search
+                        data: insertReviewRes
                     });
                 }else{
                     return res.status(404).json({
