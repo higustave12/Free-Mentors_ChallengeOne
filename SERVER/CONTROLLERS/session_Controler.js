@@ -1,4 +1,6 @@
 import session_schema from '../JOI_VALIDATION/session_validation';
+import Joi from '@hapi/joi';
+import deleteSession from '../SERVICES/deleteSessionReviewQueries';
 import session_review_schema from '../JOI_VALIDATION/session_review';
 import Joi from '@hapi/joi';
 import sessionReview from '../SERVICES/sessionReviewQueries';
@@ -105,7 +107,7 @@ class sessionControler{
             }
         }
     }
-
+  
     async getAllSession(req, res){
         const is_mentor_checking = req.user_token.mentor;
         if(!is_mentor_checking){
@@ -120,8 +122,8 @@ class sessionControler{
                     status: 404,
                     error: "No mentorship session found"
                 });
-            }
         }else{
+
             const getAllMentorSessionRes= await getAllSessions.getAllMentorSessionsSelectFn(req);
             if(getAllMentorSessionRes.length>0){
                 return res.status(200).json({
@@ -133,7 +135,7 @@ class sessionControler{
                     status: 404,
                     error: "No mentorship session found"
                 });
-            }
+  
         }
     }
 
@@ -177,29 +179,34 @@ class sessionControler{
         }
     }
 
-    //Delete a review deemed as inappropriate (By admin only)
-    deleteSessionReview(req, res){
-        const is_admin_check= req.user_token.isAdmin;
-        if(is_admin_check===true){
-            const sess_rev_id= parseInt(req.params.sessionId);
-            const session_arr= session_inst.allSessions;
-            const session_exist= session_arr.find(session_chk=>session_chk.sessionId===sess_rev_id);
-            if((session_exist) && (session_exist.score) && (session_exist.score<3)){
-                const found_session_index= session_arr.indexOf(session_exist);
-                session_arr.splice(found_session_index, 1);
-                return res.status(200).json({
-                    status: 200,
-                    data: {
-                        message: "Review successfully deleted"
-                    }
-                });
-            }else{
+    async deleteSessionReview(req, res) {
+        const is_admin_check = req.user_token.admin;
+        if (is_admin_check === true) {
+            const sessionRevId = parseInt(req.params.sessionId);
+            const delSessionRevSelectResponse = await deleteSession.deleteSessionSelectFn(sessionRevId);
+            if (delSessionRevSelectResponse) {
+                const foundSessionSore = delSessionRevSelectResponse.score;
+                if ((foundSessionSore) && (foundSessionSore < 3)) {
+                    const delSessionRevDeleteResponse = await deleteSession.deleteSessionDeleteFn(sessionRevId);
+                    return res.status(200).json({
+                        status: 200,
+                        data: {
+                            message: "Review successfully deleted", delSessionRevDeleteResponse
+                        }
+                    });
+                } else {
+                    return res.status(404).json({
+                        status: 404,
+                        error: "Denied! Check if session exists and its score<3 "
+                    });
+                }
+            }else {
                 return res.status(404).json({
                     status: 404,
-                    error: "Denied! Check if session exists and its score<3 "
+                    error: "Session not found "
                 });
             }
-        }{
+        } else {
             return res.status(400).json({
                 status: 400,
                 error: "Denied! Only Admininstrator can delete a session review"
