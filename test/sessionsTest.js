@@ -227,7 +227,7 @@ describe("Test on Mentorship sessions", ()=>{
                 .set('x-auth-token', token)
                 .end((req, res)=>{
                         res.should.have.status(404);
-                        res.body.should.have.property("error").equal("You are not a mentor for this session");
+                        res.body.should.have.property("error").equal("No session with such Id found");
                         done();
                 });
         });
@@ -311,7 +311,7 @@ describe("Test on Mentorship sessions", ()=>{
                 .set('x-auth-token', token)
                 .end((req, res)=>{
                         res.should.have.status(404);
-                        res.body.should.have.property("error").equal("You are not a mentor for this session");
+                        res.body.should.have.property("error").equal("No session with such Id found");
                         done();
                 });
         });
