@@ -227,7 +227,7 @@ describe("Test on Mentorship sessions", ()=>{
                 .set('x-auth-token', token)
                 .end((req, res)=>{
                         res.should.have.status(404);
-                        res.body.should.have.property("error").equal("You are not a mentor for this session");
+                        res.body.should.have.property("error").equal("No Pending session with such Id found");
                         done();
                 });
         });
@@ -254,7 +254,7 @@ describe("Test on Mentorship sessions", ()=>{
                 .set('x-auth-token', token)
                 .end((req, res)=>{
                         res.should.have.status(404);
-                        res.body.should.have.property("error").equal("No session with such Id found");
+                        res.body.should.have.property("error").equal("No Pending session with such Id found");
                         done();
                 });
         });
@@ -288,7 +288,32 @@ describe("Test on Mentorship sessions", ()=>{
                         done();
                 });
         });
-
+        //Should allow a mentor to reject a mentorship session request
+        it("Should NOT allow a mentor to reject a mentorship session request: Not owner of the session", (done)=>{
+            const user_token = {
+                userid: 3,
+                firstname: "FIDELE",
+                lastname: "BIZIMANA",
+                email: "fidelebizimana@gmail.com",
+                password: "12345",
+                address: "GISENYI",
+                bio: "RUBY ENTHUSIAST",
+                occupation: "STUDEN",
+                expertise: "RUBY",
+                is_admin: false,
+                is_a_mentor: true
+            };
+            const sessionId= 1;
+            const token =JWT.sign(user_token, process.env.SECRET);
+            chai.request(app)
+                .patch(`/api/v2/sessions/${sessionId}/reject`)
+                .set('x-auth-token', token)
+                .end((req, res)=>{
+                        res.should.have.status(404);
+                        res.body.should.have.property("error");
+                        done();
+                });
+        });
         //Should NOT allow a mentor to reject a mentorship session request: You are not a mentor for this session
         it("Should NOT allow a mentor to reject a mentorship session request: You are not a mentor for this session", (done)=>{
             const user_token = {
@@ -311,7 +336,7 @@ describe("Test on Mentorship sessions", ()=>{
                 .set('x-auth-token', token)
                 .end((req, res)=>{
                         res.should.have.status(404);
-                        res.body.should.have.property("error").equal("You are not a mentor for this session");
+                        res.body.should.have.property("error").equal("No Pending session with such Id found");
                         done();
                 });
         });
@@ -338,7 +363,7 @@ describe("Test on Mentorship sessions", ()=>{
                 .set('x-auth-token', token)
                 .end((req, res)=>{
                         res.should.have.status(404);
-                        res.body.should.have.property("error").equal("No session with such Id found");
+                        res.body.should.have.property("error").equal("No Pending session with such Id found");
                         done();
                 });
         });

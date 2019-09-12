@@ -254,8 +254,8 @@ describe("Test on users accounts", ()=>{
                         res.body.data.should.have.property("bio");
                         res.body.data.should.have.property("occupation");
                         res.body.data.should.have.property("expertise");
-                        res.body.data.should.have.property("is_admin");
-                        res.body.data.should.have.property("is_a_mentor");
+                        res.body.data.should.have.property("isAdmin");
+                        res.body.data.should.have.property("isAmentor");
                         done();
                 });
         });
@@ -289,7 +289,7 @@ describe("Test on users accounts", ()=>{
 
         //Should NOT change a user into a mentor: Only admin can change a user to a mentor
         it("Should NOT change a user into a mentor: Only admin can change a user to a mentor", (done)=>{
-            const userId= 6;
+            const userId= 5;
             const user_token = {
                 userid: 2,
                 firstname: "AUGUSTIN",
