@@ -7,6 +7,7 @@ import {loginSelectQuery} from '../SERVICES/userLoginQueries';
 import {changeUserToMentorSelectQuery} from '../SERVICES/changeUserToMentorQueries';
 import {updateMentorStatusQuery} from '../SERVICES/changeUserToMentorQueries';
 import viewMentor from '../SERVICES/viewMentorByIdQueries';
+import viewMentors from '../SERVICES/viewAllMentorsQueries';
 import create_acc_schema from '../JOI_VALIDATION/create_acc_validation';
 import login_schema from '../JOI_VALIDATION/login_user_validation';
 import Joi from '@hapi/joi';
@@ -139,13 +140,12 @@ class userAccountControler{
         });
     }
 
-    viewAllMentors(req, res){
-        const accs= accounts.AllAccounts;
-        const mentor_users=accs.filter(user=>user.isAmentor===true);
-            return res.status(200).json({
-                status: 200,
-                data: mentor_users
-            });
+    async viewAllMentors(req, res) {
+        const allMentors = await viewMentors.viewAllMentors();
+        return res.status(200).json({
+            status: 200,
+            data: allMentors
+        });
     }
 
     async viewMentorById(req, res){
