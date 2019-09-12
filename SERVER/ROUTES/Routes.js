@@ -11,9 +11,9 @@ router.patch('/api/v2/user/:userId',verifyToken, account_controler.ChangeUserToM
 router.get('/api/v1/mentors',verifyToken, account_controler.viewAllMentors); 
 router.get('/api/v1/mentors/:userId',verifyToken, account_controler.viewMentorById); 
 
-router.post('/api/v1/session',verifyToken, session_contrl.createSession); 
-router.patch('/api/v2/sessions/:sessionId/accept',verifyToken, session_contrl.acceptSessionRequest); 
-router.patch('/api/v1/sessions/:sessionId/reject',verifyToken, session_contrl.rejectSessionRequest); 
+router.post('/api/v2/session',verifyToken, session_contrl.createSession); 
+router.patch('/api/v1/sessions/:sessionId/accept',verifyToken, session_contrl.acceptSessionRequest); 
+router.patch('/api/v2/sessions/:sessionId/reject',verifyToken, session_contrl.rejectSessionRequest); 
 router.get('/api/v1/sessions',verifyToken, session_contrl.getAllSession); 
 router.post('/api/v1/session/:sessionId/review',verifyToken,session_contrl.reviewSession); 
 router.delete('/api/v1/sessions/:sessionId/review',verifyToken,session_contrl.deleteSessionReview); 

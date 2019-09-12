@@ -1,7 +1,8 @@
-import pool from '../test/MODELS/create';
 import session_schema from '../JOI_VALIDATION/session_validation';
 import Joi from '@hapi/joi';
+import mentorRejectSession from '../SERVICES/rejectSessionQueries';
 import mentorAcceptSession from '../SERVICES/mentorAcceptSessionQueries';
+
 
 class sessionControler{
     createSession(req, res){
@@ -74,21 +75,25 @@ class sessionControler{
             }
         }
     }
-    //Mentor reject mentorship session
-    rejectSessionRequest(req, res){
-        const sessioId= parseInt(req.params.sessionId);
-        const all_sessio= session_inst.allSessions;
-        const session_lookups= all_sessio.find(single_sessio=>single_sessio.sessionId===sessioId);
-        if(session_lookups){
+    
+    async rejectSessionRequest(req, res) {
+        const sessioId = parseInt(req.params.sessionId);
+        const sessionRejectResp= await mentorRejectSession.mentorRejectSelectFn(sessioId);
+        if(!sessionRejectResp){
+            return res.status(404).json({
+                status: 404,
+                error: "No session with such Id found"
+            })
+        }else{
+
             const mentorId= req.user_token.id;
-            const check_session_mentors= session_lookups.mentorId;
-            if(check_session_mentors===mentorId){
-                const new_session_status= "rejected";
-                session_lookups.status= new_session_status;
-                const updatedSessions= session_lookups;
+            const checkSessionRejectMentorId= sessionRejectResp.mentorid; 
+            if(checkSessionRejectMentorId===mentorId){
+                const updateSessionRejectResp= await mentorRejectSession.updateSessionRejectFn(req, sessioId);
+                const {sessionid, mentorid,menteeid,questions,menteeemail,status}= updateSessionRejectResp;
                 return res.status(200).json({
                     status: 200,
-                    data: updatedSessions
+                    data: {sessionId:sessionid, mentorId:mentorid, menteeId:menteeid, questions, menteeEmail:menteeemail, status}
                 });
             }else{
                 return res.status(404).json({
@@ -96,11 +101,6 @@ class sessionControler{
                     error: "You are not a mentor for this session"
                 })
             }
-        }else{
-            return res.status(404).json({
-                status: 404,
-                error: "No session with such Id found"
-            })
         }
     }
 
