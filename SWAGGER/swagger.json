@@ -5,7 +5,7 @@
       "title": "Free Mentors",
       "description": "Free Mentors is a social initiative where accomplished professionals become role models to young people to provide free mentorship sessions."
     },
-    "basePath": "/api/v1",
+    "basePath": "/api/v2",
     "tags": [
       {
         "name": "Users",
