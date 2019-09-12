@@ -32,7 +32,7 @@
           "tags": [
             "Users"
           ],
-          "summary": "Create user account",
+          "summary": "Create account for new user",
           "description": "Create a new  account",
           "produces": [
             "application/json"
@@ -117,7 +117,7 @@
           "tags": [
             "Users"
           ],
-          "summary": "User login",
+          "summary": "Login a user",
           "description": "User Login",
           "produces": [
             "application/json"
@@ -178,7 +178,7 @@
             {
               "name": "userId",
               "in": "path",
-              "description": "user id",
+              "description": "user id for to check admin role",
               "required": true,
               "type": "integer"
             }
@@ -218,7 +218,7 @@
             {
               "name":"x-auth-token",
               "in": "header",
-              "description" :"Token",
+              "description" :"User Token",
               "required":true
             }
           ],
@@ -243,7 +243,7 @@
             "Users"
           ],
           "summary": "View a mentor",
-          "description": "View a specific",
+          "description": "View a specific mentor by Id",
           "produces": [
             "application/json"
           ],
@@ -288,7 +288,7 @@
             "Sessions"
           ],
           "summary": "Session",
-          "description": "Create session",
+          "description": "Create a mentorship session",
           "produces": [
             "application/json"
           ],
@@ -299,13 +299,13 @@
             {
               "name":"x-auth-token",
               "in": "header",
-              "description" :"Token",
+              "description" :"User Token",
               "required":true
             },
             {
               "name": "mentorId",
               "in": "formData",
-              "description": "Id",
+              "description": "mentorId",
               "required": true,
               "type": "integer"
             },
@@ -351,13 +351,13 @@
             {
               "name":"x-auth-token",
               "in": "header",
-              "description" :"Token",
+              "description" :"User Token",
               "required":true
             },
             {
               "name": "sessionId",
               "in": "path",
-              "description": "SessionId",
+              "description": "Session Id",
               "required": true,
               "type": "integer"
             }
@@ -393,7 +393,7 @@
             {
               "name":"x-auth-token",
               "in": "header",
-              "description" :"Token",
+              "description" :"User Token",
               "required":true
             },
             {
@@ -470,13 +470,13 @@
             {
               "name":"x-auth-token",
               "in": "header",
-              "description" :"Token",
+              "description" :"User Token",
               "required":true
             },
             {
               "name": "sessionId",
               "in": "path",
-              "description": "SessionId",
+              "description": "Session Id",
               "required":true,
               "type":"integer"
             },
@@ -515,7 +515,7 @@
             "Sessions"
           ],
           "summary": "Session review",
-          "description": "Delete session",
+          "description": "Admin delete session review deemed as inappropriate",
           "produces": [
             "application/json"
           ],
@@ -526,7 +526,7 @@
             {
               "name":"x-auth-token",
               "in": "header",
-              "description" :"Token",
+              "description" :"User Token",
               "required":true
             },
             {
