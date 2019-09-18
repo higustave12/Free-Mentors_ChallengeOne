@@ -5,9 +5,9 @@ class viewMentors{
         const client = await pool.connect();
         try {
             const isMentorCheck=true;
-            const viewAllMentorsQuery = `SELECT * FROM users WHERE mentor=$1`;
+            const viewAllMentorsSelectQuery = `SELECT * FROM users WHERE mentor=$1`;
             const values = [isMentorCheck];
-            const response = await client.query(viewAllMentorsQuery, values);
+            const response = await client.query(viewAllMentorsSelectQuery, values);
             return response.rows;
         } catch (error) {
             console.log(error)

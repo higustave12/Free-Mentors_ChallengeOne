@@ -1,6 +1,6 @@
 import chai from 'chai';
 import chaiHttp from 'chai-http';
-import app from '../server';
+import app from '../../server';
 import JWT from 'jsonwebtoken';
 
 import dotenv from 'dotenv';
@@ -33,7 +33,7 @@ describe("Test on Handling invalid URL", ()=>{
         //Should Handle invalid URL
         it("Should Handle invalid URL", (done)=>{
             chai.request(app)
-                .post("/api/v1/auth/")
+                .post("/api/v2/auth/")
                 .send({
                     firstName: "EUGENE",
                     lastName: "PARK",
@@ -54,12 +54,14 @@ describe("Test on Handling invalid URL", ()=>{
     });
 });
 
+
 //Create user account test
 describe("Test on users accounts", ()=>{
     //CREATE ACCOUNT
     describe("POST/ Create user account", ()=>{
         //Should create a new user account
         it("Should create an account for a new user", (done)=>{
+
             chai.request(app)
                 .post("/api/v2/auth/signup")
                 .send({
@@ -78,13 +80,6 @@ describe("Test on users accounts", ()=>{
                     res.body.should.have.property("data");
                     res.body.data.should.be.an("object");
                     res.body.data.should.have.property("token");
-                    res.body.data.should.have.property("firstName");
-                    res.body.data.should.have.property("lastName");
-                    res.body.data.should.have.property("email");
-                    res.body.data.should.have.property("address");
-                    res.body.data.should.have.property("bio");
-                    res.body.data.should.have.property("occupation");
-                    res.body.data.should.have.property("expertise");
                     done();
                });
         });
@@ -108,14 +103,7 @@ describe("Test on users accounts", ()=>{
                     res.body.should.have.property("message").equal("User created successfully");
                     res.body.should.have.property("data");
                     res.body.data.should.be.an("object");
-                    res.body.data.should.have.property("token");
-                    res.body.data.should.have.property("firstName");
-                    res.body.data.should.have.property("lastName");
-                    res.body.data.should.have.property("email");
-                    res.body.data.should.have.property("address");
-                    res.body.data.should.have.property("bio");
-                    res.body.data.should.have.property("occupation");
-                    res.body.data.should.have.property("expertise");
+                    res.body.data.should.have.property("token")
                     done();
                });
         });
@@ -179,13 +167,6 @@ describe("Test on users accounts", ()=>{
                     res.body.should.have.property("data");
                     res.body.data.should.be.an("object");
                     res.body.data.should.have.property("token");
-                    res.body.data.should.have.property("firstName");
-                    res.body.data.should.have.property("lastName");
-                    res.body.data.should.have.property("email");
-                    res.body.data.should.have.property("address");
-                    res.body.data.should.have.property("bio");
-                    res.body.data.should.have.property("occupation");
-                    res.body.data.should.have.property("expertise");
                     done();
                });
         });
@@ -219,23 +200,19 @@ describe("Test on users accounts", ()=>{
         });
     });
 
+    
     //CHANGE A USER TO A MENTOR (By Admin only)
     describe("PATCH/ Change a user to a mentor", ()=>{
         //Should change a user into a mentor
         it("Should change a user into a mentor", (done)=>{
             const userId= 6;
             const user_token = {
-                userid: 1,
+                id: 1,
                 firstname: "BRIGITE",
                 lastname: "MUTONI",
                 email: "mutonibrigitte@gmail.com",
-                password: "12345",
-                address: "BELGIUM",
-                bio: "JAVASCRIPT ENTHUSIAST",
-                occupation: "STUDENT",
-                expertise: "NODEJS",
-                is_admin: true,
-                is_a_mentor: false
+                admin: true,
+                mentor: false
             };
             const token =JWT.sign(user_token, process.env.SECRET);
             chai.request(app)
@@ -246,16 +223,6 @@ describe("Test on users accounts", ()=>{
                         res.body.should.have.property("message").equal("User account changed to mentor");
                         res.body.should.have.property("data");
                         res.body.data.should.be.an("object");
-                        res.body.data.should.have.property("userId");
-                        res.body.data.should.have.property("firstName");
-                        res.body.data.should.have.property("lastName");
-                        res.body.data.should.have.property("email");
-                        res.body.data.should.have.property("address");
-                        res.body.data.should.have.property("bio");
-                        res.body.data.should.have.property("occupation");
-                        res.body.data.should.have.property("expertise");
-                        res.body.data.should.have.property("isAdmin");
-                        res.body.data.should.have.property("isAmentor");
                         done();
                 });
         });
@@ -264,17 +231,12 @@ describe("Test on users accounts", ()=>{
         it("Should NOT change a user into a mentor: userId not Found", (done)=>{
             const userId= 6000;
             const user_token = {
-                userid: 1,
+                id: 1,
                 firstname: "BRIGITE",
                 lastname: "MUTONI",
                 email: "mutonibrigitte@gmail.com",
-                password: "12345",
-                address: "BELGIUM",
-                bio: "JAVASCRIPT ENTHUSIAST",
-                occupation: "STUDENT",
-                expertise: "NODEJS",
-                is_admin: true,
-                is_a_mentor: false
+                admin: true,
+                mentor: false
             };
             const token =JWT.sign(user_token, process.env.SECRET);
             chai.request(app)
@@ -289,19 +251,14 @@ describe("Test on users accounts", ()=>{
 
         //Should NOT change a user into a mentor: Only admin can change a user to a mentor
         it("Should NOT change a user into a mentor: Only admin can change a user to a mentor", (done)=>{
-            const userId= 5;
+            const userId= 6;
             const user_token = {
-                userid: 2,
+                id: 2,
                 firstname: "AUGUSTIN",
                 lastname: "NTAMBARA",
                 email: "augustinntambara@gmail.com",
-                password: "12345",
-                address: "FRANCE",
-                bio: "PYTHON ENTHUSIAST",
-                occupation: "PROFESSOR",
-                expertise: "PYTHON",
-                is_admin: false,
-                is_a_mentor: true
+                admin: false,
+                mentor: true
             };
             const token =JWT.sign(user_token, process.env.SECRET);
             chai.request(app)
@@ -327,22 +284,18 @@ describe("Test on users accounts", ()=>{
         });
     });
 
+/*
     //VIEW ALL MENTORS
     describe("GET/ View all mentors", ()=>{
         //Should view all mentors
         it("Should view all mentors", (done)=>{
             const user_token = {
-                userid: 5,
+                id: 5,
                 firstname: "DOROTHE",
                 lastname: "MBARUSHIMANA",
                 email: "dorothembarushimana@gmail.com",
-                password: "12345",
-                address: "ITALY",
-                bio: "C# ENTHUSIAST",
-                occupation: "ASSISTANT PROF",
-                expertise: "C#",
-                is_admin: false,
-                is_a_mentor: false
+                admin: false,
+                mentor: false
             };
             const token =JWT.sign(user_token, process.env.SECRET);
             chai.request(app)
@@ -362,17 +315,12 @@ describe("Test on users accounts", ()=>{
         it("Should View a specific mentor by Id", (done)=>{
             const userId= 2;
             const user_token = {
-                userid: 5,
+                id: 5,
                 firstname: "DOROTHE",
                 lastname: "MBARUSHIMANA",
                 email: "dorothembarushimana@gmail.com",
-                password: "12345",
-                address: "ITALY",
-                bio: "C# ENTHUSIAST",
-                occupation: "ASSISTANT PROF",
-                expertise: "C#",
-                is_admin: false,
-                is_a_mentor: false
+                admin: false,
+                mentor: false
             };
             const token =JWT.sign(user_token, process.env.SECRET);
             chai.request(app)
@@ -389,17 +337,12 @@ describe("Test on users accounts", ()=>{
         it("Should NOT View a specific mentor by Id: A user with such Id not found", (done)=>{
             const userId= 20;
             const user_token = {
-                userid: 5,
+                id: 5,
                 firstname: "DOROTHE",
                 lastname: "MBARUSHIMANA",
                 email: "dorothembarushimana@gmail.com",
-                password: "12345",
-                address: "ITALY",
-                bio: "C# ENTHUSIAST",
-                occupation: "ASSISTANT PROF",
-                expertise: "C#",
-                is_admin: false,
-                is_a_mentor: false
+                admin: false,
+                mentor: false
             };
             const token =JWT.sign(user_token, process.env.SECRET);
             chai.request(app)
@@ -407,7 +350,7 @@ describe("Test on users accounts", ()=>{
                 .set('x-auth-token', token)
                 .end((req, res)=>{
                         res.should.have.status(404);
-                        res.body.should.have.property("error").equal("A user with such Id not found");
+                        res.body.should.have.property("error").equal("Mentor not found");
                         done();
                 });
         });
@@ -416,17 +359,12 @@ describe("Test on users accounts", ()=>{
         it("Should NOT View a specific mentor by Id: A mentor with such Id not found", (done)=>{
             const userId= 1;
             const user_token = {
-                userid: 5,
+                id: 5,
                 firstname: "DOROTHE",
                 lastname: "MBARUSHIMANA",
                 email: "dorothembarushimana@gmail.com",
-                password: "12345",
-                address: "ITALY",
-                bio: "C# ENTHUSIAST",
-                occupation: "ASSISTANT PROF",
-                expertise: "C#",
-                is_admin: false,
-                is_a_mentor: false
+                admin: false,
+                mentor: false
             };
             const token =JWT.sign(user_token, process.env.SECRET);
             chai.request(app)
@@ -434,9 +372,10 @@ describe("Test on users accounts", ()=>{
                 .set('x-auth-token', token)
                 .end((req, res)=>{
                         res.should.have.status(404);
-                        res.body.should.have.property("error").equal("A mentor for this Id not found");
+                        res.body.should.have.property("error").equal("Mentor not found");
                         done();
                 });
         });
     });
+    */
 });

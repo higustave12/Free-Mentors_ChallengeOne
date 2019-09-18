@@ -1,6 +1,6 @@
 import Joi from '@hapi/joi';
 
-const create_acc_schema= {
+const createAccountccountSchema= {
     firstName: (Joi.string().required()).replace(/\s/g,''),
     lastName: (Joi.string().required()).replace(/\s/g,''),
     email: (Joi.string().email({minDomainSegments : 2}).required()).replace(/\s/g,''),
@@ -10,4 +10,4 @@ const create_acc_schema= {
     occupation: (Joi.string().required()).replace(/\s/g,''),
     expertise: (Joi.string().required()).replace(/\s/g,'')
 };
-export default create_acc_schema;
+export default createAccountccountSchema;

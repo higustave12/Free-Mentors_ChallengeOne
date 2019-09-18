@@ -7,22 +7,16 @@ const pool = new Pool({
  connectionString: process.env.DATABASE_URL
 });
 
-pool.on('connect', () => {
-    console.log('connected to the db');
-});
+const dropTablesQuery = [
+    `DROP TABLE IF EXISTS users CASCADE`,
+    `DROP TABLE IF EXISTS sessions CASCADE`
+  ];
 
-export const dropAllTables= ()=>{
-    const drop_query= `DROP TABLE IF EXISTS users,sessions,reviews CASCADE`;
-    pool.query(drop_query)
-        .then((res) => {
-            console.log(res);
-            console.log("TABLES DELETED SUCCESSFULLY");
-        })
-        .catch((err) => {
-            console.log(err);
-            pool.end()
-        });
+const dropAllTables= async ()=>{
+    for(let singleDropQuery of dropTablesQuery){
+        await pool.query(singleDropQuery);
+    }
+    console.log(`All tables deleted successfully`);
 };
 
-export default pool;
-require('make-runnable');
+dropAllTables();

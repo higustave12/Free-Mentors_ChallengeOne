@@ -7,7 +7,7 @@ const pool= new Pool({
     connectionString: process.env.DATABASE_URL
 });
 
-export const createAlltables=()=>{
+const createAlltables= async ()=>{
     const allTables= `CREATE TABLE IF NOT EXISTS 
     users(
         id SERIAL,
@@ -54,18 +54,11 @@ export const createAlltables=()=>{
     VALUES ('PAUL','NSABIMANA','paulnsabimana@gmail.com','12345','KIGALI-RWANDA','C++ PROFESSOR','PROFEESSOR','C++','false','true');
 
     INSERT INTO users(firstname, lastname, email, password, address, bio, occupation, expertise, admin, mentor) 
-    VALUES ('DOROTHE','MBARUSHIMANA','dorothembarushimana@gmail.com','12345','KIGALI-RWANDA','C# STUDENT','STUDENT','C#','false','false');`
+    VALUES ('DOROTHE','MBARUSHIMANA','dorothembarushimana@gmail.com','12345','KIGALI-RWANDA','C# STUDENT','STUDENT','C#','false','false')`;
 
-    pool.query(allTables)
-        .then((res)=>{
-            console.log(res)
-        })
-        .catch((err)=>{
-            console.log(err);
-            pool.end()
-        });
+    await pool.query(allTables);
+    console.log(`All tables created successfully`);
 };
 
-export default pool;
-require('make-runnable');
+createAlltables();
 

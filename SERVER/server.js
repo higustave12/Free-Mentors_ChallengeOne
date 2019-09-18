@@ -31,7 +31,7 @@ app.use((error, req, res, next) => {
         error: error.message,
     });
 });
-  
+
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () =>{
     console.log(`Connected to port ${PORT}`);

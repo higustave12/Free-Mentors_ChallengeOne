@@ -1,7 +1,7 @@
 import Joi from '@hapi/joi';
 
-const login_schema= {
+const userLoginSchema= {
     email: (Joi.string().email({minDomainSegments : 2}).required()).replace(/\s/g,''),
-    password: Joi.string().required()
+    password: (Joi.string().required()).replace(/\s/g,'')
 };
-export default login_schema;
+export default userLoginSchema;
